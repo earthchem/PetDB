@@ -1,0 +1,34 @@
+<%
+	if (request.getParameter("DoOnSubmit") != null)
+        {
+		if (request.getParameter("DoOnSubmit").equals("clear"))
+		{
+			((ByMineralCriteria)criteria).clear();
+		}
+		else { 
+			if (request.getParameter("DoOnSubmit").equals("submit")) 
+			if (request.getParameter("mineral_type") != null)
+			{
+				if (pg_ind == 3) ((ByChemistryCriteria)criteria).clear();
+				criteria.setValues(ByMineralCriteria.Mineral_List,
+					request.getParameterValues("mineral_type"));
+			}
+			
+			String do_chem_elements = (String)request.getParameter("chem_elements");
+			if ("yes".equals(do_chem_elements))
+			{
+        			s_keys  =((DataRecordDS)data).getOrderedKeys();
+        			for (int i=0; i<s_keys.length; i++)
+        			{
+					String[]  values;
+               				criteria.clear(s_keys[i]);
+               				if ( (values = request.getParameterValues(s_keys[i])) != null)
+               					criteria.setValues(s_keys[i],values);
+				}
+			}
+		}
+	}
+        state = "'"
+                + criteria.getValuesAsStr(ByMineralCriteria.Mineral_List) + "'";
+
+%>

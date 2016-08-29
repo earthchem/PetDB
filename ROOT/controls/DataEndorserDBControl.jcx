@@ -1,0 +1,221 @@
+package controls; 
+
+import com.bea.control.*; 
+import java.sql.SQLException; 
+
+/** 
+ * Defines a new database control. 
+ * 
+ * The @jc:connection tag indicates which WebLogic data source will be used by 
+ * this database control. Please change this to suit your needs. You can see a 
+ * list of available data sources by going to the WebLogic console in a browser 
+ * (typically http://localhost:7001/console) and clicking Services, JDBC, 
+ * Data Sources. 
+ * 
+ * @jc:connection data-source-jndi-name="ciesin.lcdb.loadpetdb"
+ * 
+ */ 
+public interface DataEndorserDBControl extends DatabaseControl, com.bea.control.ControlExtension
+{ 
+    // Sample database function.  Uncomment to use 
+
+    // static public class Customer 
+    // { 
+    //   public int id; 
+    //   public String name; 
+    // } 
+    // 
+    // /** 
+    //  * @jc:sql statement="SELECT ID, NAME FROM CUSTOMERS WHERE ID = {id}" 
+    //  */ 
+    // Customer findCustomer(int id);
+
+    // Add "throws SQLException" to request that SQLExeptions be thrown on errors.
+
+    static final long serialVersionUID = 1L;
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * SELECT ref_num
+     * FROM reference::
+     */
+    String[] getReferences();
+    
+    
+    static public class Expeditions
+    {
+        public String expedition_num;
+        public String expedition_name;
+        public String getExpeditionNum() {
+            return expedition_num;
+        }
+        public String getExpeditionName() {
+            return expedition_name;
+        }
+    }
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select expedition_num, expedition_name
+     * from expedition
+     * ::
+     */
+    Expeditions[] getExpeditions();
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select samp_technique_code 
+     * from samp_technique_list::
+     */
+    String[] getSamplingTechniques();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select navmethod_code 
+     * from navmethod
+     * ::
+     */
+    String[] getNavigationMethods();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select tectonic_setting_name 
+     * from tectonic_setting_list::
+     */
+    String[] getTectonicSettings();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select rocktype_code 
+     * from rocktype::
+     */
+    String[] getRockTypes();
+    
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select rockclass 
+     * from rockclass::
+     */
+    String[] getRockClasses();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select method_code 
+     * from method::
+     */
+    String[] getMethods();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select item_code
+     * from item_measured::
+     */
+    String[] getItemMeasured();
+    
+    static public class ItemMeasuredJoinMethod
+    {
+        public String item_code;
+        public String method_code;   
+    }
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select 
+     * 	im.item_code, 
+     * 	m.method_code 
+     * from 
+     * 	item_measured im, 
+     * 	itemmethod_list iml, 
+     * 	method m
+     * where im.item_measured_num=iml.item_measured_num and 
+     * iml.method_num=m.method_num::
+     */
+    ItemMeasuredJoinMethod[] getItemMeasuredJoinMethod();
+    
+    static public class ItemTypeJoinItemMeasured
+    {
+        public String item_code;
+        public String item_type_code;
+        public String getItemTypeCode() {
+            return item_type_code;
+        }
+    }
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select  im.item_code, it.item_type_code
+     * from 
+     * 	item_type it, 
+     * 	itemtype_list itl, 
+     * 	item_measured im
+     * where 
+     * it.item_type_num=itl.item_type_num 
+     * and itl.item_measured_num=im.item_measured_num::
+     */
+    ItemTypeJoinItemMeasured[] getItemTypeJoinItemMeasured();
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select distinct calc_ave 
+     * from analysis::
+     */
+    String[] getAnalyses();
+
+    
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select material_code 
+     * from material::
+     */
+    String[] getMaterials();
+
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select mineral_code 
+     * from mineral_list::
+     */
+    String[] getMinerals();
+
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select crystal_code 
+     * from crystal_list
+     * ::
+     */
+    String[] getCrystals();
+
+
+    static public class RockClassJoinRockType
+    {
+        public String rocktype_code;
+        public String rockclass;
+    }
+
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select rocktype.rocktype_code, rockclass.rockclass
+     * from rockclass, rocktype
+     * where rockclass.rocktype_num=rocktype.rocktype_num::
+     */
+    RockClassJoinRockType[] getRockClassJoinRockType();
+
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select alteration_code 
+     * from alteration::
+     */
+    String[] getAlterations();
+
+    /**
+     * @jc:sql max-rows="10000" array-max-length="10000" statement::
+     * select geolocation_type 
+     * from geolocation_type::
+     */
+    String[] getGeoLocationTypes();
+}

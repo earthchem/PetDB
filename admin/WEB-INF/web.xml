@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<!-- The web.xml file is a configuration file used to control the behavior of WebLogic server.
+In most cases, you will not need to modify this file. For more information on web.xml, please
+consult the Web.xml Deployment Descriptor Elements chapter of the "Developing WebLogic Server
+Applications" documentation on edocs.bea.com. -->
+
+    <display-name>Loadpetdb Admin</display-name>
+    <context-param>
+      <param-name>datasource</param-name>
+      <param-value>ieda.gfgdb.loadpetdb</param-value>
+    </context-param>
+  
+    <filter>
+        <filter-name>PageFlowJspFilter</filter-name>
+        <filter-class>com.bea.wlw.netui.pageflow.PageFlowJspFilter</filter-class>
+    </filter>
+
+
+    <filter-mapping>
+        <filter-name>PageFlowJspFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
+
+    <listener>
+        <listener-class>
+            com.bea.wlw.runtime.core.servlet.WebappContextListener
+        </listener-class>
+    </listener>
+    
+
+
+    <!-- Standard Action Servlet Configuration (with debugging) -->
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>com.bea.wlw.netui.pageflow.PageFlowActionServlet</servlet-class>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/.pageflow-struts-generated/jpf-struts-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>config/-global</param-name>
+            <param-value>/WEB-INF/.pageflow-struts-generated/jpf-struts-config--global.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>detail</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+	<servlet>
+		<servlet-name>referenceExcel</servlet-name>
+		<servlet-class>admin.data.ReferenceExcelDownload</servlet-class>
+	</servlet>
+ 
+ 	<servlet-mapping>
+		<servlet-name>referenceExcel</servlet-name>
+		<url-pattern>referenceExcel</url-pattern>
+	</servlet-mapping> 
+	
+    <servlet>
+        <servlet-name>LoginResponse</servlet-name>
+        <servlet-class>admin.dbAccess.LoginResponse</servlet-class>
+    </servlet>
+ 
+    <servlet>
+        <servlet-name>IGSNSearch</servlet-name>
+        <servlet-class>admin.data.IGSNSearch</servlet-class>
+    </servlet>  
+     
+    <servlet>
+        <servlet-name>IGSNUpdate</servlet-name>
+        <servlet-class>admin.data.IGSNUpdate</servlet-class>
+    </servlet>  
+    
+    <servlet>
+        <servlet-name>StationByLocationServlet</servlet-name>
+        <servlet-class>admin.data.StationByLocationServlet</servlet-class>
+    </servlet>  
+     
+    <!-- Struts Action Servlet Mappings -->
+    <!-- Note that because Struts takes the *last* mapping here as the extension to add to
+         actions posted from forms, we must have *.do come after *.jpf. -->
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.jpf</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoginResponse</servlet-name>
+        <url-pattern>login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>IGSNSearch</servlet-name>
+        <url-pattern>igsnInfo</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>IGSNUpdate</servlet-name>
+        <url-pattern>igsnUpdate</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>StationByLocationServlet</servlet-name>
+        <url-pattern>stationByLocationServlet</url-pattern>
+    </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+
+    <!-- Define the NetUI tag library TLDs -->
+    <taglib>
+        <taglib-uri>netui-tags-html.tld</taglib-uri>
+        <taglib-location>/WEB-INF/netui-tags-html.tld</taglib-location>
+    </taglib>
+    
+    <taglib>
+        <taglib-uri>netui-tags-template.tld</taglib-uri>
+        <taglib-location>/WEB-INF/netui-tags-template.tld</taglib-location>
+    </taglib>
+
+</web-app>

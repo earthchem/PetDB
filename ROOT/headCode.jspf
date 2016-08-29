@@ -1,0 +1,26 @@
+<%@ page import="java.util.*" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="java.net.URL" %>
+<%@ page import="java.net.URLConnection" %>
+<%@ page import="java.lang.*" %>
+<%@ page import="petdb.query.*" %>
+<%@ page import="petdb.data.*" %>
+<%@ page import="petdb.wrapper.*" %>
+<%@ page import="petdb.criteria.*" %>
+<%@ page import="petdb.config.*" %>
+<%
+String prevPage = "";
+
+// this can be reassigned in longer pages so a 'top' link appears in the scrolling menu //
+boolean longPg = false;
+
+// this code gets the path that may be needed for html included sections
+//StringBuffer reqUrl = request.getRequestURL();
+//String projRoot = request.getContextPath();
+//String webPath = reqUrl.delete(reqUrl.lastIndexOf("/search/"), reqUrl.length()).toString();
+//String cssPath = reqUrl.toString()+"/search/css";
+
+//request.getSession().setAttribute("webPath",webPath);
+//request.getSession().setAttribute("cssPath",cssPath);
+
+%>

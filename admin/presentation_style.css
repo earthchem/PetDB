@@ -1,0 +1,38 @@
+/* these can be used anywhere inside tags */
+.searchBox1 {z-index:5; white-space:nowrap }
+
+.searchBox2 { color: #b0c8a2;font-style: normal; font-weight: bold; font-size: 10pt; line-height: normal; font-family: Verdana, Arial, Helvetica, sans-serif;z-index:5; white-space:nowrap }
+
+.fnTitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; font-weight: bold; color: #b0c8a2}
+
+.regText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; font-style: normal; line-height: normal; font-weight: normal}
+
+.boldText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9pt; font-style: normal; line-height: normal; font-weight: bold}
+
+.treatyLabel  { color: #663333; font-style: normal; font-weight: bold; font-size: 10pt; line-height: normal; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #cccc99 }
+
+.navText  { font-weight: normal; font-size: xx-small; font-family: Verdana, Arial, Helvetica, sans-serif }
+
+.bigLabel {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; font-weight: bold; color: #663333; vertical-align: bottom;}
+
+.anotherLabel {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; font-weight: bold; color: #663333}
+
+.smtreatyLabel  { color: #663333; font-weight: bold; font-size: xx-small; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #cccc99 }
+
+.countryTitle {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; font-weight: bold; color: #006666}
+
+.smboldText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9pt; font-weight: bold}
+
+.smText {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: x-small}
+
+.anotherLabel {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; font-weight: bold; color: #663333}
+
+.smcountryLabel  { color: #006666; font-weight: bold; font-size: xx-small; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #b0c8a2 }
+.smboldcntryNav { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #006666}
+.popLabel  { color: #3e4ba5; font-weight: bold; font-size: xx-small; font-family: Verdana, Arial, Helvetica; background-color: #fe9833 }
+a:hover { }
+
+.helpLabel {color: #CCCCCC; font: bold 10pt "Verdana"; background-color: #006666}
+.helpText {font: 10pt "Verdana"}
+.helpTextB {font: bold 10pt "Verdana"}
+.helpHilite {color:#CC0033; font: 10pt  "Verdana";  }

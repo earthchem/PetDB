@@ -1,0 +1,43 @@
+<%
+
+	//  Prepares the tables lists it also takes care of noting the right selection.
+	// It's used by both Edit and Display frames.
+
+
+	//Author: ncelo
+
+%>
+
+<script language="JavaScript1.1">
+
+function UpdateScreen(targ,selObj,restore){
+ eval(targ+".frames['<%= tablesList%>'].location='"+selObj.options[selObj.selectedIndex].value+"'");
+ if (restore) selObj.selectedIndex=0;
+}
+
+</script>
+
+	<TABLE><TR>
+	<FORM name = "TableListSelect" method="POST" action="#">
+	<TD colspan="2" class="anotherLabel">Choose Table: </TD>	
+	<TD>
+		<SELECT name="tablesList" onChange ="UpdateScreen('parent',this,0)" size = 1 single>
+		<%	
+		for (int index = 0; index< Configurator.tablesList.size(); index++)
+		{
+			String tlbName = (String)Configurator.tablesList.elementAt(index);
+			if ( (tlbName.equals("RegisteredUser")) && (frameData instanceof EditableFrameData))
+					;
+			else {
+				if (tlbName.equals(frameData.getTlbName())) 
+				{ %>
+                		<option value="?<%= tn%>=<%= tlbName%>" SELECTED ><%= tlbName %> </option>
+			<% 	} else { 	%>
+                		<option value="?<%= tn%>=<%= tlbName%>" ><%= tlbName %> </option>
+			<% 	} 
+			} 	%>
+		<% } %>
+		</SELECT>
+	</TD>
+	</FORM>
+	</TR></TABLE>

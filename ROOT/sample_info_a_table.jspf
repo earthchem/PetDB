@@ -1,0 +1,386 @@
+      <tr>
+        <td valign=top class="keyword"><br />          <%= title%></td>
+      </tr>
+      <tr>
+        <td valign=top>
+            <table border="1" cellpadding="1" cellspacing="0" summary="<%= title%>">
+            <!-- needs new java here to load in headings and table contents -->
+            <tr valign="bottom" bgcolor="">
+              <th align="left" scope="col"><div style="width:170px">Reference</div></th>
+              <th align="left" scope="col"> <div style="width:130px">Alias</div></th>
+              <th align="left" scope="col"><div style="width:80px">Method</div></th>
+<%      
+        if( c_title.equalsIgnoreCase("Material") == true)
+        	if ( rmcolumns.size() > 0)
+        	{
+              rockmodedataTableStr ="<tr valign=\"bottom\" bgcolor=\"\"><th align=\"left\" scope=\"col\"><div style=\"width:170px\">Reference</div></th>";
+              rockmodedataTableStr +="<th align=\"left\" scope=\"col\"><div style=\"width:130px\">Alias</div></th><th align=\"left\" scope=\"col\"><div style=\"width:80px\">Method</div></th>";
+            }
+		if (types[g] == "5")
+		{
+%>
+              <th align="left" scope="col">Type</th>
+              <th align="left" scope="col"><div style="width:80px"><%= c_title%></div></th>
+              <th align="left" scope="col">Heated</th>
+<%
+		} else {
+%>
+              <th align="left" scope="col"><div style="width:80px"><%= c_title%></div></th>
+              
+<%            if( c_title.equalsIgnoreCase("Material") == true)  //Rock Data
+              {
+	            if ( rmcolumns.size() > 0)
+	            {
+	              rockmodedataTableStr +=  "<th align=\"left\" scope=\"col\"><div style=\"width:80px\">"+c_title+"</div></th>"
+	                                   +"<th align=\"left\" scope=\"col\" id=\"rmcommentCol0\">Comment</th>";
+	            }
+	           %>
+	          <th align="left" id="commentCol0">Comment</th>
+	          <%
+              } 
+			 if( c_title.equalsIgnoreCase("Mineral"))
+			 %>	
+					<th align="left" id="mincommentCol0">Comment</th>
+			 <%
+		}
+	
+		for (int i = 0; i< columns.size(); i++)
+		{  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+			boolean rmYes=false;
+			for (int j = 0; j< rmcolumns.size(); j++)
+			{  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+	           if( i ==  ((Integer)rmcolumns.elementAt(j)).intValue() && (!c_title.equals("Mineral") && !c_title.equals("Host Mineral"))) { rmYes = true; break; }
+            }
+			if ( rmYes == false) {
+%>
+              <th align="left" scope="col"><%= columns.elementAt(i)%></th>
+<%          }
+			else
+			{
+               if( c_title.equalsIgnoreCase("Material") == true) //Not Mineral
+               {
+                  rockmodedataTableStr +=  "<th align=\"left\" scope=\"col\">"+ columns.elementAt(i)+ "</th>";
+                  if(i ==  rmcolumns.size()-1) rockmodedataTableStr += "</tr>";
+               }
+			}
+		}
+
+%>
+            </tr>
+<%
+      //  rockmodedataTableStr += "</tr>";
+        
+		ds3.buildOrderedIndex(types[g]);
+		columns_value = new double[columns.size()];
+		author="";
+		ref_num="";
+		alias = "";
+		method ="";
+		method_num ="";
+		material = "";
+		heated = "";
+		analysis_comment="";
+		type = "";
+		prev_an ="";	
+		 String type_code = "";
+		 String item_code= "";
+		any = false;
+		if (allDS == null) throw new Exception("Error on the resultSet");
+		boolean showicon = false;
+    while( allDS.next())
+    {
+        any = true;
+ 		if (!prev_an.equals(allDS.getValue(SampleInfoAnalysisDS.Analysis_Num)))
+		{
+			
+			if (prev_an.length()!=0)
+			{
+				if( type_code.equalsIgnoreCase("MODE") == false ) //Not rock mode data
+				{ 
+%>
+            <tr class="regTxt">
+              <td><a href="ref_info.jsp?singlenum=<%= ref_num%>" target="ref_win" onClick="openWindow2(this,450,900,this.target)"><%= author%></a></td>
+              <td><%= alias%></td>
+              <td><a href="method_info.jsp?singlenum=<%= method_num%>" target="_self"><%= method%></a></td>
+<%
+                if (types[g] == "5")
+                {
+%>
+              <td><%= type%></td>
+              <td><%= material%></td>
+              <td><%= heated%></td>
+<%
+                } else {
+%>
+              <td><%= material%></td>
+            
+              <%   
+               if (types[g] == "3")     
+               { 
+               %>
+                <td align="center" valign="middle" id="commentCol<%= commentNum %>">
+              <% if (showicon==true) { %>
+            
+              <span id="comment<%= commentNum %>" style="border-radius: 4px 4px 4px 4px;" class="ui-state-default ui-corner-all ui-icon ui-icon-comment"></span>
+               
+              <%         showicon = false;  
+              }  %>
+                </td>
+              <% commentDesc.add( analysis_comment ); commentNum = commentNum+1;   
+              } %>
+		            
+		       <%   
+               if (types[g] == "6")   
+               { 
+               %>
+              <td align="center" valign="middle" id="mincommentCol<%= mincommentNum %>">
+              <% if (showicon==true) { %>
+              <span id="mincomment<%= mincommentNum %>" style="border-radius: 4px 4px 4px 4px;" class="ui-state-default ui-corner-all ui-icon ui-icon-comment"></span>
+              <%         showicon = false;  
+              }  %>
+              </td>
+              <% mincommentDesc.add( analysis_comment ); mincommentNum = mincommentNum+1;   
+              } %>      
+		            
+		              
+<%
+                }
+               
+                for (int i = 0; i< columns_value.length; i++)
+                { 
+                  boolean rmYes=false;
+                  for (int j = 0; j< rmcolumns.size(); j++)
+                  {  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+                        if( i == ((Integer)rmcolumns.elementAt(j)).intValue() && (!c_title.equals("Mineral") && !c_title.equals("Host Mineral"))) { rmYes = true; break; }
+                  }
+                  if ( rmYes == false) 
+                  {
+                    if (columns_value[i]==-1)
+                    {
+%>
+              <td><nobr>&nbsp;</nobr></td>
+<%
+                    }  else {
+%>
+              <td><nobr><%= columns_value[i]%></nobr></td>
+<%
+                    }//end of if (columns_value[i]==-1)
+                  }//end of  if ( rmYes == false) 
+                }//end of for int i
+%>
+            </tr>
+<%              }
+		        else // they are rock mode data
+		        {
+		        	if( c_title.equalsIgnoreCase("Material") == true || c_title.equalsIgnoreCase("Mineral")) 
+		        	{
+		        	//  System.out.println("type="+type_code + "item_code="+item_code+" --> MODE");
+
+		              boolean rmYes=false;
+                      rockmodedataTableStr += "<tr class=\"regTxt\">"
+		        	                       +"<td><a href=\"ref_info.jsp?singlenum="+ref_num+"\" target=\"ref_win\" onClick=\"openWindow2(this,450,900,this.target)\">"+author+"</a></td>"
+		        	                       +"<td>"+alias+"</td><td><a href=\"method_info.jsp?singlenum="+ method_num+"\" target=\"_self\">"+ method +"</a></td><td>"+material+"</td>"
+		                                   +"<td  id=\"rmcommentCol" + rmcommentNum +"\" align=\"center\">";
+		              if(analysis_comment !=null )
+		              {
+		                  if( analysis_comment.equals("&nbsp;") == false )
+		                  {
+		                      rockmodedataTableStr +="<span id=\"rmcomment"+ rmcommentNum + "\" style=\"border-radius: 4px 4px 4px 4px;\" class=\"ui-state-default ui-corner-all ui-icon ui-icon-comment\"></span>";
+		                     		   
+		                      rmcommentDesc.add(analysis_comment);
+		                  }
+		              }
+                      rmcommentNum = rmcommentNum+1;
+		              rockmodedataTableStr +="</td>";                    
+	                  for (int i = 0; i< columns_value.length; i++)
+	                  {
+	                	  rmYes = false;
+	                	  for (int j = 0; j< rmcolumns.size(); j++)
+	                      {  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+	                          if( i == ( (Integer) rmcolumns.elementAt(j)).intValue() ) { rmYes = true; break; }
+	                      }
+	                	  if(rmYes == true) //It is rock mode data
+	                	  {
+	                          if (columns_value[i]==-1)
+	                          {
+	                              rockmodedataTableStr += "<td><nobr>&nbsp;</nobr></td>";
+	                          }  
+	                          else {
+	                              rockmodedataTableStr += "<td><nobr>"+columns_value[i]+"</nobr></td>";
+	                          }
+	                	  }
+	                  }//end of for int i loop
+		            
+	                  rockmodedataTableStr +=  "</tr>";
+                    
+
+		        	}
+		        }
+			} //end of: if (prev_an.length()!=0)
+			 
+			author 	= allDS.getValue(SampleInfoAnalysisDS.Reference);
+			ref_num = allDS.getValue(SampleInfoAnalysisDS.Ref_Num);
+			method 	= allDS.getValue(SampleInfoAnalysisDS.Method); 
+			method_num = allDS.getValue(SampleInfoAnalysisDS.Method_Num); 
+			alias	= allDS.getValue(SampleInfoAnalysisDS.Alias);
+			if (types[g] == "3"||types[g] == "6") 
+			{
+			analysis_comment = allDS.getValue(SampleInfoAnalysisDS.Analysis_Comment);
+			if( analysis_comment != null )
+			{
+				if(analysis_comment.equals("&nbsp;") == false ) 
+				{
+					showicon=true;					
+				}
+			}
+			}
+
+			if(aliasesRefStr.indexOf(alias+"("+author+")") == -1 ) {
+			  aliasesRefStr +=alias+"("+author+")<br/>";
+               authorMap.put(ref_num, "("+author+")<br/>");
+            }
+			material = allDS.getValue(SampleInfoAnalysisDS.Material);
+			if (types[g].equals("5"))
+			{
+				heated	= ((SampleInfoIncAnalysisDS)allDS).getValue(SampleInfoIncAnalysisDS.Heating);  
+				type	= ((SampleInfoIncAnalysisDS)allDS).getValue(SampleInfoIncAnalysisDS.Type);  
+                if (type.equals("Mineral")) {
+                    type = type + " (" + ((SampleInfoIncAnalysisDS)allDS).getValue(SampleInfoIncAnalysisDS.Mineral) + ")";
+                }
+			}
+			for (int i=0; i< columns_value.length; i++) columns_value[i] = -1;
+            prev_an = allDS.getValue(SampleInfoAnalysisDS.Analysis_Num);
+
+        } //end of:  if (!prev_an.equals(allDS.getValue(SampleInfoAnalysisDS.Analysis_Num)))
+          
+                type_code =  allDS.getValue(SampleInfoAnalysisDS.Type_Code);
+                item_code =  allDS.getValue(SampleInfoAnalysisDS.Item_Code);
+                int f_index = ds3.getIndexOf(type_code,item_code);
+     
+                if ((f_index > -1 ) && (f_index < columns.size()))
+                  columns_value[f_index] = allDS.getDoubleValue(SampleInfoAnalysisDS.Value);
+	} // while( next())
+ 
+	if (any) //Display the last row or only row
+	{
+		if( type_code.equalsIgnoreCase("MODE") == false ) //Not rock mode data
+		{ 
+%>
+            <tr class="regTxt">
+              <td><a href="ref_info.jsp?singlenum=<%= ref_num%>" target="ref_win" onClick="openWindow2(this,450,900,this.target)"><%= author%></a></td>
+              <td><%= alias%></td>
+              <td><a href="method_info.jsp?singlenum=<%= method_num%>" target="_self"><%= method%></a></td>
+<%
+		if (types[g] == "5")
+		{
+%>
+              <td><%= type%></td>
+              <td><%= material%></td>
+              <td><%= heated%></td>
+              <%
+		} else {
+%>
+              <td><%= material%></td>
+              <% if (types[g] == "3")  
+		      {  
+              %>
+              <td align="center" valign="middle" id="commentCol<%= commentNum %>">
+              <% if (showicon==true) { %>
+              <span id="comment<%= commentNum %>" style="border-radius: 4px 4px 4px 4px;" class="ui-state-default ui-corner-all ui-icon ui-icon-comment"></span>
+              <%     
+              }  showicon = false; commentDesc.add( analysis_comment ); commentNum++;             
+            } %>
+            
+              <% if (types[g] == "6")   
+		      {  
+              %>
+              <td align="center" valign="middle" id="mincommentCol<%= mincommentNum %>">
+              <% if (showicon==true) { %>
+              <span id="mincomment<%= mincommentNum %>" style="border-radius: 4px 4px 4px 4px;" class="ui-state-default ui-corner-all ui-icon ui-icon-comment"></span>
+              <%     
+              }  showicon = false; mincommentDesc.add( analysis_comment ); mincommentNum++;             
+            } %> 
+<%
+		}
+		}
+		else
+		{
+			rockmodedataTableStr += "<tr class=\"regTxt\">"+
+                    "<td><a href=\"ref_info.jsp?singlenum="+ref_num+"\" target=\"ref_win\" onClick=\"openWindow2(this,450,900,this.target)\">"+author+"</a></td>"+
+                    "<td>"+alias+"</td><td><a href=\"method_info.jsp?singlenum="+ method_num+"\" target=\"_self\">"+ method +"</a></td><td>"+material+"</td>"
+                    +"<td  id=\"rmcommentCol" + rmcommentNum +"\" align=\"center\">";
+            if(analysis_comment !=null )
+            {
+            	if( analysis_comment.equals("&nbsp;") == false )
+            	{
+            	  rockmodedataTableStr +="<span id=\"rmcomment"+ rmcommentNum + "\" style=\"border-radius: 4px 4px 4px 4px;\" class=\"ui-state-default ui-corner-all ui-icon ui-icon-comment\"></span>";
+                   
+                  rmcommentDesc.add(analysis_comment);
+            	}
+            }
+            rmcommentNum++;	
+            rockmodedataTableStr +="</td>";
+		}
+		if( type_code.equalsIgnoreCase("MODE") == false ) //Not rock mode data
+		{ 
+                        for (int i = 0; i< columns_value.length; i++)
+                        {
+                        	boolean rmYes=false;
+                            for (int j = 0; j< rmcolumns.size(); j++)
+                            {  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+                                 if( i == ((Integer)rmcolumns.elementAt(j)).intValue() && (!c_title.equals("Mineral") && !c_title.equals("Host Mineral"))) { rmYes = true; break; }
+                            }
+                			if (rmYes == false ) {
+                                if (columns_value[i]==-1)
+                                {
+%>
+              <td><nobr>&nbsp;</nobr></td>
+<%
+                                }  else {                                  
+%>
+              <td><nobr><%= columns_value[i]%></nobr></td>
+<%
+                                }
+                			}
+                        }
+		}
+		else
+		{			
+			  for (int i = 0; i< columns_value.length; i++)
+              {
+              	boolean rmYes=false;
+      			for (int j = 0; j< rmcolumns.size(); j++)
+      			{  //item_type_code list such as SiO2, TiO2, Al2O3, Fe2O3 and FeO etc.
+      	           if( i ==  ((Integer)rmcolumns.elementAt(j)).intValue()) { rmYes = true; break; }
+      			}
+      			if (rmYes == true ) 
+      			{
+      				if( c_title.equalsIgnoreCase("Material") == true) 
+  		        	{
+      				 if (columns_value[i]==-1)
+                          {
+                             rockmodedataTableStr += "<td><nobr>&nbsp;</nobr></td>";
+                          }  
+                          else {
+                           rockmodedataTableStr += "<td><nobr>"+columns_value[i]+"</nobr></td>";
+                          }
+  		        	}
+      			}
+              }
+			
+			
+		}
+                        if( type_code.equalsIgnoreCase("MODE") == false ) //Not rock mode data
+                		{
+%>
+            </tr>
+<% } else {
+	rockmodedataTableStr += "</tr>";
+}
+%>
+            <%
+	} //end  if(any)
+%>
+          </table>
+        </td>
+     </tr>

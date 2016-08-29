@@ -1,0 +1,120 @@
+<html>
+
+
+
+<head>
+
+
+
+<title>PetroPlot Conventions</title>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="plotStyle.css" rel="stylesheet" type="text/css">
+</head>
+
+
+
+
+
+
+
+<body bgcolor="#FFFFFF">
+
+
+
+<center>
+
+<h1>PetroPlot Conventions</h1>
+
+
+
+</center>
+
+
+
+
+
+<p>
+
+The following rules can help users to work more efficiently with PetroPlot functions.</br><br />
+
+
+
+<ol>
+
+ <li> A data sheet should be organized as: row corresponds to sample/analysis;
+
+	 column represents category (location, element, element ratio, etc);
+
+	 the first row contains only header information (i.e. element names etc)</li><br /><br />
+
+ <li> All sheet-mode functions except “Compile Rows” work on selected areas in the data sheet.
+
+ 	In general, whole sheet, whole column or whole row selections should be avoided.
+
+ 	The program works most efficiently if only the data to be worked with are selected.</li><br /><br />
+
+
+
+ <li> For “Multi XY Plots”, it is recommended that Series Names  are stored in Column A,
+
+	 and Series Numbers are stored in Column B, as shown in the
+
+	 <a href=files.htm#PetroPlotExampleData_xls>PetroPlotExampleData.xls</a> file.</li><br /><br />
+
+ <li> To use PetroPlot “ChangeXY” function, data sources for all series in one chart
+
+ 	must come from a single worksheet.  Series with data from other files will
+
+ 	NOT be updated to the new axes.</li><br /><br />
+
+ <li>  “Spider Diagram” function requires that "PetroPlotSpider.xls" is open.</li><br /><br />
+
+ <li>  Sample names should be text string, not as number format.</li><br /><br />
+
+ <li>  For “Grouping” function, at least one group info sheet is needed
+
+ 	(e.g. the groupinfo sheet in <a href=files.htm#PetroPlotExampleData_xls>PetroPlotExampleData.xls</a>).
+
+ 	There are no naming restrictions for group info sheets.
+
+ 	A “-1” sign should be put in Column A after the last grouping record.
+
+ 	No “-1” is needed in the header row.</li><br /><br />
+
+ <li>  To use “Compile Rows” function, users should pre-sort the data sheet based on analytical quality.
+
+ 	Make sure that better data appear first for a single sample.</li>
+
+</ol>
+
+<br /><br />
+
+
+
+</p>
+
+<p> If you think more or less rules should be listed here, please <a href="mailto:ysu@ldeo.columbia.edu">contact me</a>. </p>
+
+
+
+
+
+<br /><br />
+
+<i>Last modified 05/10/2002, Yong Jun Su</i><br />
+
+This line marks the end of <b>PetroPlot Conventions</b>
+
+
+
+</body>
+
+
+
+</html>
+
+
+

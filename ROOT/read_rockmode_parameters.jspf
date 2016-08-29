@@ -1,0 +1,26 @@
+<%
+	if (request.getParameter("DoOnSubmit") != null)
+        {
+		//state += "DoOnSubmit != null; "; 
+		if (request.getParameter("DoOnSubmit").equals("clear"))
+			((ByRockModeCriteria)criteria).clear();
+		else {
+			//state += " NOT CLEAR; "; 
+ 		        String do_chem_elements = (String)request.getParameter("chem_elements");
+                 	if ("yes".equals(do_chem_elements))
+			{
+				//state += " do_chem_elements == yes; ";
+       				s_keys  =((DataRecordDS)data).getOrderedKeys();
+				
+				//state += " s_keys = " + s_keys + "; ";
+				for (int i=0; i<s_keys.length; i++)
+       				{
+					String[]  values;
+            				criteria.clear(s_keys[i]);
+               				if ( (values = request.getParameterValues(s_keys[i])) != null)
+               					criteria.setValues(s_keys[i],values);
+				}
+			}
+		}
+	}
+%>

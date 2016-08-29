@@ -1,0 +1,18 @@
+<%
+
+	// Prepares the tables lists it also takes care of noting the right selection.
+	// It's used by both Edit and Display frames.
+
+
+	//Author: ncelo
+
+%>
+
+	<FORM name = "SearchSubPanel" method="POST">
+		<TABLE><TR>
+			<TD> Search for: </TD>	
+			<TD><INPUT type="text" name="<%= ss%>" value="<%= frameData.getMltSearchStr()%>"></INPUT></TD> 
+			<TD><INPUT type="submit" name="search" value="Search"></TD>
+		</TR></TABLE>
+	</FORM>
+	

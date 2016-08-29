@@ -1,0 +1,49 @@
+<%
+	if (request.getParameterValues("Item") != null)
+        {
+                String  c_type = request.getParameter("Type");
+                String  c_item = request.getParameter("Item");
+                String val_1 = request.getParameter("valuea0");
+                if ((val_1 != null) && (!val_1.equals(""))) 
+                {
+                        String compTo_1 = request.getParameter("calca0");
+                        val_1 = compTo_1 + " " + val_1;
+                }
+                String val_2 = request.getParameter("valueb0");
+                if ((val_2 != null)  && (!val_2.equals("")))
+                {
+                        String compTo_1 = request.getParameter("calcb0");
+                        val_2 = compTo_1 + " " + val_2;
+                }
+		String[] mth = request.getParameterValues("ItemNum1");
+		String meth = "";
+		if (mth != null) 
+			for (int i = 0; i<mth.length;i++) 
+				if (i ==0 )
+					meth +=  mth[i];
+				else 
+					meth += "," + mth[i];
+		int index = -1;
+		if ((index = criteria.getValueIndex(ByChemistryCriteria.ITEM,c_item)) == -1)
+		{
+                	criteria.addValue(ByChemistryCriteria.ITEM, c_item);
+                	criteria.addValue(ByChemistryCriteria.TYPE, c_type);
+                	criteria.addValue(ByChemistryCriteria.LIMIT_1, val_1);
+                	criteria.addValue(ByChemistryCriteria.LIMIT_2, val_2);
+                	criteria.addValue(ByChemistryCriteria.METHOD, meth);
+		}
+		else 
+		{
+                	criteria.setValueAtIndex(ByChemistryCriteria.TYPE, c_type, index);
+                	criteria.setValueAtIndex(ByChemistryCriteria.ITEM, c_item, index);
+                	criteria.setValueAtIndex(ByChemistryCriteria.LIMIT_1, val_1, index);
+                	criteria.setValueAtIndex(ByChemistryCriteria.LIMIT_2, val_2,index);
+                	criteria.setValueAtIndex(ByChemistryCriteria.METHOD, meth, index);
+
+		}
+		wrapper = criteria.getWrapper();
+		if (wrapper==null) throw new Exception("Wrapper is null");
+       		data = (DataRecordDS) wrapper.getControlList("0");
+        }
+	state += "chemistry READ:";
+%>

@@ -1,0 +1,40 @@
+	<%	
+	synchronized(singleSrcRS) {
+		Vector columns = singleSrcRS.getColumnsLabels();
+		String column = "";
+		if  (singleSrcRS != null) { 
+			admin.dbAccess.Record rec = singleSrcRS.getRecordAt(0);
+			if (rec == null) return;
+	%>
+			<FORM name="RecordSubPanel" method="POST" action="#">
+			<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+	<% 
+			for (int i = 0; i< columns.size(); i++) 
+			{ 
+			 	column = (String)columns.elementAt(i);
+	%>
+			 	<TR>
+			 	<TD colspan="2" class="anotherLabel" align="left"><%= column%>:  </TD>
+			 	<TD colspan="2" class="regText" align="left"><%= rec.valueAt(i)%></TD>
+ 			 	</TR>
+	<% 
+			}
+ 
+	if (	(frameData instanceof EditableFrameData) 
+		&& 
+		(UpdateableRecordSearch.DELETE.equals( ((EditableFrameData)frameData).getSglSearchAction() ) )
+		&&  (! ((EditableFrameData)frameData).getExecutable().actionPerformed() )
+	   ) {
+	%>
+		<TR>
+        	<TD><INPUT type="submit" name="<%= rc_c1_n%>" value="<%= rc_c1_v%>"></TD>
+        	<TD><INPUT type="submit" name="<%= rc_c2_n%>" value="<%= rc_c2_v%>"></TD>
+        	</TR>
+	<%
+	      } 
+	}
+	}
+	%>
+	</TABLE>
+	</FORM>
+

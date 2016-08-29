@@ -1,0 +1,177 @@
+
+	<%	
+	synchronized(singleSrcRS) {
+		
+		Vector columns = singleSrcRS.getColumnsLabels();
+		admin.dbAccess.Record rec = singleSrcRS.getRecordAt(0);
+		String action = ((EditableFrameData)frameData).getSglSearchAction();
+	%>
+
+		<FORM name="RecordSubPanel" method="POST" action="#"
+		<% if ("Reference".equals(frameData.getTlbName()) &&
+				(action.equals(UpdateableRecordSearch.EDIT)||action.equals(UpdateableRecordSearch.NEW)))
+			 { %> onsubmit="return validateReference()" <%}%>>
+		<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+ 	
+	<%
+	 	for (int i = 0; i< columns.size(); i++) { 
+			String column = (String)columns.elementAt(i);       
+	%>   
+		<TR>
+        <%  %>
+			<TD colspan="2" class="anotherLabel"  align="left"><%= column%>
+			<% if ("Reference".equals(frameData.getTlbName())&&("PUBLIC_COMMENT".equals(column)||"INTERNAL_COMMENT".equals(column)))
+			{out.print("(max 1000 char)");}%>:</TD>
+			
+	<% 
+			if (action.equals(UpdateableRecordSearch.NEW)) {
+				if ( column.equals(Configurator.getTablesKey(frameData.getTlbName())) )
+				{	 
+	%>
+					<TD>Automatic ID</TD>
+	
+	<%
+	 			} else if ("Reference".equals(frameData.getTlbName())&&"STATUS".equals(column)){ 		
+	%> 	
+					<TD><select name="e_<%= column%>" >
+	  					<option value="REFERENCE_STATUS">Status_List</option>
+	  					<option value="IN_QUEUE">IN_QUEUE</option>
+	  					<option value="IN_PROGRESS">IN_PROGRESS</option>
+	  					<option value="COMPLETED">COMPLETED</option>
+	  					<option value="ALERT"> ALERT!</option>
+					</select> (required)</TD> 
+	<%
+	 			} else if ("Reference".equals(frameData.getTlbName())&&("PUBLIC_COMMENT".equals(column)||"INTERNAL_COMMENT".equals(column))){ 		
+	%> 
+					<TD><textarea cols="37" rows="5" name="e_<%= column%>"></textarea></TD>
+	
+
+	<%
+	 			} else { 		
+	%> 
+					<TD colspan="2">
+                    <%if("INSTITUTION_TYPE".equals(column)) {%> 
+                    <select id = "institution_type" name="e_<%= column%>"></select>
+                    <script>getInstitution_type('');</script>
+                    <% } else if ("STATE".equals(column)) { %>
+                     <select id = "state" name="e_<%= column%>"></select>
+                    <script>getStates('');</script>
+                     <% } else if ("COUNTRY".equals(column)) { %>
+                     <select id = "country" name="e_<%= column%>"></select>
+                    <script>getCountries('');</script>
+                    <% } else { %>
+					 <INPUT type="text" name="e_<%= column%>" value="" size="50">
+                      <% } %>
+					</TD>
+	<%
+				} 
+			} else {  			 
+				if ( column.equals(Configurator.getTablesKey(frameData.getTlbName())) ) 
+				{
+	%>
+					<TD  colspan="2" class="regText"  align="left"><%= rec.valueAt(i)%></TD> 
+	<%
+				} else if ("Reference".equals(frameData.getTlbName())&&"STATUS".equals(column)){ 	
+					String status = rec.valueAt(i);
+	%> 	
+					<TD><select name="e_<%= column%>" >
+	  					<option value="REFERENCE_STATUS">Status_List</option>
+	  					<option value="IN_QUEUE" <% if("IN_QUEUE".equals(status)){ out.print(" selected"); }%>>IN_QUEUE</option>
+	  					<option value="IN_PROGRESS" <% if("IN_PROGRESS".equals(status)){ out.print(" selected"); }%>>IN_PROGRESS</option>
+	  					<option value="COMPLETED" <% if("COMPLETED".equals(status)){ out.print(" selected"); }%>>COMPLETED</option>
+	  					<option value="ALERT" <% if("ALERT".equals(status)){ out.print(" selected");}%>> ALERT!</option>
+					</select> (required)</TD> 
+	<%
+	 			} 				
+				else if ("Reference".equals(frameData.getTlbName())&&("PUBLIC_COMMENT".equals(column)||"INTERNAL_COMMENT".equals(column))){ 		
+	%> 
+					<TD><textarea cols="37" rows="5" name="e_<%= column%>"><%= rec.valueAt(i)%></textarea></TD>
+	<%
+	 			} 
+				
+				else {		 
+	%>
+					<TD colspan="2">
+                    <%if("INSTITUTION_TYPE".equals(column)) {%> 
+                    <select id = "institution_type" name="e_<%= column%>"></select>
+                    <script>getInstitution_type('<%= rec.valueAt(i)%>');</script>
+                    <% } else if ("STATE".equals(column)) { %>
+                     <select id = "state" name="e_<%= column%>"></select>
+                    <script>getStates('<%= rec.valueAt(i)%>');</script>
+                     <% } else if ("COUNTRY".equals(column)) { %>
+                     <select id = "country" name="e_<%= column%>"></select>
+                    <script>getCountries('<%= rec.valueAt(i)%>');</script>
+                    <% } else { %>
+					<INPUT type="text" name="e_<%= column%>" value="<%= rec.valueAt(i)%>" size="50">
+                      <% } %>
+					</TD>
+ 	<%
+				}
+		 	}
+	 %>
+		</TR>
+
+	<% 
+		} // end for
+	}  		
+	%>
+        <TR>
+	<%
+	if (frameData.getTlbName().equals("Sample"))
+	{
+	%>
+        <TD><INPUT type="button" name="sub" value="COMMIT" onClick="validate();"></TD>
+        <TD><INPUT type="submit" name="<%= rc_c2_n%>" value="<%= rc_c2_v%>"></TD>
+	<%
+	} else {
+	%>
+        <TD><INPUT type="submit" name="<%= rc_c1_n%>" value="<%= rc_c1_v%>"></TD>
+        <TD><INPUT type="submit" name="<%= rc_c2_n%>" value="<%= rc_c2_v%>"></TD>
+        </TR>
+	<%
+	}
+	%>
+ 	</TABLE>
+	</FORM>
+
+
+
+<SCRIPT TYPE="text/javascript">
+
+function validateReference()
+{
+	if(document.forms["RecordSubPanel"].e_STATUS.value=='REFERENCE_STATUS') {
+		 alert("Please select status!");
+		 return false;
+	} 
+	
+	if (document.forms["RecordSubPanel"].e_PUBLIC_COMMENT.value.length > 999) {
+		var size = document.forms["RecordSubPanel"].e_PUBLIC_COMMENT.value.length;
+		 alert("The text for PUBLIC_COMMENT too long ("+size+")!");
+	 return false;
+	}
+	
+	if (document.forms["RecordSubPanel"].e_INTERNAL_COMMENT.value.length > 999) {
+		 var size = document.forms["RecordSubPanel"].e_INTERNAL_COMMENT.value.length;
+		 alert("The text for INTERNAL_COMMENT too long ("+size+")!");
+		 return false; 		 
+	}
+	return true;
+}
+
+function validate()
+{			
+        a1 = document.forms["RecordSubPanel"].e_NEW_SAMPLE_ID.value;
+        a2 = document.forms["RecordSubPanel"].e_OLD_SAMPLE_ID.value;
+	if ( a1 != a2 )
+        {
+                document.forms["RecordSubPanel"].submit();
+		return true;
+        } 
+	else 
+	{
+                alert("Old Sample_ID and New Sample_ID should be different from each other!")
+		return false;
+	}
+}
+</SCRIPT>

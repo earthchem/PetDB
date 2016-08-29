@@ -1,0 +1,272 @@
+   <tr align="left">
+      <td valign="middle">
+<table border="0" class="regTxt" id="<%=tableId%>" style="border-collapse: collapse;" style="border-collapse: collapse;">
+<%
+
+	xls = false;
+	sheet = null;
+
+	if (!xls)
+	{
+%>
+<tr class="pad">
+ <th width="50" align="left">Sample</th>
+ <th width="50" align="left">SampleID</th>
+ <th width="50" align="left">IGSN</th>
+ <th width="20" align="left">Method</th>
+ <th width="20" align="left">Material</th>
+<%
+	} 
+	else
+	{
+        	label = new Label(0,xls_x_start,"Sample");
+               	sheet.addCell(label);
+               	label = new Label(1,xls_x_start,"Sample_ID");
+               	sheet.addCell(label);
+               	label = new Label(2,xls_x_start,"Material");
+               	sheet.addCell(label);
+	}
+
+	if (ds1 != null)
+	{
+	Vector keys = ds1.getKeys();
+	 
+	for(int i = 0; i< DisplayConfigurator.Type_Order.length; i++)
+	{
+		if (keys.indexOf(DisplayConfigurator.Type_Order[i]) >= 0)
+		{
+			Vector v = (Vector)ds1.getValue(DisplayConfigurator.Type_Order[i]);
+			for (int j=0; j< v.size(); j++)
+			{
+				columns_size++;
+				if (!xls)
+				{
+%> 
+
+<th width="20" align="left"><font size="2"><b><%= v.elementAt(j)%></b></font></th>
+
+<%
+				} 
+				else
+				{
+                        		label = new Label(columns_size + 2,xls_x_start,(String)v.elementAt(j));
+                        		sheet.addCell(label);
+				}
+			}
+		}
+	}
+	} // ds1 is NOT null
+%>
+<%
+	if (!xls) 
+	{
+%>
+</tr>
+<%
+	}
+%>
+<%
+	ds1.buildOrderedIndex();
+    columns_value = new double[columns_size];
+    columns_valueStr=new String[columns_size];
+	for(int i=0;i<columns_size;i++) columns_valueStr[i]="";
+	row_index = 0;
+	f_index = 0;
+	previous_id ="";
+    method="";
+    method="";
+	material = "";
+	igsn="";
+	igsnURL="N/A";
+	alias = "";
+	s_id = "";
+    colorName = "#DFDCB5";
+    
+	if (ds2 != null)
+	while (ds2.next())
+	{
+		if ( tableId.equals("Table2")||!previous_id.equals(ds2.getValue(TblInRefInfo2DS.Batch_Num)) ||
+            !previous_method.equals(ds2.getValue(TblInRefInfo2DS.Method)))
+		{
+			if (previous_id.length() != 0)
+			{
+				row_index++;
+				if (row_index%2 == 0) colorName = "#D6D6D6";
+				else colorName = "#DFDCB5";
+				if (!xls)
+				{
+                    
+%>
+<tr bgcolor="<%=colorName%>" class="pad">
+	<td width="50"><%= alias%></td>
+	<td width="50"><%= s_id%></td>
+	<td width="50"><%= igsnURL %></td>
+    <td width="20"><%= method %></td>
+	<td width="20"><%= material%></td>
+<%  
+				}
+				else
+				{
+                        		label = new Label(0,xls_x_start + row_index,alias);
+                        		sheet.addCell(label);
+                        		label = new Label(1,xls_x_start + row_index,s_id);
+                        		sheet.addCell(label);
+                        		label = new Label(2,xls_x_start + row_index,material);
+                        		sheet.addCell(label);
+				} 
+
+				for (int g =0; g < columns_value.length; g++)
+				{     
+                     
+                    if ( Math.abs( columns_value[g] + 9999) < 0.01)
+					{
+						if (!xls)
+						{
+%>   
+	<td width="20"><nobr>&nbsp;</nobr></td>	
+<%
+						} else
+						{
+
+							; //write xls
+						}
+					}
+					else
+					{
+						if (!xls)
+						{
+							if(columns_valueStr[g]!=null && columns_valueStr[g].endsWith(", "))
+							{
+								columns_valueStr[g] = columns_valueStr[g].substring(0,columns_valueStr[g].length()-2);
+							}
+                          
+%> 
+	<td width="20"><nobr><%= columns_valueStr[g]%>&nbsp;</nobr></td>	
+<%        columns_valueStr[g]="";
+						} else {
+                        			sheet.addCell(new jxl.write.Number(3+g,xls_x_start + row_index,columns_value[g]));
+						}
+					}
+
+				}  // end of for (int g =0;
+%>
+
+<% 
+	if (!xls)
+	{
+%>
+</tr>
+<%
+	} 
+	else 
+	{
+		; //write xls
+	}
+%>
+<%
+			} //end of if (previous_id.length() != 0)
+
+			alias = ds2.getValue(TblInRefInfo2DS.Alias);
+			s_id = ds2.getValue(TblInRefInfo2DS.Sample_ID);
+			igsn = ds2.getValue(TblInRefInfo2DS.IGSN);
+            method = ds2.getValue(TblInRefInfo2DS.Method);
+			material = 
+				(ds2.isFieldEmpty(TblInRefInfo2DS.Inclusion)) 
+				? 	(ds2.isFieldEmpty(TblInRefInfo2DS.Mineral))
+					? ds2.getValue(TblInRefInfo2DS.Material)
+					: ds2.getValue(TblInRefInfo2DS.Mineral)
+				: ds2.getValue(TblInRefInfo2DS.Inclusion);
+			
+			for (int g = 0; g< columns_value.length; g++) columns_value[g] = -9999;
+			previous_id = ds2.getValue(TblInRefInfo2DS.Batch_Num);
+            previous_method = ds2.getValue(TblInRefInfo2DS.Method);
+			if( "&nbsp;".equalsIgnoreCase(igsn) == false ) 
+				igsnURL = "<a href='#IDBlock' onclick=\"openwindow('"+PetDBConstants.igsnSESARURL+igsn+"','"+igsn+"','600','400')\" >"+igsn+"</a>";
+			  else
+				igsnURL="N/A";
+		}
+		String item_code =  ds2.getValue(TblInRefInfo2DS.Item_Code);
+		String type_code =  ds2.getValue(TblInRefInfo2DS.Type_Code);
+		f_index = ds1.getIndexOf(type_code,item_code);
+		if ((f_index > -1 ) && (f_index < columns_size))
+		{
+			columns_value[f_index] = ds2.getDoubleValue(TblInRefInfo2DS.Value);
+	//		if("Groundmass".equalsIgnoreCase(material))
+	//		  columns_valueStr[f_index] +=columns_value[f_index]+", ";
+	//		else
+            if(tableId.equals("Table2"))
+			  columns_valueStr[f_index] =columns_value[f_index]+" "+ds2.getValue(TblInRefInfo2DS.Unit)+", ";
+            else
+              columns_valueStr[f_index] =columns_value[f_index]+", ";
+		}
+	}   // end of while()
+
+	row_index++;
+	if (row_index%2 == 0) colorName = "#D6D6D6";
+	else colorName = "#DFDCB5";
+%>
+<%
+	if (!xls)
+	{ 
+%>
+<tr bgcolor="<%=colorName%>" class="pad">
+	<td width="50"><%= alias   %></td>
+	<td width="50"><%= s_id    %></td>
+	<td width="50"><%= igsnURL %></td>
+    <td width="20"><%= method  %></td>
+	<td width="20"><%= material%></td>
+<%
+	}
+	else 
+	{
+        	label = new Label(0,xls_x_start + row_index,alias);
+                sheet.addCell(label);
+                label = new Label(1,xls_x_start + row_index,s_id);
+                sheet.addCell(label);
+                label = new Label(2,xls_x_start + row_index,material);
+               	sheet.addCell(label);
+	}
+	
+			for (int g =0; g < columns_value.length; g++)
+			{
+				 if ( Math.abs( columns_value[g] + 9999) < 0.01)
+				{
+					if (!xls)
+					{  
+%>   
+	<td width="20"><nobr>&nbsp;</nobr></td>	
+<%
+					} 
+					else 
+					{
+						; //write xls
+					}
+				}
+				else
+				{
+					if (!xls)
+					{
+                            if(columns_valueStr[g]!=null && columns_valueStr[g].endsWith(", "))
+							{
+								columns_valueStr[g] = columns_valueStr[g].substring(0,columns_valueStr[g].length()-2);
+							} 
+%> 
+	<td width="20"><nobr><%= columns_valueStr[g]%>&nbsp;</nobr></td>	
+<%
+					} else {
+                        		sheet.addCell(new jxl.write.Number(3+g,xls_x_start + row_index,columns_value[g]));
+					}
+				}
+
+			} //end of for
+	if (!xls)
+	{
+%>
+</tr>
+</table>
+	  </td>
+    </tr>
+<%
+	}
+//	int r = wrapper.closeQueries();
+%>

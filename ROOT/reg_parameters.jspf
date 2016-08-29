@@ -1,0 +1,112 @@
+<%@ page import="java.util.*"%>
+<%@ page import="java.lang.*"%>
+<%@ page import="javax.servlet.*"%>
+	<%@ page import="petdb.registration.*"%>
+	<%@ page import="petdb.criteria.*"%>
+	<%@ page import="ciesin.uas.query.*"%>
+	<%@ page import="ciesin.uas.update.*"%>
+
+<%
+	String message = " We will keep you updated on the changes/enhancements of PetDB database.";
+	String subject = "PetDB registration.";
+	String user_reg_stat = "";
+	Emailer em = new Emailer();
+	String packagename = application.getInitParameter("uas_package");
+	if (packagename != null)
+	if (request.getParameter("Submit") != null)
+	{	
+		String firstname = request.getParameter("firstname");
+		String lastname = request.getParameter("lastname");
+		String org = request.getParameter("organizatn");
+		String email = request.getParameter("email");
+                RegUserBoolSQL isSubUserSQL =
+                        new RegUserBoolSQL(email, null,packagename);
+
+		boolean go_on = true;
+                if (isSubUserSQL.prepareData() == 0)
+                {
+			Boolean isIt = isSubUserSQL.getRegUserBool();
+			
+			if ((isIt != null) && (isIt.booleanValue() == true))
+			{
+				user_reg_stat = 
+				" User :" + email +  ": already exists in the PetDB subscription list! \n";
+				session.setAttribute("user_reg_stat",user_reg_stat);
+                	}
+			else
+			{
+                		RegUserBoolSQL isSubUserSQLG =
+                        		new RegUserBoolSQL(email, null);
+                		if (isSubUserSQLG.prepareData() == 0)
+				{
+					Boolean isItG = isSubUserSQLG.getRegUserBool();
+					if (isItG.booleanValue() != true)
+					{
+					
+						//register user 
+		        			RegisteredUser regUser = new RegisteredUser(-1);
+        					regUser.setFirstName(firstname);
+        					regUser.setLastName(lastname);
+        					regUser.setEmail(email);
+        					regUser.setOrganization(org);
+
+        					regUser.setUserName(email);
+        					regUser.setPassword("none");
+
+        					InsertRegUserSQL insertUserSQL =
+                        				new InsertRegUserSQL(regUser, packagename);
+
+        					if (insertUserSQL.doUpdate() != 0)
+        					{
+							go_on = false;
+						} else
+						{
+							;
+						}
+					}
+					if (go_on)
+					{
+						InsertSubscriptionSQL newSubSQL =
+                                                	new InsertSubscriptionSQL(email, packagename);
+
+                                		if (newSubSQL.doUpdate() == 0)
+                                		{
+							user_reg_stat = "Thank you for"
+							+ " registering with the PetDB mailing list!";
+							//+ " You will receive a confirmation email shortly.";
+							try {
+								em.sendEmail("petdb@ciesin.columbia.edu",
+                      							email,
+									"petdb@ciesin.columbia.edu",
+                      							subject,
+                      							user_reg_stat + message);
+								user_reg_stat += 
+									" You will receive a confirmation email shortly.";
+							} 
+							catch (Exception e) 
+							{
+								go_on = false;
+								user_reg_stat = "Please, check you email address!";
+							} 
+							session.setAttribute("user_reg_stat", user_reg_stat);
+						} else go_on = false;
+					}
+					if (!go_on) 
+					{
+						user_reg_stat = "Registration failed. Please, try again later!";
+						session.setAttribute("user_reg_stat", user_reg_stat);
+
+					} 
+        			} 
+				else
+				{ 
+					user_reg_stat = "Registration failed. Please, try again later!";
+					session.setAttribute("user_reg_stat", user_reg_stat);
+				}
+			}
+		} else 
+			throw new Exception("User Registration Database is off-line. Pls. register later!"); 
+
+	}
+
+%>

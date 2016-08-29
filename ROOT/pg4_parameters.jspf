@@ -1,0 +1,192 @@
+<%@ page import="petdb.criteria.Criteria"%>
+<%@ page import="petdb.data.DataRecordDS"%>
+<%@ page import="petdb.data.FinalSampleDS"%>
+<%@ page import="petdb.data.TagAlongData"%>
+<%@ page import="petdb.wrapper.DataWrapper"%>
+<%
+
+	boolean compiled = false;
+    String sub = request.getParameter("sub");
+    CCriteriaCollection c_c_collection;
+    CombinedCriteria c_criteria;
+    Criteria criteria;
+	DataSet data = null;
+    int test =0;
+	int pg_ind = 4;
+	Wrapper wrapper = null;
+	String[] s_keys= null;
+	SummaryWrapper summary_wrapper=null;
+    if ((c_c_collection = (CCriteriaCollection)session.getAttribute("ccColl")) == null)
+    {
+          throw new Exception("Your Session has EXPIRED. Please go to index.jsp and start over");
+    }
+   
+    c_criteria = c_c_collection.getCurrentCCriteria();
+	
+	boolean search = c_criteria.isSet();
+ 
+	if( (summary_wrapper=(SummaryWrapper)session.getAttribute("pg4_summary_wrapper") ) == null)
+	{
+	    summary_wrapper = 
+		    (SummaryWrapper)c_criteria.getSampleCriteria(request.getSession().getId()).getWrapper(); //this will search database
+	    session.setAttribute("pg4_summary_wrapper", summary_wrapper);
+	}
+    	
+	String state = "";
+	
+	Wrapper pg3wrapper =null;
+ 
+	if ((pg3wrapper = (Wrapper)session.getAttribute("pg3wrapper")) == null)
+                throw new Exception("Your Session has EXPIRED. Please go to index.jsp and start over");
+
+    String criteria_type = ((DataWrapper)pg3wrapper).getCriteriaType();
+
+    if ((criteria =c_criteria.getCriteria(criteria_type)) == null)
+            throw new Exception("The Criteria you chose does not exist");
+        
+    wrapper = criteria.getWrapper();
+    if (wrapper==null) throw new Exception("Wrapper is null");
+    
+    data = (DataRecordDS) wrapper.getControlList("0");
+   
+	String browsing;
+	FinalSampleDS final_data;
+    Wrapper final_wrapper;
+	String info_page ="method_info.jsp";
+	String analysis_summary = "";
+
+        %>
+            <% /* Always call read_global_flags to check for AND/OR Setting */ %>
+            <%@ include file="read_global_flags.jspf"%>
+        <%
+        	if (criteria_type.equals(CombinedCriteria.ByDataCriteria))
+        	{
+       	        session.setAttribute("compiled_or_individual","Y"); //Indicate that the radio buttons for pre-compiled or individual is clicked.
+%>
+        		<%@ include file="read_data_parameters.jspf"%>
+<%
+			if ( ((ByDataCriteria)criteria).getDataType().equals(ByDataCriteria.Compiled) )
+			{
+				compiled = true;
+				analysis_summary = " Rock Pre-Compiled Analysis";
+				info_page = "method_info.jsp";
+			} else analysis_summary = " Rock Individual Analysis";
+        	} 
+		else if (criteria_type.equals(CombinedCriteria.ByMineralCriteria))
+        	{
+			analysis_summary = " Mineral Analysis";
+%>
+        		<%@ include file="read_mineral_parameters.jspf"%>
+<%
+        	} 
+		else  if (criteria_type.equals(CombinedCriteria.ByInclusionCriteria)) 
+		{
+                        analysis_summary = " Inclusion  Analysis";
+%>
+        		<%@ include file="read_inclusion_parameters.jspf"%>
+<%
+        	} else 
+		{
+			analysis_summary = " Rock Mode Analysis";
+%>
+			<%@ include file="read_rockmode_parameters.jspf"%>
+<%
+		}
+        if((null != sub) && (!sub.equals( "" )) && (sub.equals("y")))
+        {
+        	browsing =(String)session.getAttribute("browsing");
+        }
+        else
+        {
+	        if ( (browsing =request.getParameter("browsing")) == null)
+	        {    
+                browsing = "first";
+	 
+		        if (session.getAttribute("final_wrapper") != null)
+		        {
+			        final_wrapper = (FinalSampleWrapper)session.getAttribute("final_wrapper");
+			        ((FinalSampleWrapper)final_wrapper).update(criteria, summary_wrapper.getQryStr(true)); //This will triger search of database
+			        state += " get from session final_wrapper";
+		        } else  {
+			        final_wrapper = new FinalSampleWrapper(criteria, summary_wrapper.getQryStr(true));
+			        state += " new final_wrapper";
+		    }
+		    session.setAttribute("final_wrapper",final_wrapper);
+		    session.setAttribute("browsing",browsing);
+	    }
+      }
+      wrapper = criteria.getWrapper();
+        
+	  data = (DataRecordDS) wrapper.getControlList("0");
+       	
+	  s_keys  =((DataRecordDS)data).getOrderedKeys();
+
+	  final_wrapper = (FinalSampleWrapper)session.getAttribute("final_wrapper");
+
+//Debug block	
+//   	try{
+   	      	  // Create file 
+//   	      	  FileWriter fstream = new FileWriter("C:\\Users\\Lulin Song\\Downloads\\resultqry_pg4.txt");
+//   	      	  BufferedWriter outFile = new BufferedWriter(fstream);
+//   	      	  outFile.write( final_wrapper.toString() );
+//   	      	  //Close the output stream
+//   	      	  outFile.close();
+//   	      	  }catch (Exception e){//Catch exception if any
+//   	      	  System.err.println("Error: " + e.getMessage());
+//   	      	  }
+	
+	//session.setAttribute("state",final_wrapper.toString());
+	final_data = (FinalSampleDS)final_wrapper.getControlList("0");
+	
+    
+    String resultSamples = null;
+    if(request.getParameter("allMAJ") != null) 
+    {
+        summary_wrapper.setTagAlongSampleNum(criteria.getItemCodes());
+        resultSamples = summary_wrapper.getTagAlongSampleNum();
+        if(resultSamples == null) resultSamples = "TO_BE_REPLACED.sample_num IN (" +((FinalSampleDS)final_data).getSampleNumbers()+")"; 
+        session.setAttribute("tagAlongSamples",resultSamples);
+    }  
+    TagAlongData tagAlong = new TagAlongData((Criteria)criteria.clone(), (String)session.getAttribute("tagAlongSamples")); 
+    
+	
+    
+    int page_size = 10; //list 10 at one time
+	int rows_written = page_size; 
+	int totalCount = final_data.getTotalCount();
+	int currentRow=0;
+	String errorMsg=null;
+	if(totalCount == 0 ) errorMsg="Not able to retrieve the dataset you requested. Please contact us with your search criteria.";
+	else
+	{
+	  if (browsing != null)
+	  {
+		//state += "Browsing = " + browsing + " before that counter = " + final_data.getCurrentRecNum();
+		if (browsing.equals("first")){
+			//state += " GO FIRST PAGE FROM PG$_PARAMETERS";
+			if (totalCount != 0 ) final_data.goFirstPage();
+		} else if (browsing.equals("next")){
+			final_data.goNextPage();
+		} else if (browsing.equals("previous")) {
+			final_data.goPreviousPage(page_size);
+		} else if (browsing.equals("last")){
+			boolean r =  final_data.goLastPage(page_size);
+		}
+	    session.setAttribute("browsing",browsing);
+	  }
+	  try{
+	      currentRow = final_data.getCurrentRecNum();
+	  }
+	  catch(Exception e)
+	  {
+		  System.err.println(e.getMessage());
+		  errorMsg="Not able to retrieve the dataset you requested. Please contact us with your search criteria.";
+	  }
+      if (criteria_type.equals(CombinedCriteria.ByDataCriteria))
+	  if ( ((ByDataCriteria)criteria).getDataType().equals(ByDataCriteria.Compiled) )
+		currentRow++;
+
+	//state +=  " after that counter = " + final_data.getCurrentRecNum();
+	
+	}
+%>

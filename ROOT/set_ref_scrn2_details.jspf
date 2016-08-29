@@ -1,0 +1,39 @@
+	 <tr>
+      <% if (href_str.equals("set_ref_scrn2.jsp")) { %>
+        <th width="5%" ALIGN="left">&nbsp;</th>
+    <%}%>
+		<th  align="left" scope="col">&nbsp;</th>
+        <th  align="left" scope="col"><a href="<%= href_str%>?ind=<%= ind%>&<%=orderDesc%>=<%=PubRecord.AUTH%> " target="_self">Author</a></th>
+        <th  align="left" scope="col"><a href="<%= href_str%>?ind=<%= ind%>&<%=orderDesc%>=<%=PubRecord.YEAR%>" target="_self">Year</a></th>
+        <th  align="left" scope="col">Title and Journal</th>
+      </tr>
+<%
+    while (pr_ds.hasMoreKeys())
+	{
+		 String key = pr_ds.getNextKey();
+               	 PubRecord rr = (PubRecord)pr_ds.getValue(key);
+                	r_keys += (r_keys.length() == 0 ? key : "," + key);
+                	c_title = "" + rr.getValue(PubRecord.TITLE);
+               		if (!"&nbsp;".equals(rr.getValue(PubRecord.Journal)) && !"0".equals(rr.getValue(PubRecord.Journal)) )
+                        	c_title += " Journal: " + rr.getValue(PubRecord.Journal);
+                	if (!"&nbsp;".equals(rr.getValue(PubRecord.Volume)) && !"0".equals(rr.getValue(PubRecord.Volume)))
+                        	c_title += " Volume: " + rr.getValue(PubRecord.Volume);
+                            
+%>
+        <tr class="regTxt">
+          <% if (href_str.equals("set_ref_scrn2.jsp")) { %>
+		 <td><% if(isCompleted) {%><input type="checkbox" checked name="checkboxref" value="<%= key%>"> <%}%> </td>
+        <%}%>
+                  <td ><a href="ref_info.jsp?singlenum=<%= key%>" target="ref_win" onClick="openWindow2(this,350,750,this.target)" title="Get chemistry and location data for this reference">
+                        data tables</a></td>  
+                  <td ><%= rr.getValue(PubRecord.AUTH)%></td>
+                  <td ><%= rr.getValue(PubRecord.YEAR)%></td> 
+                  <td ><%= c_title%><%= (rr.getValue(PubRecord.Book_Title).length()<2 ? "": ";" + rr.getValue(PubRecord.Book_Title)
+)%><%= (rr.getValue(PubRecord.Editors).length()<2 ? "": "; "+ rr.getValue(PubRecord.Editors))%></td>
+           <%-- 	<td><input type="button" value="Excel" onclick="location.href='referenceExcel?ref_num=<%= key%>'"></td>  --%>
+         </tr>
+                
+<%
+        }
+        
+%>

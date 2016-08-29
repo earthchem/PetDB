@@ -1,0 +1,14 @@
+CREATE OR REPLACE TRIGGER PETDB.IGSN_Sample_Num_Sync
+   AFTER   DELETE OR UPDATE OF sample_num
+   ON petdb.SAMPLE
+   begin
+   delete from IGSN_INFO i where i.sample_NUM not in (select s.sample_num from sample s);
+   end;
+   
+
+CREATE OR REPLACE TRIGGER PETDB.IGSN_Station_Num_Sync
+   AFTER   DELETE OR UPDATE OF station_num
+   ON petdb.Station
+   begin
+   delete from IGSN_INFO i where i.station_NUM not in (select s.station_num from station s); 
+   end;

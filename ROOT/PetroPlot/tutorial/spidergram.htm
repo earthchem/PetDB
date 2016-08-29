@@ -1,0 +1,196 @@
+<html>
+
+
+
+<head>
+
+
+
+<title>PetroPlot Tutorial: Spider Diagram function</title>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="plotStyle.css" rel="stylesheet" type="text/css">
+</head>
+
+
+
+
+
+
+
+<body bgcolor="#FFFFFF">
+
+
+
+<center>
+
+<h1>PetroPlot Tutorial</h1>
+
+<h1>Spider Diagram function</h1>
+
+</center>
+
+
+
+<p>
+
+<b>Purpose:</b> <br />
+
+Spider diagrams, which present data for many elements normalized to reference such
+
+as primitive mantle, are common plots used to compare samples and to investigate
+
+trace element systematics.  In order to make a spider diagram,
+
+the data have to be organized such that elements are in a specific order,
+
+and chemical values are divided by the standard values.
+
+PetroPlot “SpiderDiagram” function automates the entire process. <br /><br /><br />
+
+
+
+
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Start:</b> <br />
+
+Make sure the file <a href=files.htm#PetroPlotSpider_xls>PetroPlotSpider.xls</a> is open.  <br />
+
+You can customize the standard values in the "PetroPlotSpider.xls" file.<br /><br /><br />
+
+</p>
+
+
+
+<p>
+
+<b>Step 1:</b> <br />
+
+Select a set of rows on a data sheet. <br />
+
+<i>(Notice: You can select any column.  PetroPlot only reads the row positions from your selection.)</i><br />
+
+<img src="figures/spidergram_figure01.gif"><br /><br /><br />
+
+
+
+Click PetroPlot --> Spider Diagram. <br />
+
+<img src="figures/spidergram_figure00.gif"><br /><br /><br />
+
+
+
+</p>
+
+
+
+<p>
+
+<b>Step 2:</b> <br />
+
+Select a column as legend for the spider diagram, then click "Next" <br />
+
+<font color=red><i>(Warning: Don't use any number values as legend,
+
+e.g. if a sample is named as "32", rename it to a string.)</i></font><br />
+
+<img src="figures/spidergram_figure02.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Step 3:</b> <br />
+
+Set up standard values (i.e. to what values data should be normalized). <br />
+
+<img src="figures/spidergram_figure03.gif"><br /><br /><br />
+
+
+
+<i><b>Select a worksheet:</b></i> <br />
+
+When you click a value in the upper left panel, the lower left panel will show standards in the selected worksheet <br />
+
+<img src="figures/spidergram_figure04.gif"><br /><br /><br />
+
+
+
+<i><b>Select a standard:</b></i> <br />
+
+When you click a standard in the lower left panel, the right panel will show values.<br />
+
+However, you don't need to select from the right panel.  <br />
+
+The right panel is for the purpose to check values and make sure those are what you want to use.<br />
+
+<img src="figures/spidergram_figure05.gif"><br /><br /><br />
+
+
+
+
+
+<i><b>Click the "Next" button.  Done!</b></i> <br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Results:</b> <br />
+
+PetroPlot adds a new sheet for selected samples, orders the elements based on the selected standard,
+
+calculates the normalization values, and makes line charts. <br /><br /><br />
+
+
+
+
+
+<b>Known problems:</b><br />
+
+
+
+<i><b>Use numbers as legend.</b></i><br />
+
+If you use numbers as legends, the PetroPlot program will generate errors.
+
+<a href=problem_numberlegend.htm>Details...</a><br /><br />
+
+
+
+
+
+<br /><br />
+
+<i>Last modified 05/10/2002, Yong Jun Su</i><br />
+
+This line marks the end of <b>PetroPlot Tutorial: Spider Diagram function</b>
+
+
+
+</body>
+
+
+
+</html>
+
+
+

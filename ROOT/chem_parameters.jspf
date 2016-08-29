@@ -1,0 +1,56 @@
+<%
+        CCriteriaCollection c_c_collection;
+        CombinedCriteria c_criteria;
+        Criteria criteria;
+        String state ="";
+        String criteria_type ="";
+	String title = "Measured Variable: "; 
+	String measure = "Concentration: "; 
+        int test =0;
+	Wrapper  pg3wrapper = null;
+
+        //ccColl is the session place holder for the CombinedCriteriaCollaction object
+        if ((c_c_collection = (CCriteriaCollection)session.getAttribute("ccColl")) == null)
+        {
+                throw new Exception("Your Session has EXPIRED. Please go to index.jsp and start over");
+        }
+        
+	if ((pg3wrapper = (Wrapper)session.getAttribute("pg3wrapper")) == null)
+        {
+                throw new Exception("Your Session has EXPIRED. Please go to index.jsp and start over");
+        } else
+                criteria_type = ((DataWrapper)pg3wrapper).getCriteriaType();
+
+        c_criteria = c_c_collection.getCurrentCCriteria();
+	criteria = c_criteria.getCriteria( ((DataWrapper)pg3wrapper).getCriteriaType() );
+
+	Wrapper wrapper = null;
+	boolean search = c_criteria.isSet(); 
+
+        SummaryWrapper summary_wrapper = (SummaryWrapper)c_criteria.getSampleCriteria(request.getSession().getId()).getWrapper();
+
+
+	String item =  request.getParameter("item"); 
+	String item_num =  request.getParameter("item_num"); 
+	String type =  request.getParameter("type"); 
+	String type_desc =  request.getParameter("label"); 
+	String type_num =  request.getParameter("type_num"); 
+	boolean mth_flag = ( "false".equals(request.getParameter("mth")) ? false : true); 
+	if ((wrapper =(Wrapper)session.getAttribute("chemWrapper")) == null)
+	{
+		session.setAttribute("chemWrapper", 
+		new ByChemWrapper((ChemistryCriteria)criteria,item_num+ ":"+type_num+";"+summary_wrapper.getQryStr(true)));
+		wrapper = (Wrapper)session.getAttribute("chemWrapper");
+	} else 
+		((ByChemWrapper)wrapper).update((ChemistryCriteria)criteria,item_num+
+			 ":"+type_num + ";"+summary_wrapper.getQryStr(true));
+	
+	DataSet ds = wrapper.getControlList("0"); 
+
+	if (!mth_flag)
+	{
+		title = "Mineral: ";
+		measure = "Volume: ";
+	}
+	AValuePerKeyDS methodds = (AValuePerKeyDS) request.getSession().getAttribute("Method");
+%>

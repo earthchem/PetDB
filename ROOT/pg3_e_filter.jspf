@@ -1,0 +1,97 @@
+<%
+	ds = wrapper.getControlList("0");
+   // System.out.println(wrapper.getClass().getName());
+	String[] labels = null;
+	if ( criteria_type.equals(CombinedCriteria.ByInclusionCriteria)	)
+	    labels = ((DataIIRecordDS)ds).getOrderedLabels(); //Those lables are hard-coded.
+	else                                                //Labels are :
+		labels = ((DataRecordDS)ds).getOrderedLabels(); // "Major_Oxides", "Isotopic_Ratio","Noble_Gas","REE",
+                                                        // "U_Series","Volatile","TE","IS","AGE","EM","Rock_Mode",
+                                                        // "Model Data","Ratio"
+	
+	if ( criteria_type.equals(CombinedCriteria.ByInclusionCriteria)	) //s_keys are: MAJ, IR, NGAS,REE,US,VO,TE,AGE,EM,MODE,MD,RT
+	  s_keys	 =((DataIIRecordDS)ds).getOrderedKeys(); //Those keys are hard-coded.
+	else
+	  s_keys	 =((DataRecordDS)ds).getOrderedKeys();
+	Vector v = null;
+	AValuePerKeyDS itemds = (AValuePerKeyDS) request.getSession().getAttribute("ItemMeasured");
+	AValuePerKeyDS mineralistds = (AValuePerKeyDS) request.getSession().getAttribute("MineralList");
+	Vector itemDesc = new Vector();
+	
+	for (int t = 0; t<labels.length; t++)
+	{
+		v = (Vector)ds.getValue(s_keys[t]); //ds is DataIIRecordDS
+		if (v != null)
+		{
+%>
+
+<td>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+<%		
+
+			String type_num = (String)((DataRecordDS)ds).getIndexKey(s_keys[t]);
+			
+			String firstRow ="<tr class=\"pad\"><td nowrap class=\"setLabel1T\">"+labels[t]+"</td></tr>";
+%>  
+    <tr class="pad">
+      <td nowrap class="setLabel1T"><%= labels[t]%></td>
+    </tr>
+    <tr>
+      <td nowrap>
+
+        <table width="100%" border="0" cellspacing="0">
+          <%
+						int relevant = 0;
+						for (int i = 0; i<v.size(); i++)
+						{
+							DataRecord dr = (DataRecord)v.elementAt(i);
+							String item = (String)dr.getColumn(DataRecord.Name);
+							String item_num = (String)dr.getColumn(DataRecord.ID);
+							String ext = ""; //(String)dr.getColumn(DataRecord.Type);
+					        if ( criteria_type.equals(CombinedCriteria.ByInclusionCriteria)	)
+					            ext = (String) ((DataIIRecord)dr).getColumn(DataIIRecord.TypeII);
+							if ( ((ByChemistryWrapper)wrapper).isRelevant(dr) )
+							{
+							    relevant++;
+							   if (relevant == 1)
+							   {
+%>
+          <tr align="left" valign="top">
+            <td><input type="checkbox" name="All_type" value="<%= s_keys[t]%>" onChange="chkdVal=1;" onClick ="chkdVal=1; Sel_DeSelAllItems(this);">
+            </td>
+            <td class="lt_line"><font size="-2">Select/Deselect&nbsp;All</font></td>
+          </tr>
+            <%
+							    }
+							    boolean selected = (
+										(criteria.isSelected(ByDataCriteria.ITEM,item)) 
+										|| (criteria.isSelected(s_keys[t],item))
+									   );
+							    itemDesc.add(item); //used for qtooltip
+							    String idStr = item; //used for id which won't support ()
+							    idStr = idStr.replace('(','_');
+							    idStr = idStr.replace(')','_');
+							    idStr = idStr.replace('/','_');
+%>
+          <tr align="left" valign="top">
+            <td><input type="checkbox" name="<%= s_keys[t]%>" value="<%= item%>" <%= selected ? "checked" : ""%> onChange="javascript:chkdVal=1;">
+            </td>
+            <td><a href="set_chem.jsp?mth=<%= mth_flag%>&item=<%= item%>&item_num=<%=item_num%>&type=<%= s_keys[t]%>&type_num=<%= type_num%>&label=<%= labels[t]%>" 
+                   target="set_win" 
+                   onClick="chkdVal=1;document.form1.DoOnSubmit.value='submit_e';document.form1.chem_elements.value='yes';document.form1.submit();openWindow2(this,400,900);"
+                   id='<%= idStr %>'
+                ><%= item%></a></td>
+          </tr>
+          <%		}					
+						}
+%>
+        </table>
+      </td>
+    </tr>
+  </table>
+</td>
+<%
+        
+	}
+} 
+%>

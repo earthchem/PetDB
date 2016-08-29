@@ -1,0 +1,13 @@
+<div>
+<br/>
+  <table border="0" cellspacing="0">
+    <tr align="center" valign="bottom"> 
+      <td>
+      <div id="map_canvas" style="width: 350px; height: 200px">map should show here</div>
+      </td>
+    </tr>
+    <tr> 
+      <td align="center" valign="middle" colspan="4"><img src="images/shim.gif" width="5" height="5"></td>
+    </tr>
+  </table>
+</div>

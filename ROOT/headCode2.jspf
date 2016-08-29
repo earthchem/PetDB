@@ -1,0 +1,19 @@
+<% // same as headCode but with popout error pg %>
+<%@ page import="petdb.config.*" %>
+<%@ page import="petdb.query.*" %>
+<%@ page import="petdb.data.*" %>
+<%@ page import="petdb.wrapper.*" %>
+<%@ page import="petdb.criteria.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.lang.*" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+
+<%
+
+// this code gets the path that may be needed for html included sections
+//StringBuffer reqUrl = request.getRequestURL();
+//String projRoot = request.getContextPath();
+//String webPath = reqUrl.delete(reqUrl.lastIndexOf("/search/"), reqUrl.length()).toString();
+//String cssPath = reqUrl.toString()+"/search/css";
+String errMsg = (String) request.getSession().getAttribute("error");
+%>

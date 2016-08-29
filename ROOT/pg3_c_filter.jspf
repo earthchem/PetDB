@@ -1,0 +1,245 @@
+<table>
+    <tr>
+        <td>
+                        <table border="0" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <td valign="top" width="350">
+                                
+                                <!--  switch between individual or pre-compile options -->
+                                   <% if (criteria_type.equals(DataWrapper.ByDataCriteria))
+                                      {
+                                	     String compiledCheckStr =ByDataCriteria.Compiled.equals(((ByDataCriteria)criteria).getDataType()) ? "checked" : "";
+                                	     String individualCheckStr = ( ByDataCriteria.Individual.equals(((ByDataCriteria)criteria).getDataType()) ? "checked" : "");
+                                	     String sessionCheckStr = (String) session.getAttribute("compiled_or_individual");
+                                	     if( sessionCheckStr == null ) {compiledCheckStr =""; individualCheckStr="";}; //First time here in this session. Don't check anything by default. It will be set after the radio button is clicked and form is submit.
+                                   %>
+                                    <div style="border:1px dotted;">
+                                    <span class="emphasis">Data Display for sample</span><span style="color:red;font-style:bold;"> (Required)</span><br />
+                                      <span class="regTxt">
+                                        <input type="radio" name="datatype" value="<%= ByDataCriteria.Individual%>" <%= individualCheckStr %>><label>&nbsp;By method and source (multiple rows per sample)</label><br />
+                                        <input type="radio" name="datatype" value="<%= ByDataCriteria.Compiled%>" <%= compiledCheckStr %>><label>&nbsp;One row per sample</label>
+                                        <i>(Click <a href="#pad" onclick="MM_showHideLayers('precompile','show')" >here</a> for more information about this option.)</i>
+                                      </span>
+                                    </div>
+                                    <div id="precompile" class="criteria"> 
+                                    The second option will return a data table with only one row for each sample that contains a compilation of analytical values measured by different methods or reported in different references. If multiple values for the same variable parameter exist, 
+                                    the most recently published value will be shown. If you wish to see all of the values available, please select "Display data by method and source".
+                                    <button onclick="return MM_showHideLayers('precompile','hide');" class="ui-state-default ui-corner-all ui-icon ui-icon-close" style="display:inline;width:18px;height:18px;"></button>
+                                    </div>
+                                    <% } %> 
+                                    <br />
+                                    
+                                <!--  switch between & or || query constraints -->
+                                    <div style="border:1px dotted;"><span class="emphasis">Query Constraints:</span><br/>
+                                    <span class="regTxt"><label><input type="radio" name="logical_and_or" value="or" <%= (((ByChemistryCriteria)criteria).isORQuery() ? "checked" : "")%>>&nbsp;Include samples with <b>one or more</b> selected variables</label></span>
+                                    <br />
+                                    <span class="regTxt"><label><input type="radio" name="logical_and_or" value="and" <%= (((ByChemistryCriteria)criteria).isANDQuery() ? "checked" : "")%>>&nbsp;Include samples with <b>all</b> selected variables</label></span>
+                                    </div><br/>
+                                    
+                                <!--  switch between rock analyses type -->
+                                    <% 	if (criteria_type.equals(DataWrapper.ByDataCriteria)) {
+                                    %> <div style="border:1px dotted;">
+                                    <span class="emphasis">Whole Rock and/or Volcanic glass</span><br />
+                                    <span>
+                                    <input name="analysis_type" type="radio" value="<%= ByDataWrapper.Both%>" <%= ((ByChemistryWrapper)wrapper).selected(ByDataWrapper.Both) ? "checked" : ""%> onClick="chkVal();">
+                                    Include whole rock&nbsp;and&nbsp;glass&nbsp;analyses&nbsp;</span>
+                                    <span><br/>
+                                    <input type="radio" name="analysis_type" value="<%= ByDataWrapper.Rock%>" <%= ((ByChemistryWrapper)wrapper).selected(ByDataWrapper.Rock) ? "checked" : ""%> onClick="chkVal();">
+                                    Include only whole&nbsp;rock&nbsp;analyses&nbsp;</span><br/>
+                                    <span><input type="radio" name="analysis_type" value="<%= ByDataWrapper.Glass%>"  <%= ((ByChemistryWrapper)wrapper).selected(ByDataWrapper.Glass) ? "checked" : ""%> onClick="chkVal();">
+                                    Include only glass&nbsp;analyses&nbsp; </span></div>
+                                    <% 
+                                      }
+                                    %>                                     
+                                </td>
+                                
+                                <!--  Mineral Criteria  -->
+                                <td valign="top" align="center" class="new">
+                                <% if (criteria_type.equals(DataWrapper.ByMineralCriteria))
+                                {
+                                          DataSet  mineral_list = wrapper.getControlList("1");
+                                          Vector v1 =  mineral_list.getKeys();
+                                %>
+                                 <div style="border:1px dotted;">
+                                    <table width="100%">
+                                        <tr><td align="center"> <span class="emphasis">
+                                            Select Mineral Type<br /></span>
+                                            <select name="mineral_type" id="mineral_type" Multiple Size="7">
+                                                <option value ="" <%= (criteria.isSet(ByMineralCriteria.Mineral_List)) ? "" :"selected "%>>All Available</option>
+                                                <%
+                                                for (int i =0; i< v1.size(); i++) {
+                                                    String k  = (String)v1.elementAt(i);
+                                                    String v = (String)mineral_list.getValue(k);
+                
+                                                if (criteria != null) {
+                                                %>
+                                                <option value="<%= k%>" <%= (criteria.isSelected(ByMineralCriteria.Mineral_List,k)) ? "selected" :""%>> <%= v%> </option>
+                                                <%
+                                                }  else {
+                                                %>
+                                                <option value="<%= k%>" > <%= v%> </option>
+                                                <%
+                                                        }
+                                                     }
+                                                %>
+                                            </select>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center"><input type="button" name="Update" value="Update Chemical Items" onClick="thisRefresh()">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <% 
+                                }
+                                %>
+                                </td>
+                                <td width="300" align="left">
+                                   <div style="border:1px dotted;overflow:auto;"><span class="emphasis">Summary of method or compositional range filters</span>
+                                           <div style="border:1px;border-top-style:dotted;border-bottom-style:dotted;height:80px;text-align:center">
+                                           <%if( c_criteria.getDsc(criteria_type) =="" ) { %>No filters are set. <br/>Click on name of variable to set filter.<%} else { %> <%= c_criteria.getDsc(criteria_type)%> <% } %>
+                                           
+                                           </div>
+                                           <input type="button" name="Clear" value="Clear Filters" onClick="SubmitClear()">
+                                      <!-- 
+                                      <textarea name="textarea2" cols="45" rows="4" wrap="VIRTUAL" class="regTxt"  onFocus="noWrite(this)" READONLY><%= c_criteria.getDsc(criteria_type)%></textarea><br />Summary of constraints on chemical items
+                                    -->
+                                   
+                                   </div>
+                                </td>
+                            </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+<!--  switch between different inclusion types (melt or fluid) -->					
+<%       if (criteria_type.equals(DataWrapper.ByInclusionCriteria)) 
+         {
+%>
+                    <tr align="left" valign="top">
+                      <td width="100%">
+                        <table width="100%" class="select">
+                            <tr>
+                                <td nowrap class="emphasis" colspan="2">Inclusion Analyses</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" nowrap class="lt_line"><img src="images/shim.gif" height="1" width="5" border="0"></td>
+                            </tr>
+                            <tr class="regTxt">
+                                <td nowrap colspan="2">Select inclusion Type (if any):&nbsp;
+                                <% if (((ByInclusionCriteria)criteria).getAnalysisType().equals(ByInclusionWrapper.Melt) ) { %>
+                                    <input name="incl_type" id="melt" type="radio" value="<%= ByInclusionWrapper.Melt%>"  <% if(meltCount.equals("0")) out.print("disabled='true'"); else out.print("checked='true'"); %> onClick="changeInclusionType(this);"/>
+                                    <label for="melt" <% if(meltCount.equals("0")) out.print("style='color:grey'");%> > melt inclusion&nbsp;</label>                            
+                                    <input name="incl_type"  id="fluid" type="radio" value="<%= ByInclusionWrapper.Fluid%>"  <% if(fluidCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/> 
+                                    <label for="fluid" <% if(fluidCount.equals("0")) out.print("style='color:grey'");%> > fluid inclusion&nbsp;</label> 
+                                    <input name="incl_type"  id="min" type="radio" value="<%= ByInclusionWrapper.Mineral%>"  <% if(minIncCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/> 
+                                    <label for="min" <% if(minIncCount.equals("0")) out.print("style='color:grey'");%> > mineral inclusion&nbsp;</label> 
+                                <% } else if(((ByInclusionCriteria)criteria).getAnalysisType().equals(ByInclusionWrapper.Fluid)) { %>
+                                    <input name="incl_type"  id="melt"  type="radio" value="<%= ByInclusionWrapper.Melt%>"  <% if(meltCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/>
+                                    <label for="melt" <% if(meltCount.equals("0")) out.print("style='color:grey'");%> > melt inclusion&nbsp;</label>                             
+                                    <input name="incl_type"  id="fluid"  type="radio" value="<%= ByInclusionWrapper.Fluid%>"  <% if(fluidCount.equals("0")) out.print("disabled='true'"); else out.print("checked='true'"); %> onClick="changeInclusionType(this);"/> 
+                                    <label for="fluid" <% if(fluidCount.equals("0")) out.print("style='color:grey'");%> > fluid inclusion&nbsp;</label> 
+                                    <input name="incl_type"  id="min" type="radio" value="<%= ByInclusionWrapper.Mineral%>"  <% if(minIncCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/> 
+                                    <label for="min" <% if(minIncCount.equals("0")) out.print("style='color:grey'");%> > mineral inclusion&nbsp;</label> 
+                               <% } else { %>
+                                    <input name="incl_type"  id="melt"  type="radio" value="<%= ByInclusionWrapper.Melt%>"  <% if(meltCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/>
+                                    <label for="melt" <% if(meltCount.equals("0")) out.print("style='color:grey'");%> > melt inclusion&nbsp;</label>                             
+                                    <input name="incl_type"  id="fluid"  type="radio" value="<%= ByInclusionWrapper.Fluid%>"  <% if(fluidCount.equals("0")) out.print("disabled='true'"); %> onClick="changeInclusionType(this);"/> 
+                                    <label for="fluid" <% if(fluidCount.equals("0")) out.print("style='color:grey'");%> > fluid inclusion&nbsp;</label> 
+                                    <input name="incl_type"  id="min" type="radio" value="<%= ByInclusionWrapper.Mineral%>" checked='true' onClick="changeInclusionType(this);"/> 
+                                    <label for="min"> mineral inclusion&nbsp;</label> 
+                                <% } %>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td colspan="2" nowrap class="lt_line"><img src="images/shim.gif" height="1" width="5" border="0"></td>
+                            </tr>
+            <% 		
+            if ( ((ByInclusionCriteria)criteria).getAnalysisType().equals(ByInclusionWrapper.Melt))
+                {
+            %>
+                            <tr class="regTxt">
+                                <td colspan="2" nowrap>Choose heating:&nbsp;
+                                <input name="incl_heat" type="radio" value="<%= ByInclusionCriteria.Heating_All%>" <%= ByInclusionCriteria.Heating_All.equals( ((ByInclusionCriteria)criteria).getHeating()) ? "checked " : ""%> onClick="">
+                                all&nbsp;
+                                <input type="radio" name="incl_heat" value="<%= ByInclusionCriteria.Heating_Yes%>" <%= ByInclusionCriteria.Heating_Yes.equals( ((ByInclusionCriteria)criteria).getHeating()) ? "checked" : ""%> onClick="">
+                                only heated&nbsp;
+                                <input type="radio" name="incl_heat" value="<%=  ByInclusionCriteria.Heating_No%>" <%= ByInclusionCriteria.Heating_No.equals( ((ByInclusionCriteria)criteria).getHeating())? "checked" : ""%> onClick="">
+                                only unheated&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" nowrap class="lt_line"><img src="images/shim.gif" height="1" width="5" border="0"></td>
+                            </tr>
+                            <%
+                        DataSet  hostmineral_list = wrapper.getControlList("1");
+                        Vector v2 = hostmineral_list.getKeys();
+                            %>
+                            <tr class="regTxt">
+                                <td width="45%" align="left" valign="top">Use menu at right to select host mineral,<br />	
+                                    then click below to update this page<br />	
+                                    <input type="button" name="Update2" value="Update Chemical Items" onClick="thisRefresh()">
+                                </td>
+                                <td width="55%" align="left" valign="top">host mineral<br />
+                                <select name="host_mineral" id="select" multiple size="5">
+                                    <option value="" <%= (!criteria.isSet(ByInclusionCriteria.HostMineral)) ? "selected" :""%>>All
+                                    Available</option>
+                                    <%
+                                    for (int i =0; i< v2.size(); i++)
+                                    {
+                                             String k  = (String)v2.elementAt(i);
+                                             String hostValue = (String)hostmineral_list.getValue(k);
+                    
+                                             if (criteria != null) {
+                                    %>
+                                             <option value="<%= k%>" <%= (criteria.isSelected(ByInclusionCriteria.HostMineral,k)) ? "selected" :""%>> <%=hostValue%> </option>
+                                    <%
+                                             }  else {
+                                    %>
+                                             <option value="<%= k%>" > <%=hostValue%> </option>
+                                    <%
+                                            } //end of if
+                                    }//end of for
+               
+                                    %>
+                               </select></td>
+                            </tr>
+<% 
+                }//end of if Melt
+               if ( ((ByInclusionCriteria)criteria).getAnalysisType().equals(ByInclusionWrapper.Fluid) && 0 == 1) {
+%>
+                            <tr class="regTxt" valign="top">
+                                <td nowrap>select from menus at right,
+                                then click below to update page:<br />
+                                <input type="button" name="Update" value="Update Chemical Items" onClick="thisRefresh()"></td>
+                                <td>
+                                  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="regTxt">
+                                    <tr align="left">
+                                        <td>Fluid Inclusion<br />
+                                        <select name="incl_mineral" multiple size ="5">
+                                            <option value="" <%= (!criteria.isSet(ByInclusionCriteria.Mineral)) ? "selected" :""%>>All Available</option>
+                                        </select></td>
+                                        <td align="left">host mineral<br />
+                                        <select name="host_mineral" multiple size="5">
+                                            <option value ="" <%= (!criteria.isSet(ByInclusionCriteria.Mineral)) ? "selected" :""%>>All Available</option>
+                                        </select></td>
+                                    </tr>
+                                 </table>
+                                </td>
+                            </tr>
+						  
+<%	  
+                }//end of if Fluid
+%>
+        </table>
+    </td>
+</tr>
+<%
+	}//end of if inclusion
+%>
+                    <tr align="left" class="setLabel1">
+                        <td valign="middle"><img src="images/shim.gif" width="5" height="1"><span class="emphasis">Select variables. (Click name of variable to filter by method or compositional range)</span></td>
+                    </tr>
+</table>
+                       

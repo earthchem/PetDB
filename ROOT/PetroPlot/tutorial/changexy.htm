@@ -1,0 +1,210 @@
+<html>
+
+
+
+<head>
+
+
+
+<title>PetroPlot Tutorial: ChangeXY function</title>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="plotStyle.css" rel="stylesheet" type="text/css">
+</head>
+
+
+
+
+
+
+
+<body bgcolor="#FFFFFF">
+
+
+
+<center>
+
+<h1>PetroPlot Tutorial</h1>
+
+<h1>ChangeXY function</h1>
+
+</center>
+
+
+
+<p>
+
+<b>Purpose:</b> <br />
+
+This function changes axes for all series in a single XY plot, while preserving the format of a chart.<br />
+
+It is useful for generating multiple high-quality plots with complex formatting,
+
+especially when there are a large number of series. <br /><br />
+
+
+
+For example, the formatting of the XY charts follows Excel’s default settings,
+
+which might be unsatisfactory.  <br />
+
+In the following, series 1 uses blue diamonds, series 2 uses pink squares,
+
+and series 3 uses yellow triangles, etc.  You may want to change the colors or the shapes<br />
+
+<img src="figures/changexy_figure00.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Start:</b> <br />
+
+Format the diagram as you want. This is your template.  <br />
+
+<img src="figures/changexy_figure01.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Step 1:</b> <br />
+
+We suggest that you copy the template to other place inside this workbook.  <br />
+
+<font color=red><i>(The ChangeXY function does not work if a chart contains data from other workbooks.)</i></font><br />
+
+<img src="figures/changexy_figure02.gif"><br /><br /><br />
+
+</p>
+
+
+
+<p>
+
+<b>Step 2:</b> <br />
+
+Select the diagram Click the PetroPlot --> ChangeXY button.  <br />
+
+<img src="figures/changexy_figure03.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Step 3:</b> <br />
+
+Change the X or (and) Y axes.  <br />
+
+<i>This example changes X axis.</i><br />
+
+<img src="figures/changexy_figure04.gif"><br /><br />
+
+<i>This example changes Y axis.</i><br />
+
+<img src="figures/changexy_figure05.gif"><br /><br /><br />
+
+
+
+</p>
+
+
+
+<p>
+
+<b>Step 4:</b> <br />
+
+Click the "Next" button.  <br />
+
+<img src="figures/changexy_figure06.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Step 5:</b> <br />
+
+The scale of new plot needs to be manually adjusted.  <br />
+
+<img src="figures/changexy_figure07.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<p>
+
+<b>Result:</b> <br />
+
+<img src="figures/changexy_figure08.gif"><br /><br /><br />
+
+</p>
+
+
+
+
+
+<b>Known problems:</b><br />
+
+
+
+<i><b>1. Not XY Scatter.</b></i><br />
+
+If there exist lines connecting scatter points, the PetroPlot program won't continue.
+
+<a href=problem_notxy.htm>Details...</a><br /><br />
+
+
+
+<i><b>2. Data from other sheets or other files.</b></i><br />
+
+PetroPlot only changes series with data from the current workbook.  All series need to come from the SAME SHEET.
+
+<a href=problem_dataother.htm>Details...</a><br /><br />
+
+
+
+<i><b>3. Pseudo log scale charts.</b></i><br />
+
+PetroPlot currently doesn't changeXY on pseudo-log-scale plots. Future version might add this function.
+
+<br /><br />
+
+
+
+<br /><br />
+
+<i>Last modified 05/10/2002, Yong Jun Su</i><br />
+
+This line marks the end of <b>PetroPlot Tutorial: ChangeXY function</b>
+
+
+
+</body>
+
+
+
+</html>
+
+
+

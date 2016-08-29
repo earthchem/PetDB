@@ -1,0 +1,53 @@
+	<%
+		Vector columns = multiSrcRS.getColumnsLabels();
+	
+	%>
+
+	<FORM name="ResultsSubPanel" method="POST">
+	SearchResults:
+	<TABLE width="25%" border="0" cellspacing="0" cellpadding="0">
+ 	<TR>
+	<SELECT name = "<%= id %>" size = 10 single>
+	<% synchronized(multiSrcRS) {
+		try {
+			for (int i =0; i< multiSrcRS.getRecordCount(); i++) {
+                        	admin.dbAccess.Record  rec = multiSrcRS.getRecordAt(i);
+				String label = rec.valueAt(columns.indexOf("LABEL"));
+				String value = rec.valueAt(columns.indexOf("ID"));
+				String s_l = (label.length()>93) ? label.substring(0,93):label;
+				if (value.equals(frameData.getSelectedRec())) { 	%>
+                			<option value="<%= value%>" SELECTED><%= s_l%> </option>
+        <% 			} else {						 %>
+                			<option value="<%= value%>"><%= s_l%> </option>
+	<% 			}
+			}
+
+		} catch (Exception e) {
+			out.write("Error with the results " + " multiSrcRS = " + multiSrcRS+ " " + e.getMessage());
+		}
+	} 				%>
+	</SELECT>
+ 	</TR>
+	<TR>
+	<TD colspan="2"><INPUT type="submit" name="<%= rs_c1_n%>" value="<%= rs_c1_v%>"></TD>
+	<% 
+		if ( (!frameData.getTlbName().equals("Sample")) && (edit))  
+		{		
+	%>
+	<TD colspan="2"><INPUT type="submit" name="<%= rs_c2_n%>" value="<%= rs_c2_v%>"></TD>
+	<TD colspan="2"><INPUT type="submit" name="<%= rs_c3_n%>" value="<%= rs_c3_v%>"></TD>
+	<% 	
+		} 
+        if ( (frameData.getTlbName().equalsIgnoreCase("Reference")==true ) && (edit))  
+		{
+        
+	%>
+		<td><input type="button" value="EXCEL" onclick="location.href='referenceExcel?ref_num=<%= frameData.getMltSearchStr()%>'"></td> 
+    	<TD colspan="2"><INPUT type="submit" name="<%= rs_c4_n%>" value="<%= rs_c4_v%>"></TD>
+    <%
+        }
+    %>
+	</TR>
+ 	</TABLE>
+	</FORM>
+

@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>MGDS Global 
+Multi-Resolution Topography (GMRT)</title>
+    <script 
+type="text/javascript">
+		onload=function() {
+ 
+		document.getElementById("the_div").style.display = 
+"none";
+ 		}
+ 	</script>
+    
+    <script 
+src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAALohpJMvcCbQQqgE6UDNDwBTZIV0sZz3jm9cJWuRNkKX6SZ-U9xQpRcwjvFTBBt_z_xwKCU4XcU6JOQ" 
+type="text/javascript"></script>
+	
+	<!-- <script 
+src="http://geoportal.kgs.ku.edu/googlemaps2/arcims_GMv236.js" 
+type="text/javascript"></script> -->
+    <script 
+src="http://www.marine-geo.org/services/google/gma_wms.js" 
+type="text/javascript"></script>
+</head>
+  
+<body onload="load()" 
+onunload="GUnload()">
+
+    <div id="map" style="width: 400px; height: 
+250px; float:left; border: 1px solid black;"></div>
+    <script 
+type="text/javascript">
+
+
+ 	//<![CDATA[
+ 	// initiate variables 
+for markers
+ 	var num_markers = 0;
+	var marker = new Array();
+ 
+	var tmp;
+	marker[1] = null;
+	marker[2] = null;
+ 
+	var ptLat = new Array();
+	ptLat[1] = 90;
+	ptLat[2] = 
+-90;
+	var ptLong = new Array();
+	ptLong[1] = -180;
+ 
+	ptLong[2] = -180;
+	env = '';
+	var tminx, tmaxx;
+ 
+	var tminy, tmaxy;
+	var cnt_x, cnt_y;
+	var icon = 
+new GIcon();
+	icon.image = 
+"http://www.marine-geo.org/services/google/icons/cross_icon.png";
+ 
+	icon.iconAnchor = new GPoint(7,7);
+	
+	// create 
+map
+    var map = new GMap2(document.getElementById("map"));
+    
+ 
+// create tile layer for 1 to 10 zoom levels
+ 	var tileDoq= new 
+GTileLayer(new GCopyrightCollection(""),2,10);
+ 	
+ 	
+ 
+	
+ 	
+	tileDoq.myLayers='topo';
+ 
+	tileDoq.myFormat='image/jpeg';
+ 
+tileDoq.myBaseURL='http://www.marine-geo.org/services/wms?';
+ 
+	tileDoq.getTileUrl=CustomGetTileUrl;
+	tileDoq.getOpacity = 
+function() {return 1.0;}
+
+    var gma_layer=[tileDoq];
+    var 
+gma_hybrid_layer=[tileDoq,G_HYBRID_MAP.getTileLayers()[1]];
+
+    var 
+bathymetry = new GMapType(gma_layer, G_SATELLITE_MAP.getProjection(), 
+"Bathymetry", G_SATELLITE_MAP);
+    var bathyhybrid = new 
+GMapType(gma_hybrid_layer, G_SATELLITE_MAP.getProjection(), "Labels", 
+G_SATELLITE_MAP);
+
+
+ 	map.getMapTypes().length = 0;
+    
+ 
+//map.addMapType(G_HYBRID_MAP);
+ 
+	//map.addMapType(G_SATELLITE_MAP);
+ 
+	map.addMapType(bathymetry);
+    map.addMapType(bathyhybrid);
+ 
+
+		
+    map.setCenter(new GLatLng(41.0,-73.9), 2);
+ 
+map.addControl(new GSmallMapControl());
+    map.addControl(new 
+GScaleControl());
+    map.addControl(new GMapTypeControl());
+
+     
+ 
+	map.enableDoubleClickZoom();
+	map.enableContinuousZoom();
+ 
+	map.enableScrollWheelZoom();
+  	new GKeyboardHandler(map, 
+window);
+  
+  
+	var bounds = map.getBounds();
+	var center = 
+map.getCenter();
+	
+	var current_zoom_level = 2;
+	var 
+last_zoom_level = 1;
+	
+	
+ 
+	//document.getElementById("message").innerHTML = 
+bounds.toString();
+	
+	
+	
+ 
+	GEvent.addListener(map, 'click', select_corner);
+ 
+	GEvent.addListener(map, 'zoomend', detect_zoom);
+ 
+	GEvent.addListener(map, 'drag', detect_drag);
+	
+	
+ 
+	function detect_zoom(oldLevel, newLevel) {
+		// 
+clear bounding box when zooming in, keep when zoomiing out
+ 
+	if(newLevel > oldLevel)
+		{
+ 
+	num_markers = 0;
+			map.clearOverlays();
+ 
+			document.getElementById('lat1').value = '';
+ 
+			document.getElementById('lat2').value = '';
+ 
+			document.getElementById('long1').value = '';
+ 
+			document.getElementById('long2').value = '';
+ 
+		}
+	}
+	function detect_drag() {
+ 
+	// clear bounding box after dragging
+		num_markers = 
+0;
+		map.clearOverlays();
+ 
+	document.getElementById('lat1').value = '';
+ 
+	document.getElementById('lat2').value = '';
+ 
+	document.getElementById('long1').value = '';
+ 
+	document.getElementById('long2').value = '';
+	}
+
+ 
+	function select_corner(overlay, point)
+	{
+		if 
+(overlay)
+		{
+			num_markers = 0;
+ 
+			map.clearOverlays();
+	
+ 
+	document.getElementById('lat1').value = '';
+ 
+	document.getElementById('lat2').value = '';
+ 
+	document.getElementById('long1').value = '';
+ 
+	document.getElementById('long2').value = '';
+		}
+ 
+		else if (point)
+		{
+ 
+	if (num_markers == 2) return;
+ 
+	num_markers++;
+
+			marker[num_markers] = new GMarker(point, icon);
+ 
+			//marker[num_markers] = new GMarker(point);
+ 
+			map.addOverlay(marker[num_markers]);
+
+ 
+		point.x = point.x*1000;
+ 
+	point.y = point.y*1000;
+			point.x = 
+Math.round(point.x);
+			point.y = 
+Math.round(point.y);
+			point.x = point.x/1000;
+ 
+			point.y = point.y/1000;
+
+
+ 
+	ptLat[num_markers] = point.y;
+ 
+	ptLong[num_markers] = point.x;
+ 
+	document.getElementById('lat'+num_markers).value = point.y;
+ 
+ 
+	document.getElementById('long'+num_markers).value = point.x;
+ 
+			
+			if (num_markers == 2) 
+{
+				drawPolylines();
+ 
+		if (ptLat[2] > ptLat[1]) {
+ 
+		tmp = ptLat[1];
+ 
+	ptLat[1] = ptLat[2];
+ 
+	ptLat[2] = tmp;
+ 
+	document.getElementById('lat1').value = ptLat[1];
+ 
+				document.getElementById('lat2').value 
+= ptLat[2];
+				}
+ 
+	if (ptLong[2] < ptLong[1]) {
+ 
+	tmp = ptLong[1];
+ 
+	ptLong[1] = ptLong[2];
+ 
+	ptLong[2] = tmp;
+ 
+	document.getElementById('long1').value = ptLong[1];
+ 
+ 
+	document.getElementById('long2').value = ptLong[2];
+ 
+			}
+
+				if (ptLong[2] 
+== ptLong[1] || ptLat[2] == ptLat[1]) {
+ 
+		document.getElementById('lat1').value = '';
+ 
+				document.getElementById('lat2').value 
+= '';
+ 
+	document.getElementById('long1').value = '';
+ 
+			document.getElementById('long2').value = '';
+ 
+				}
+				
+ 
+			}
+
+		}
+	}
+
+	function 
+drawPolylines()
+	{
+		var mid1_lat = -1;
+ 
+	var mid1_long = -1;
+		var mid2_lat = -1;
+ 
+	var mid2_long = -1;
+		mid1_lat = ptLat[1];
+ 
+	mid1_long = ptLong[2];
+		mid2_lat = ptLat[2];
+ 
+	mid2_long = ptLong[1];
+
+		var points = [];
+ 
+		points.push(new GPoint(ptLong[1], ptLat[1]));
+ 
+	points.push(new GPoint(mid1_long, mid1_lat));
+ 
+	points.push(new GPoint(ptLong[2], ptLat[2]));
+ 
+	points.push(new GPoint(mid2_long, mid2_lat));
+ 
+	points.push(new GPoint(ptLong[1], ptLat[1]));
+ 
+	thisEnv = new GPolyline(points, "#000000");
+ 
+	map.addOverlay(thisEnv);
+	}
+
+	function fnClear()
+ 
+	{
+		num_markers = 0;
+ 
+	map.clearOverlays();
+
+ 
+	document.getElementById('lat1').value = '';
+ 
+	document.getElementById('lat2').value = '';
+ 
+	document.getElementById('long1').value = '';
+ 
+	document.getElementById('long2').value = '';
+	}
+
+ 
+	function fnRemovePolyline()
+	{
+ 
+	map.removeOverlay(thisEnv);
+	}
+
+
+	
+	
+   //]]>
+ 
+</script>
+   
+    <br clear="all"/>
+    <small>
+ 
+	Obtain your selection by clicking on the corners of its 
+bounding box.
+		<br>To delete the bounding box, click 
+<b>clear</b> or one of the crosses.
+    </small>
+    	<br>
+
+ 
+	<table border="1" width="400px" align="left" 
+style="border-collapse:collapse;" bordercolor="#ECE9D8" 
+cellpadding="5px">
+
+		<tr>
+		<td align="center" 
+colspan="3" style="background-color:#EFEFEF;">
+ 
+	<input type="button" value="Clear" onclick="javascript: 
+fnClear();">
+		</td>
+		</tr>
+	</table>
+	
+ 
+	<br clear="all"/>
+	<form >
+	West: <input 
+type="text" value="" id="long1">&nbsp;
+	East: <input type="text" 
+value="" id="long2">&nbsp;
+	<br>
+	South: <input type="text" 
+value="" id="lat2">&nbsp;
+	North: <input type="text" value="" 
+id="lat1">&nbsp;
+		
+	</form>
+
+	<script 
+type="text/javascript">
+    //<![CDATA[
+		if (env != 
+'')
+		{
+			GEvent.trigger(map, 'click', 
+null, new GPoint(tminx, tmaxy));
+ 
+	GEvent.trigger(map, 'click', null, new GPoint(tmaxx, 
+tminy));
+		}
+    //]]>
+	</script>
+
+   
+ 
+</body>
+</html>

@@ -1,0 +1,178 @@
+<%@ page import="petdb.criteria.ByDiamondCriteria"%>
+<%@ page import="petdb.criteria.ByXenolithCriteria"%>
+<%@ page import="petdb.query.SimpleQuery"%>
+<%
+session.removeAttribute("selectedCriteria");
+session.removeAttribute("SelectedAllType");
+CCriteriaCollection c_c_collection;
+CombinedCriteria c_criteria;
+Criteria criteria;
+String state =" Start;";
+int test =0;
+int pg_ind = 3;
+String[] s_keys;
+
+Wrapper wrapper = null;
+Wrapper pg3wrapper = null;
+DataRecordDS data = null;
+boolean mth_flag = true;
+session.setAttribute("state","");
+if ((c_c_collection = (CCriteriaCollection)session.getAttribute("ccColl")) == null) {
+    throw new Exception("Your Session has EXPIRED. Please go to index.jsp and start over");
+}
+
+
+c_criteria = c_c_collection.getCurrentCCriteria();
+String diamond = request.getParameter("diamond");
+String xenolith = request.getParameter("xenolith");
+if(diamond != null) c_criteria.setQuickSearch("Diamond"); 
+else if (xenolith != null) c_criteria.setQuickSearch("Xenolith"); 
+
+String datasource = application.getInitParameter("datasource");
+if(diamond != null) {
+    String ipAddress = IPAddress.getIpAddr(request);
+new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('DIAMOND',SYSDATE,'"+datasource+"',null,'"+ipAddress+"')");
+ c_criteria.clear();
+ c_criteria.addCriteria(CombinedCriteria.ByDiamondCriteria, new ByDiamondCriteria());
+ criteria= c_criteria.getCriteria(CombinedCriteria.ByDiamondCriteria);
+ criteria.setValues("9", new String[]{"9"});
+ c_criteria.runCriteria(request.getSession().getId()); 
+} else if (xenolith != null) {
+ String ipAddress = IPAddress.getIpAddr(request);
+ new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('XENOLITH',SYSDATE,'"+datasource+"',null,'"+ipAddress+"')");
+ c_criteria.clear();
+ c_criteria.addCriteria(CombinedCriteria.ByXenolithCriteria, new ByXenolithCriteria());
+ criteria= c_criteria.getCriteria(CombinedCriteria.ByXenolithCriteria);
+ criteria.setValues("9", new String[]{"9"});
+ c_criteria.runCriteria(request.getSession().getId()); 
+}
+
+
+boolean search = c_criteria.isSet();
+
+
+SummaryWrapper summary_wrapper =
+        (SummaryWrapper)c_criteria.getSampleCriteria(request.getSession().getId()).getWrapper();
+
+pg3wrapper = (Wrapper)session.getAttribute("pg3wrapper");
+String criteria_type = null;
+
+if (pg3wrapper == null) {
+    session.setAttribute("pg3wrapper", new DataWrapper(summary_wrapper.getQryStr(true)));
+    pg3wrapper = (Wrapper)session.getAttribute("pg3wrapper");
+    criteria_type = ((DataWrapper)pg3wrapper).getCriteriaType();
+} else {
+	
+    criteria_type = ((DataWrapper)pg3wrapper).getCriteriaType();
+    String ggg = summary_wrapper.getQryStr(true);
+    ((DataWrapper)pg3wrapper).update(summary_wrapper.getQryStr(true)); //This will change criteria_type which should not. It is legacy code.
+}
+
+if (request.getParameter("criteria_type") != null) { //Not null when the request is from pg4.jsp or reload pg3.jsp
+    if (  !((String)request.getParameter("criteria_type")).equals(criteria_type) )    		
+    {
+        criteria =
+                c_criteria.getCriteria( ((DataWrapper)pg3wrapper).getCriteriaType() );
+        if (criteria != null)
+            criteria.clear();
+        
+        ((DataWrapper)pg3wrapper).setCriteriaType(request.getParameter("criteria_type"));
+        criteria_type = request.getParameter("criteria_type");
+     }
+    else if( !( (String)request.getParameter("criteria_type")).equals(((DataWrapper)pg3wrapper).getCriteriaType()) )
+    {
+    	criteria =
+                c_criteria.getCriteria( ((DataWrapper)pg3wrapper).getCriteriaType() );
+        if (criteria != null)
+            criteria.clear();
+        
+        ((DataWrapper)pg3wrapper).setCriteriaType(request.getParameter("criteria_type"));
+        criteria_type = request.getParameter("criteria_type");
+        
+   }
+}
+else if (! criteria_type.equals(((DataWrapper)pg3wrapper).getCriteriaType() ) )
+{
+	criteria =
+            c_criteria.getCriteria( ((DataWrapper)pg3wrapper).getCriteriaType() );
+    if (criteria != null)
+        criteria.clear();
+    
+    ((DataWrapper)pg3wrapper).setCriteriaType(criteria_type);
+} 
+else if ("true".equals(request.getParameter("diamond"))) {
+    criteria_type = CombinedCriteria.ByMineralCriteria;
+    ((DataWrapper)pg3wrapper).setCriteriaType(criteria_type);
+}
+
+if ((criteria =c_criteria.getCriteria(criteria_type)) == null) {
+    if  (criteria_type.equals(CombinedCriteria.ByDataCriteria))
+        test =  c_criteria.addCriteria(criteria_type,
+                new ByDataCriteria(summary_wrapper.getQryStr(true)));
+    
+    else if (criteria_type.equals(CombinedCriteria.ByMineralCriteria))
+        test =  c_criteria.addCriteria(criteria_type,
+                new ByMineralCriteria(summary_wrapper.getQryStr(true)));
+    
+    else if (criteria_type.equals(CombinedCriteria.ByInclusionCriteria))
+        test =  c_criteria.addCriteria(criteria_type,
+                new ByInclusionCriteria(summary_wrapper.getQryStr(true)));
+    
+    else
+        test =  c_criteria.addCriteria(criteria_type,
+                new ByRockModeCriteria(summary_wrapper.getQryStr(true)));
+    
+    criteria = c_criteria.getCriteria(criteria_type);
+} else {
+    ((ByChemistryWrapper)criteria.getWrapper()).update(summary_wrapper.getQryStr(true));
+}
+
+wrapper = criteria.getWrapper();
+if (wrapper==null) throw new Exception("Wrapper is null");
+data = (DataRecordDS) wrapper.getControlList("0");
+%>
+    <% /* Always call read_global_flags to check for AND/OR Setting */ %>
+    <%@ include file="read_global_flags.jspf"%>
+<%
+if (criteria_type.equals(CombinedCriteria.ByRockModeCriteria)) 
+{
+    mth_flag = false;
+%>
+	<%@ include file="read_chemistry_parameters.jspf"%>
+	<%@ include file="read_rockmode_parameters.jspf"%>
+<%
+} else {
+%>
+	<%@ include file="read_chemistry_parameters.jspf"%>
+    <%
+    if (criteria_type.equals(CombinedCriteria.ByDataCriteria)) {
+    %>
+	    <%@ include file="read_data_parameters.jspf"%>
+    <%
+    } else if (criteria_type.equals(CombinedCriteria.ByMineralCriteria)) {
+    %>
+	<%@ include file="read_mineral_parameters.jspf"%>
+    <%
+	} else {
+    %>
+	<%@ include file="read_inclusion_parameters.jspf"%>
+    <% 
+    }
+        
+} //end of RockModeAnalysis else
+
+int a_type = 0;
+int c_type =	(
+        criteria_type.equals(DataWrapper.ByDataCriteria)
+        ?  0
+        :
+            (criteria_type.equals(DataWrapper.ByMineralCriteria)
+            ?  1
+        :
+                (criteria_type.equals(DataWrapper.ByInclusionCriteria)
+                ?  2
+        :  3)
+        )
+        );
+state += "DONE PARAMETERS";
+%>

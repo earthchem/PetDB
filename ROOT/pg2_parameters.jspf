@@ -1,0 +1,302 @@
+<%
+	CCriteriaCollection c_c_collection=null;  
+	CombinedCriteria c_criteria;
+	Criteria criteria;
+	String state ="";
+	int test =0;
+	
+	//Testing for redeployment. After redeploy, sometimes the user restart with this page which should not. */
+	if( DatabaseAdapter.getDatabaseAdapter() == null )
+	{
+		throw new Exception("Your sesson is expired. Please re-start the search.");
+	}
+	//Set 'ccColl' session information if it is null 
+    if ((c_c_collection = (CCriteriaCollection)session.getAttribute("ccColl")) == null)
+    {
+		session.setAttribute("ccColl",new CCriteriaCollection());
+		c_c_collection =  (CCriteriaCollection)session.getAttribute("ccColl");
+    }
+	
+	c_criteria = c_c_collection.getCurrentCCriteria();
+    c_criteria.clear(CombinedCriteria.ByDiamondCriteria);
+    c_criteria.clear(CombinedCriteria.ByXenolithCriteria);
+	//Set the state for empty string "" at the stage.
+	session.setAttribute("state",state);
+	Wrapper pg3wrapper = (Wrapper)session.getAttribute("pg3wrapper");
+	//if pg3wrapper is null that mean it just start the search( first time here )
+  
+	if(pg3wrapper == null)
+	  c_criteria.initDataCriteria();
+
+	String criteria_type = null;
+	if( pg3wrapper != null ) criteria_type = ((DataWrapper)pg3wrapper).getCriteriaType();
+	
+	// for (Enumeration e = request.getParameterNames() ; e.hasMoreElements() ;) {
+         //System.out.println("pg2_parameters.jspf ~~~~~~~ all request parameter names ~~~~~~~~~~~~~ ="+e.nextElement());
+   //  }
+	
+	//---- Get parameters when retriving query!!
+	if (request.getParameter("retriveQry") != null)
+	{	
+		String name = request.getParameter("retriveQry");
+		int res =c_c_collection.retriveCCriteria(name);
+		c_criteria = c_c_collection.getCurrentCCriteria();
+
+	}
+	//---- Get parameters when saving query!!
+	else if (request.getParameter("saveQry") != null)
+	{	
+		String name = request.getParameter("saveQry");
+		c_c_collection.saveCCriteria(name, c_criteria);
+
+	}
+	
+	//---- Get parameters when clearing!
+	if (request.getParameter("clear") != null)
+	{
+		int t1;
+		String cr = request.getParameter("clear");
+		if (cr.equals("All")) 
+			t1  =c_criteria.clear();
+		else 
+			t1 = c_criteria.clear(cr);
+	}
+
+	//---- Get Parameters if comming from set_geo.jsp
+	
+	if ( request.getParameterValues("geo_ItemNum") != null)
+	{
+		
+	//System.out.println("---- Get Parameters if comming from set_geo.jsp");
+	
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByGeoCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByGeoCriteria, new ByGeoCriteria());
+		   	criteria = c_criteria.getCriteria(CombinedCriteria.ByGeoCriteria);
+		}
+		String[] v = request.getParameterValues("geo_ItemNum");
+		for (int i=0;i<v.length;i++) state+=v[i]+",";  
+		criteria.setValues(ByGeoCriteria.LOCATION, request.getParameterValues("geo_ItemNum"));
+		test = c_criteria.clearSampleID();
+	}
+	//---- Get Parameters if comming from set_rock.jsp
+	
+	else if ( request.getParameterValues("alteration") != null)
+	{
+		
+		//System.out.println("---- Get Parameters if comming from set_rock.jsp");
+
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByRockCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByRockCriteria, new ByRockCriteria());
+			criteria= c_criteria.getCriteria(CombinedCriteria.ByRockCriteria);
+		}
+		String[] val = request.getParameterValues("ItemNum");
+		if (val != null)
+		{
+			for (int i = 0; i < val.length;i++) state +=val[i]+",";
+			criteria.setValues(ByRockCriteria.ROCK_CLASS,val);
+		}
+		criteria.setValues(ByRockCriteria.METHOD, request.getParameterValues("samptech"));
+		criteria.setValues(ByRockCriteria.ALTERATION, request.getParameterValues("alteration"));
+		test = c_criteria.clearSampleID();
+	}
+
+	//---- Get Parameters if comming from set_geo.jsp
+	
+	else if ( request.getParameterValues("ItemNum") != null)
+	{
+		
+	//System.out.println("---------- Get Parameters if comming from set_geo_name.jsp");
+	
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByGeoCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByGeoCriteria, new ByGeoCriteria());
+			criteria= c_criteria.getCriteria(CombinedCriteria.ByGeoCriteria);
+		}
+		String[] val = request.getParameterValues("ItemNum");
+		Wrapper geoWrapper = criteria.getWrapper();
+		for (int i = 0; i < val.length; i++)
+		{
+			String tmp = val[i];
+			//System.out.println("tmp="+tmp);
+			int colon_i = tmp.indexOf(':');
+			String t_key = tmp.substring(0,colon_i);
+			String t_val = geoWrapper.getLabelForKey(ByGeoCriteria.LOCATION,t_key);
+			val[i] = t_val + tmp.substring(colon_i,tmp.length());
+		}
+		criteria.setValues(ByGeoCriteria.LOCATION, request.getParameterValues("geo_ItemNum"));
+		criteria.setValues(ByGeoCriteria.LOCATION,val);
+			for (int i = 0; i < val.length;i++) state +=val[i]+",";
+		test = c_criteria.clearSampleID();
+	}
+
+	//---- Get Parameters if comming from set_version.jsp
+	
+	else if ( request.getParameterValues("data_version") != null)
+	{
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByDataVersionCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByDataVersionCriteria, new ByDataVersionCriteria());
+			criteria= c_criteria.getCriteria(CombinedCriteria.ByDataVersionCriteria);
+		}
+		criteria.setValues(ByDataVersionCriteria.Version, request.getParameterValues("data_version"));
+		test = c_criteria.clearSampleID();
+	}
+	//---- Get Parameters if comming from set_tect.jsp
+	
+	else if ( request.getParameterValues("tectonic") != null)
+	{		
+		//System.out.println("---- Get Parameters if comming from set_tect.jsp");
+
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByTectCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByTectCriteria, new ByTectCriteria());
+			criteria= c_criteria.getCriteria(CombinedCriteria.ByTectCriteria);
+		}
+		criteria.setValues(ByTectCriteria.TECTONIC, request.getParameterValues("tectonic"));
+		test = c_criteria.clearSampleID();
+	}
+
+	//---- Get Parameters if comming from set_latlong.jsp
+	
+	else if (
+		( request.getParameterValues("depthbottom") != null)
+		||
+		( request.getParameterValues("longEast") != null)
+		||
+		( request.getParameterValues("latSouth") != null)
+		||
+		( request.getParameterValues("depthtop") != null)
+		||
+		( request.getParameterValues("latNorth") != null)
+		||
+		( request.getParameterValues("longWest") != null)
+		)
+	{
+		if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByLongLatCriteria)) == null)
+		{
+			test = c_criteria.addCriteria(CombinedCriteria.ByLongLatCriteria, new ByLongLatCriteria());
+		   	criteria = c_criteria.getCriteria(CombinedCriteria.ByLongLatCriteria);
+		} 
+		criteria.setValues(ByLongLatCriteria.L_WEST, request.getParameterValues("longWest"));
+		criteria.setValues(ByLongLatCriteria.L_EAST, request.getParameterValues("longEast"));
+		criteria.setValues(ByLongLatCriteria.L_NORTH, request.getParameterValues("latNorth"));
+		criteria.setValues(ByLongLatCriteria.L_SOUTH, request.getParameterValues("latSouth"));
+		criteria.setValues(ByLongLatCriteria.D_TOP, request.getParameterValues("depthtop"));
+		criteria.setValues(ByLongLatCriteria.D_BOTTOM, request.getParameterValues("depthbottom"));
+		test = c_criteria.clearSampleID();
+	}
+	//--------Get Parameters if comming from setExpedition
+	else if (
+		( request.getParameterValues("checkboxexp") != null)
+		)
+	{
+		
+		//System.out.println("---- Get Parameters if comming from set_exped.jsp");
+        if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByExpCriteria)) == null)
+                {
+                        test = c_criteria.addCriteria(CombinedCriteria.ByExpCriteria, new ByExpCriteria(ByExpCriteria.EXPNUMs));
+                        criteria = c_criteria.getCriteria(CombinedCriteria.ByExpCriteria);
+                } 
+		else 
+			((ByExpCriteria)criteria).setType(ByExpCriteria.EXPNUMs);
+		state += "type = " +  ((ByExpCriteria)criteria).getType();
+		session.setAttribute("state",state);
+                criteria.setValues(ByExpCriteria.EXPIDs, request.getParameterValues("checkboxexp"));
+		test = c_criteria.clearSampleID();
+	}
+	//--------Get Parameters if comming from view/pick Samples
+	
+	else if (
+		( request.getParameterValues("checkbox_sample") != null)
+		)
+	{
+		
+		//System.out.println("---- Get Parameters if comming from view_pick.jsp");
+        if ( (criteria = c_criteria.getCriteria(CombinedCriteria.BySampleIDCriteria)) != null)
+                {
+		if (request.getParameter("act").equals("include")) {
+                criteria.setValues(BySampleIDCriteria.INCLUDE, request.getParameterValues("checkbox_sample"));
+		}
+		if (request.getParameter("act").equals("exclude")){	
+                criteria.setValues(BySampleIDCriteria.EXCLUDE, request.getParameterValues("checkbox_sample"));
+		}
+		}
+	}
+	
+	//--------Get Parameters if comming from set Reference
+	else if (
+		( request.getParameterValues("checkboxref") != null)
+		)
+	{
+		
+		//System.out.println("---- Get Parameters if comming from set_refer.jsp");
+    if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByPubCriteria)) == null)
+                {
+                        test = c_criteria.addCriteria(CombinedCriteria.ByPubCriteria, new ByPubCriteria());
+                        criteria = c_criteria.getCriteria(CombinedCriteria.ByPubCriteria);
+                }
+                criteria.setValues(ByPubCriteria.REFIDs, request.getParameterValues("checkboxref"));
+		test = c_criteria.clearSampleID();
+	}
+	//---- see if data availablity is set!!!
+	else if (
+		( request.getParameterValues(ByDataAvailCriteria.Material_Analysis) != null)
+		||
+		( request.getParameterValues(ByDataAvailCriteria.Inclusion_Analysis) != null)
+		||
+		( request.getParameterValues(ByDataAvailCriteria.Mineral_Analysis) != null)
+		||
+		( request.getParameter(ByDataAvailCriteria.Any_Mineral) != null)
+		||
+		( request.getParameterValues(ByDataAvailCriteria.Any_Material) != null)
+		||
+		( request.getParameter(ByDataAvailCriteria.Any_Inclusion) != null)
+		)
+	{
+		state += "Setting data Availability";
+		session.setAttribute("state",state);
+                if ( (criteria = c_criteria.getCriteria(CombinedCriteria.ByDataAvailCriteria)) == null)
+                {
+                        test = c_criteria.addCriteria(CombinedCriteria.ByDataAvailCriteria, new ByDataAvailCriteria());
+                        criteria = c_criteria.getCriteria(CombinedCriteria.ByDataAvailCriteria);
+             
+                } else criteria.clear();
+        		
+        		//System.out.println("---- Get Parameters if comming from Setting data Availability.jsp");
+
+		if ( request.getParameter(ByDataAvailCriteria.Any_Mineral) != null)
+			{
+			((ByDataAvailCriteria)criteria).setAnyMineral();
+			}
+		if ( request.getParameter(ByDataAvailCriteria.Any_Inclusion) != null)
+			{
+			((ByDataAvailCriteria)criteria).setAnyInclusion();
+			}
+                criteria.setValues(ByDataAvailCriteria.Any_Material,
+				 request.getParameterValues(ByDataAvailCriteria.Any_Material));
+                criteria.setValues(ByDataAvailCriteria.Material_Analysis,
+				 request.getParameterValues(ByDataAvailCriteria.Material_Analysis));
+                criteria.setValues(ByDataAvailCriteria.Mineral_Analysis,
+				 request.getParameterValues(ByDataAvailCriteria.Mineral_Analysis));
+                criteria.setValues(ByDataAvailCriteria.Inclusion_Analysis,
+				 request.getParameterValues(ByDataAvailCriteria.Inclusion_Analysis));
+                 c_criteria.runCriteria(request.getSession().getId());
+                ((ByDataAvailCriteria)criteria).updateQuickSearch((Map)session.getAttribute("availMap"),application.getInitParameter("datasource"),request);
+ 
+	}
+    
+      
+	
+   
+ //   
+    c_criteria.runCriteria(request.getSession().getId());
+	criteria = c_criteria.getSampleCriteria(request.getSession().getId());
+   
+	Wrapper wrapper =criteria.getWrapper();
+   
+	
+	//System.out.println("---- end of pg2_parameters.jspf");
+
+%>

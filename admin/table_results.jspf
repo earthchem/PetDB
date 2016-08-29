@@ -1,0 +1,49 @@
+	<%	
+	synchronized(multiSrcRS) 
+	{
+		Vector columns = multiSrcRS.getColumnsLabels();
+		String column = "";
+		if  (multiSrcRS != null) 
+		{ 
+	%>
+			<TABLE width="100%" border="0" cellspacing="0" cellpadding="0">
+			 <TR>
+	<% 
+			for (int j = 0; j< columns.size(); j++) 
+			{ 
+	%>
+			 	<TD colspan="1" nowrap class="anotherLabel" align="left"><%= (String)columns.elementAt(j)%> </TD>
+	<% 
+			}
+	%>
+ 			</TR>
+	<%
+                	try {
+                        for (int j =0; j< multiSrcRS.getRecordCount(); j++) 
+				{
+                                admin.dbAccess.Record  rec = multiSrcRS.getRecordAt(j);
+        %>
+			<TR>
+	<%
+				for (int i = 0; i< columns.size(); i++)
+					{
+	%>
+			<td colspan="1" nowrap><%= rec.valueAt(i)%></td>
+	<%
+					}
+	%>
+			</TR>
+	<% 
+				}
+	%>
+			</TABLE>
+        <%
+		      	} 
+			catch (Exception e) 
+			{
+                        	out.write("Error with the results " +
+					 " multiSrcRS = " + multiSrcRS+ " " + e.getMessage());
+                	}
+	      } 
+	}
+	%>

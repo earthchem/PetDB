@@ -1,0 +1,46 @@
+ <%
+        if (ds == null) return;
+        String rc_keys= "";
+        String cc_title= "";
+	PubRecordDS pc_ds = (PubRecordDS)c_ds;
+	pc_ds.goFirst();
+	int kkk = pc_ds.orderBy(PubRecord.YEAR);
+%> 
+	<table width="100%" CELLPADDING="1" CELLSPACING="0" class="regTxt">
+	 <tr class="rowLabel2">
+                <tr class="rowLabel2">
+                <th width="5%" ALIGN="left">&nbsp;</th>
+                <th width="20%" ALIGN="left" class="pad2">Author</th>
+                <th ALIGN="left" class="pad2">Year</th>
+                <th ALIGN="left" class="pad2">Title</th>
+                </tr>
+<%
+        while (pc_ds.hasMoreKeys())
+	{
+		 String key = pc_ds.getNextKey();
+               	 PubRecord rr = (PubRecord)pc_ds.getValue(key);
+                	rc_keys += (rc_keys.length() == 0 ? key : "," + key);
+                	cc_title = "" + rr.getValue(PubRecord.TITLE);
+               		/*
+			if (!"&nbsp;".equals(rr.getValue(PubRecord.Journal)))
+                        	cc_title += " Journal: " + rr.getValue(PubRecord.Journal);
+                	if (!"&nbsp;".equals(rr.getValue(PubRecord.Volume)))
+                        	cc_title += " Volume: " + rr.getValue(PubRecord.Volume);
+			*/
+
+%>
+                <tr valign="top" class="regTxt">
+                  <td><a href="ref_info.jsp?singlenum=<%= key%>" target="ref_win" onClick="openWindow2(this,350,750,this.target)">
+                        data tables</a></td>
+                  <td><%= rr.getValue(PubRecord.AUTH)%></td>
+                  <td class="pad2"><%= rr.getValue(PubRecord.YEAR)%></td>
+                  <td><%= cc_title%><%= (rr.getValue(PubRecord.Book_Title).length()<2 ? "": ";" + rr.getValue(PubRecord.Book_Title)
+)%><%= (rr.getValue(PubRecord.Editors).length()<2 ? "": "; "+ rr.getValue(PubRecord.Editors))%></td>
+                </tr>
+                <tr class="setLabel2"><td colspan="4"><img src="images/shim.gif" width="5" height="1"></td>
+                </tr>
+<%
+        }
+%>
+          </table>
+

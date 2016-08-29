@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application>
+  <option name="excludedirs" value="cvs;sccs;rcs;.svn;" />
+  <option name="excludefiles" value="\..*|.*\.[0-9]+|wlw_[0-9]+\..*" />
+  <option name="excludefilesFromEar" value="[default]" />
+  <option name="name" value="loadpetdb" />
+  <option name="version" value="1" />
+  <components>
+    <component name="com.bea.ide.debug.IDebugClient">
+      <option name="SrcPath0_currproject_" value="Current Project" />
+      <option name="SrcPath1_project_" value="ROOT" />
+      <option name="SrcPath2_project_" value="admin" />
+    </component>
+    <component name="com.bea.ide.workspace.IWorkspace">
+      <node name="ApplicationBuild">
+        <node name="1">
+          <option name="includeProject" value="true" />
+          <option name="project" value="ROOT" />
+        </node>
+        <node name="2">
+          <option name="includeProject" value="true" />
+          <option name="project" value="admin" />
+        </node>
+      </node>
+      <node name="EARBuild">
+        <option name="output.directory" value="." />
+        <option name="output.filename" value="loadpetdb-2.9.0" />
+      </node>
+    </component>
+    <component name="com.bea.portal.ide.actions.OpenAdministrationPageAction" />
+  </components>
+  <modules />
+  <projects>
+    <project name="ROOT">
+      <option name="contextPath" value="loadpetdb/search" />
+      <option name="project.path" value="./ROOT" />
+      <option name="type" value="urn:com-bea-ide:project.type:WebApp" />
+      <components>
+        <component name="Checked Netui Library Upgrade">
+          <option name="ROOT" value="true" />
+        </component>
+        <component name="com.bea.ide.debug.IDebugData" />
+        <component name="com.bea.portal.ide.rules.server.ConnectionInfoManager" />
+        <component name="workshop.workspace.project.build.ProjectBuilderPrefs">
+          <option name="ant.classpath" value="../../../../../../weblogic/jdk142_08/jre/lib/rt.jar;../../../../../../weblogic/jdk142_08/jre/lib/jsse.jar;../../../../../../weblogic/jdk142_08/jre/lib/jce.jar;../../../../../../weblogic/jdk142_08/lib/tools.jar;../../../../../../weblogic/weblogic815/server/lib/knex.jar;../../../../../../weblogic/weblogic815/common/lib/log4j.jar;../../../../../../weblogic/weblogic815/server/lib/debugging.jar;../../../../../../weblogic/weblogic815/javelin/lib/javelin.jar;../../../../../../weblogic/weblogic815/server/lib/wlw-lang.jar;../../../../../../weblogic/weblogic815/server/lib/weblogic.jar;../../../../../../weblogic/weblogic815/common/eval/pointbase/lib/pbserver44.jar;../../../../../../weblogic/weblogic815/common/eval/pointbase/lib/pbclient44.jar;../../../../../../weblogic/weblogic815/server/lib/webservices.jar;../../../../../../weblogic/weblogic815/server/lib/webserviceclient.jar;../../../../../../weblogic/weblogic815/server/lib/webserviceclient+ssl.jar;../../../../../../weblogic/weblogic815/server/lib/xbean.jar;../../../../../../weblogic/weblogic815/server/lib/wlxbean.jar;../../../../../../weblogic/weblogic815/server/lib/xqrl.jar;../../../../../../weblogic/weblogic815/server/lib/netui/netui-compiler.jar;../../../../../../weblogic/jrockit81sp6_142_10/jre/lib/rt.jar;../../../../../../weblogic/jrockit81sp6_142_10/jre/lib/jsse.jar;../../../../../../weblogic/jrockit81sp6_142_10/jre/lib/jce.jar;../../../../../../weblogic/jrockit81sp6_142_10/lib/tools.jar;../../../../../../weblogic/weblogic81/server/lib/knex.jar;../../../../../../weblogic/weblogic81/common/lib/log4j.jar;../../../../../../weblogic/weblogic81/server/lib/debugging.jar;../../../../../../weblogic/weblogic81/javelin/lib/javelin.jar;../../../../../../weblogic/weblogic81/server/lib/wlw-lang.jar;../../../../../../weblogic/weblogic81/server/lib/weblogic.jar;../../../../../../weblogic/weblogic81/common/eval/pointbase/lib/pbserver44.jar;../../../../../../weblogic/weblogic81/common/eval/pointbase/lib/pbclient44.jar;../../../../../../weblogic/weblogic81/server/lib/webservices.jar;../../../../../../weblogic/weblogic81/server/lib/webserviceclient.jar;../../../../../../weblogic/weblogic81/server/lib/webserviceclient+ssl.jar;../../../../../../weblogic/weblogic81/server/lib/xbean.jar;../../../../../../weblogic/weblogic81/server/lib/wlxbean.jar;../../../../../../weblogic/weblogic81/server/lib/xqrl.jar;../../../../../../weblogic/weblogic81/server/lib/netui/netui-compiler.jar;../../../../../../Program Files/Java/localSDK/libs/classes/ciesin.jar" />
+          <option name="ant.path" value="${ROOT.root}/exported_build.xml" />
+          <option name="buildTarget" value="build" />
+          <option name="useAnt" value="false" />
+        </component>
+        <component name="workshop.workspace.project.build.WebAppBuilderPrefs">
+          <option name="ant.precompilejsp" value="false" />
+          <option name="incrementalBuild" value="false" />
+        </component>
+      </components>
+    </project>
+    <project name="admin">
+      <option name="contextPath" value="loadpetdb/admin" />
+      <option name="project.path" value="./admin" />
+      <option name="type" value="urn:com-bea-ide:project.type:WebApp" />
+      <components>
+        <component name="Checked Netui Library Upgrade">
+          <option name="admin" value="true" />
+        </component>
+        <component name="com.bea.ide.debug.IDebugData" />
+        <component name="workshop.workspace.project.build.ProjectBuilderPrefs">
+          <option name="ant.classpath" value="../../../../../weblogic/jdk142_08/jre/lib/rt.jar;../../../../../weblogic/jdk142_08/jre/lib/jsse.jar;../../../../../weblogic/jdk142_08/jre/lib/jce.jar;../../../../../weblogic/jdk142_08/lib/tools.jar;../../../../../weblogic/weblogic815/server/lib/knex.jar;../../../../../weblogic/weblogic815/common/lib/log4j.jar;../../../../../weblogic/weblogic815/server/lib/debugging.jar;../../../../../weblogic/weblogic815/javelin/lib/javelin.jar;../../../../../weblogic/weblogic815/server/lib/wlw-lang.jar;../../../../../weblogic/weblogic815/server/lib/weblogic.jar;../../../../../weblogic/weblogic815/common/eval/pointbase/lib/pbserver44.jar;../../../../../weblogic/weblogic815/common/eval/pointbase/lib/pbclient44.jar;../../../../../weblogic/weblogic815/server/lib/webservices.jar;../../../../../weblogic/weblogic815/server/lib/webserviceclient.jar;../../../../../weblogic/weblogic815/server/lib/webserviceclient+ssl.jar;../../../../../weblogic/weblogic815/server/lib/xbean.jar;../../../../../weblogic/weblogic815/server/lib/wlxbean.jar;../../../../../weblogic/weblogic815/server/lib/xqrl.jar;../../../../../weblogic/weblogic815/server/lib/netui/netui-compiler.jar;../../../../../weblogic/jrockit81sp6_142_10/jre/lib/rt.jar;../../../../../weblogic/jrockit81sp6_142_10/jre/lib/jsse.jar;../../../../../weblogic/jrockit81sp6_142_10/jre/lib/jce.jar;../../../../../weblogic/jrockit81sp6_142_10/lib/tools.jar;../../../../../weblogic/weblogic81/server/lib/knex.jar;../../../../../weblogic/weblogic81/common/lib/log4j.jar;../../../../../weblogic/weblogic81/server/lib/debugging.jar;../../../../../weblogic/weblogic81/javelin/lib/javelin.jar;../../../../../weblogic/weblogic81/server/lib/wlw-lang.jar;../../../../../weblogic/weblogic81/server/lib/weblogic.jar;../../../../../weblogic/weblogic81/common/eval/pointbase/lib/pbserver44.jar;../../../../../weblogic/weblogic81/common/eval/pointbase/lib/pbclient44.jar;../../../../../weblogic/weblogic81/server/lib/webservices.jar;../../../../../weblogic/weblogic81/server/lib/webserviceclient.jar;../../../../../weblogic/weblogic81/server/lib/webserviceclient+ssl.jar;../../../../../weblogic/weblogic81/server/lib/xbean.jar;../../../../../weblogic/weblogic81/server/lib/wlxbean.jar;../../../../../weblogic/weblogic81/server/lib/xqrl.jar;../../../../../weblogic/weblogic81/server/lib/netui/netui-compiler.jar" />
+          <option name="ant.path" value="${admin.root}/exported_build.xml" />
+          <option name="buildTarget" value="build" />
+          <option name="useAnt" value="false" />
+        </component>
+        <component name="workshop.workspace.project.build.WebAppBuilderPrefs">
+          <option name="ant.precompilejsp" value="true" />
+          <option name="incrementalBuild" value="false" />
+        </component>
+      </components>
+    </project>
+  </projects>
+  <node name="roles" />
+</application>
+

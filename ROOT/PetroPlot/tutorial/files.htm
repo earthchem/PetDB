@@ -1,0 +1,240 @@
+<html>
+
+
+
+<head>
+
+
+
+<title>PetroPlot Tutorial: directories and files</title>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="plotStyle.css" rel="stylesheet" type="text/css">
+</head>
+
+
+
+
+
+
+
+<body bgcolor="#FFFFFF">
+
+
+
+<center>
+
+<h1>PetroPlot Tutorial</h1>
+
+<h1>Directories and files</h1>
+
+</center>
+
+
+
+<p>
+
+<b>Upzip PetroPlot.zip on your hard drive:</b> <br />
+
+A new folder called <b>"PetroPlot"</b> will appear. <br />
+
+The following example puts the <b>"PetroPlot"</b> folder under "My Documents" on a PC.
+
+You can put it in any convenient location.<br /><br />
+
+This directory contains <b>two files:</b> <a href="#readme_txt">ReadMe.txt</a> , <a href="#petroplot_htm">PetroPlot.htm</a> .<br />
+
+and <b>three sub-folders:</b> <a href="#Excelfile">Excelfile</a> , <a href="#paper">paper</a> , <a href="#tutorial">tutorial</a><br />
+
+
+
+<img src="figures/files_figure01.gif">
+
+</p>
+
+<br />
+
+
+
+<p>
+
+<a name=readme_txt>1</a>. <i><b>ReadMe.txt</b></i> -- Start up info. <br />
+
+<img src="figures/files_figure02.gif">
+
+</p>
+
+<br />
+
+
+
+<p>
+
+<a name=petroplot_htm>2</a>. <i><b>PetroPlot.htm</b></i> -- The home page for documentation. <br />
+
+<img src="figures/files_figure03.gif">
+
+</p>
+
+<br />
+
+
+
+<p>
+
+<a name=Excelfile>3</a>. The folder <b>Excelfile</b> contains three files:
+
+<a href="#PetroPlot_xla">PetroPlot.xla</a>,
+
+<a href="#PetroPlotSpider_xls">PetroPlotSpider.xls</a>,
+
+<a href="#PetroPlotExampleData_xls">PetroPlotExampleData.xls</a>.
+
+<br />
+
+<img src="figures/files_figure04.gif">
+
+</p>
+
+<a name=PetroPlot_xla>&nbsp;</a><i><b>PetroPlot.xla</b></i><br />
+
+As the core Excel add-in library file, "PetroPlot.xla" is required for all PetroPlot functions.
+
+Similar to other Excel add-in libraries, this file runs in the background in Excel.
+
+The source codes can be viewed in Visual Basic Editor. (<a href="vbeditor.htm">How?</a>)<br /><br />
+
+
+
+<a name=PetroPlotSpider_xls>&nbsp;</a><i><b>PetroPlotSpider.xls</b></i>&nbsp;(<font color=red>Note: the name of this file should not be modified.</font>)<br />
+
+This file contains normalization standard values for spider diagrams.
+
+Required for the PetroPlot Spider Diagram function.<br /><br />
+
+
+
+It is provided with three worksheets: REE, AllTrace and MyValues.<br />
+
+
+
+The REE and AllTrace  worksheets contain chondrite, primitive mantle
+
+and average MORB values from Sun & McDonough (1989) and McDonough & Sun (1995);<br />
+
+
+
+<img src="figures/files_figure05.gif"><br /><br />
+
+
+
+the MyValues worksheet is a demo showing how a customized worksheet
+
+could be added to the PetroPlotSpider.xls file.<br />
+
+
+
+<img src="figures/files_figure06.gif"><br /><br />
+
+
+
+All worksheets in <i><b>PetroPlotSpider.xls</b></i> must obey 3 rules :<br />
+
+(1) Each row represents a normalization standard; each column contains values for one element.<br />
+
+(2) Standard names must be in Column A, and element names must be in Row 1.<br />
+
+(3) “-1” is required as termination value in both Column A and Row 1.
+
+Extra information beyond the “-1” signs will not be used for spider diagram plotting.<br /><br />
+
+Users may add an arbitrary number of worksheets.  Inside each worksheet
+
+(including the provided AllTrace and REE), arbitrary numbers of standards or elements can also be added.
+
+The order of elements can be changed, and the data values can be modified.
+
+In another words, the spider diagram normalization values are fully customizable.<br /><br />
+
+
+
+
+
+<a name=PetroPlotExampleData_xls>&nbsp;</a><i><b>PetroPlotExampleData.xls</b></i><br />
+
+An Excel file with petrology data for the demonstration purpose ONLY.<br />
+
+Data source is Niu and Batiza (1997). <br />
+
+<img src="figures/files_figure07.gif"><br /><br />
+
+The format of an ordinary file should follow the format of this example file.<br />
+
+For instance, in a data sheet, each row represents a sample/analysis;
+
+each column represents a category (location, element, element ratio, etc)
+
+and the first row is always reserved for headers (i.e. element names etc).  <br /><br />
+
+
+
+However, unlike the PetroPlotSpider.xls, it is not required to put sample names in Column A.
+
+
+
+<br />
+
+
+
+<p>
+
+<a name=paper>4</a>. The folder <b>paper</b> .<br />
+
+The PetroPlot is submitted for publication
+
+to <a href=www.g-cubed.org><i>Geochem. Geophys. Geosyst.</i></a> <br />
+
+Official version of the paper is in this folder.<br />
+
+<img src="figures/files_figure08.gif">
+
+</p>
+
+<br />
+
+
+
+<p>
+
+<a name=tutorial>5</a>. The folder <b>tutorial</b>. <br />
+
+Contains all tutorial documentation.
+
+Go back to <a href=../petroplot.htm#tutorial>PetroPlot.htm</a> to read the list of topics.
+
+
+
+<br />
+
+
+
+</p>
+
+<br />
+
+<i>Last modified 05/17/2002, Yong Jun Su</i><br />
+
+This line marks the end of <b>PetroPlot Tutorial: Directories and files</b>
+
+
+
+</body>
+
+
+
+</html>
+
+
+

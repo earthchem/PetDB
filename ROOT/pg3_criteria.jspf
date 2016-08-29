@@ -1,0 +1,93 @@
+<%
+/*LS  moved to pg3.jsp      DataSet ds =summary_wrapper.getControlList("0");
+        int totalcount = ((CriteriaDS)ds).getCount(); */
+        String sampleids = ((CriteriaDS)ds).getSampleIDs();
+        String sampleids_commasep = sampleids.substring(sampleids.indexOf("(")+1, sampleids.indexOf(")"));
+        String[] samples = sampleids_commasep.split(", ");
+    Vector keys = new Vector();        
+	ds =pg3wrapper.getControlList("0");	
+
+	keys = ds.getKeys();
+    String key  = (String)keys.elementAt(0);
+    DataSummaryRecord r = (DataSummaryRecord)ds.getValue(key);
+    Vector myos= ds.getValues();
+		
+	int w_g = Integer.parseInt(r.getValue(DataSummaryRecord.WHOLEROCK)) 
+			+ Integer.parseInt( r.getValue(DataSummaryRecord.GLASS));
+        
+ 	//session.setAttribute("state",state + " w_g " + r.getValue(DataSummaryRecord.WHOLEROCK));       
+	//String incl_type = "glass_min";
+	//String criteria_label = "";
+
+	//if (criteria_type.equals(CombinedCriteria.ByDataCriteria))
+	//	criteria_label = "Rock Analysis";
+	//else if (criteria_type.equals(CombinedCriteria.ByMineralCriteria))
+	//	criteria_label = "Mineral Analysis";
+	//else if (criteria_type.equals(CombinedCriteria.ByInclusionCriteria)) 
+	//	criteria_label = "Inclusion Analysis";
+	//else 
+	//	criteria_label = "Rock Mode Analysis";
+	//System.out.println(request.getRequestURL());
+	String rockCheckStr = criteria_type.equals(DataWrapper.ByDataCriteria)? "checked":"";
+	String minCheckStr = criteria_type.equals(DataWrapper.ByMineralCriteria)? "checked":"";
+	String modeCheckStr = criteria_type.equals(DataWrapper.ByRockModeCriteria)? "checked":"";
+	String incCheckStr = criteria_type.equals(DataWrapper.ByInclusionCriteria)? "checked":"";
+	
+	String sessCheckStr = (String) session.getAttribute("analysesTypeSet");
+    if( sessCheckStr == null ) {
+    	 rockCheckStr =""; minCheckStr=""; modeCheckStr="";incCheckStr="";
+    } //First time here in this session. Don't check anything by default. It will be set after the radio button is clicked and form is submit.
+    if("true".equals(request.getParameter("xenolith"))) rockCheckStr =  "checked";
+    else if ("true".equals(request.getParameter("diamond"))) {    
+       minCheckStr =  "checked";
+    }
+    String meltCount = r.getValue(DataSummaryRecord.GLASS_INC);
+    String fluidCount = r.getValue(DataSummaryRecord.FLUID);
+    String minIncCount = r.getValue(DataSummaryRecord.MIN_INC);   
+    String mineralCount = r.getValue(DataSummaryRecord.MINERAL);
+    String rockModeCount = r.getValue(DataSummaryRecord.ROCKMODE);
+    String incCount = r.getValue(DataSummaryRecord.INCLUSION);
+    
+    //Don't check the radio button if no data available
+    if(rockModeCount.equals("0") ) modeCheckStr="";
+    if(mineralCount.equals("0") ) minCheckStr="";
+    if(incCount.equals("0") ) incCheckStr="";
+    if(w_g==0 ) rockCheckStr="";
+%>
+	<table class="results" style="width:880px;align:left;border:1;cellspacing:0;cellpadding:0;">
+	    <tr>
+	      <th class="new" align="left"><input name="criteria_type" type="radio" value="<%= DataWrapper.ByDataCriteria%>" id="rock" onClick="changeCriteriaType(this,<%= w_g%>);" 
+	               <%= rockCheckStr %> 
+	               <% if(w_g==0) out.print("disabled='true'"); %> />
+	               <label for="rock" <% if(w_g==0) out.print("style='color:grey'");%> >Rock Analyses</label> <br />
+	       </th>
+	      <td>
+		      <span class="regTxt">&nbsp;[Total:<%= w_g %>  ( <%= r.getValue(DataSummaryRecord.GLASS)%> glass, <%=  r.getValue(DataSummaryRecord.WHOLEROCK)%> whole rock analyses)]</span><br />
+		  </td>
+	    </tr>
+	    <tr>
+	      <th class="new" align="left"><input name="criteria_type" type="radio" value="<%= DataWrapper.ByMineralCriteria%>" id="mineral" onClick="changeCriteriaType(this, <%= r.getValue(DataSummaryRecord.MINERAL)%>);"
+	               <%= minCheckStr %> 
+	               <% if(mineralCount.equals("0")) out.print("disabled='true'");%> />
+	               <label for="mineral" <% if(mineralCount.equals("0")) out.print("style='color:grey'");%> > Mineral Analyses</label> <br />
+	      </th>
+	      <td><span>[Total:<%=  r.getValue(DataSummaryRecord.MINERAL)%> ]</span><br />
+		  </td>
+	    </tr>
+
+       <tr>
+          <th class="new" align="left"> <input name="criteria_type" type="radio" value="<%= DataWrapper.ByInclusionCriteria%>" id="inclusion" onClick="<% if("0".equals(meltCount)){if(!"0".equals(fluidCount)) out.print("setInclusionType('FLUID');"); else out.print("setInclusionType('MIN');");   } %> changeCriteriaType(this,<%= r.getValue(DataSummaryRecord.INCLUSION)%>);"
+                   <%= incCheckStr %>
+                   <% if(incCount.equals("0")) out.print("disabled='true'");%> />
+	               <label for="inclusion" <% if(incCount.equals("0")) out.print("style='color:grey'");%> >Inclusion Analyses</label> <br />
+          </th>
+          <td><span>[Total:<%= r.getValue(DataSummaryRecord.INCLUSION)%> (<%= meltCount %> Melt, <%= fluidCount%> Fluid, <%= minIncCount %> Mineral)]</span>
+		  </td>
+	   </tr>
+    </table>
+	<%
+		session.setAttribute("state", "CCC " + state);
+	%>
+<% 
+//System.out.println("====================== End of pg3_criteria.jspf ===================== ");
+%>

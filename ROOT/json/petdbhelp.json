@@ -1,0 +1,13 @@
+{
+    "specSampleHelp":     "<p align='left' >Find data from samples by searching on author-given sample names or name fragments (e.g. 135-834B-22R-2/24-28, PS66-238-49) or by PetDB Sample ID or Sample ID Fragment (e.g. ODP0135-0834B-022R-002/24-28, POLARK20-2-238-049, POLAR).</p>", 
+    "specRefHelp":        "<p align='left' >Find data from a particular reference by searching on Author Name, Publication Year, Keyword in Title, and/or Journal Name.</p>",
+    "setLatLonHelp":      "<p align='left' >Select samples by geospatial coordinates (map search or enter latitude/longitude) and/or water depth.</p>",
+    "setGeoSampHelp":     "<p align='left' >Select samples by names of physiographic or geological features (e.g. Lamont Seamounts, East Pacific Rise)</p>",
+    "setTecHelp":         "<p align='left' >Select samples by choosing a tectonic setting (e.g. back-arc basin)</p>",
+    "setSampCharHelp":    "<p align='left' >Select samples by lithology or sampling technique</p>",
+    "setCruiseHelp":      "<p align='left' >Select samples by cruise or expedition or ship.</p>",
+    "setPubInfoHelp":     "<p align='left' >Select samples by author, publication, and year of publication or data submission.</p>",
+    "setDataAvailHelp":   "<p align='left' >Select samples by the data that are available for the sample, e.g. whole rock major or trace elements, radiogenic isotope ratios, or mineral analyses.</p>",
+    "setDataVersionHelp": "<p align='left' >Set constraints on the data query by date entered into the PetDB database.</p>",
+    "step1ResultHelp":    "<div align='left' class='emphasis'><i>Continue your search or review your samples using following buttons. You can also save or retrieve your selection within this session using 'save query' or 'retrieve query' buttons below.</i></div>"
+}

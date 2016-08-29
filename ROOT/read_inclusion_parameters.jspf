@@ -1,0 +1,49 @@
+<%
+
+	if (request.getParameter("DoOnSubmit") != null)
+        {
+		if (request.getParameter("DoOnSubmit").equals("clear"))
+		{
+			((ByInclusionCriteria)criteria).clear();
+		} 
+		else 
+		{
+			if (request.getParameter("DoOnSubmit").equals("submit")) 
+			{
+			if (request.getParameter("incl_type") != null)
+				{
+				if (pg_ind == 3) ((ByChemistryCriteria)criteria).clear();
+				((ByInclusionCriteria)criteria).setAnalysisType(request.getParameter("incl_type"));
+				}
+			if (request.getParameter("incl_heat") != null)
+				{
+				if (pg_ind == 3) ((ByChemistryCriteria)criteria).clear();
+				((ByInclusionCriteria)criteria).setHeating(request.getParameter("incl_heat"));
+				}
+			if (request.getParameter("host_mineral") != null){
+				{
+				if (pg_ind ==3) ((ByChemistryCriteria)criteria).clear();
+				criteria.setValues(ByInclusionCriteria.HostMineral,
+						request.getParameterValues("host_mineral"));
+				}
+			}
+			}
+	
+			String do_chem_elements = (String)request.getParameter("chem_elements");
+                        if ("yes".equals(do_chem_elements))
+                        {
+
+        			s_keys  =((DataRecordDS)data).getOrderedKeys();
+        			for (int i=0; i<s_keys.length; i++)
+        			{
+					String[]  values;
+                			criteria.clear(s_keys[i]);
+                			if ( (values = request.getParameterValues(s_keys[i])) != null)
+                      				criteria.setValues(s_keys[i],values);
+				}
+			}
+		}
+	}
+	state = "'"+((ByInclusionCriteria)criteria).getHeating() + ":"
+		 + criteria.getValuesAsStr(ByInclusionCriteria.HostMineral) + "'";  
+%>

@@ -1,0 +1,120 @@
+	<table width="100%" align="left" border="0" cellspacing="0" cellpadding="8">
+              <tr>
+                <td><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <tr valign="top">
+                      <td class="TablFont">Your criteria for selecting samples
+                        are:<br />
+                        <% if (c_criteria.isSet(CombinedCriteria.ByLongLatCriteria)) { %>                        
+                        Longtitude/Latitude: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByLongLatCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('latlongcrit','','show')" onMouseOut="MM_showHideLayers('latlongcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="latlongcrit" style="position:absolute; left:350px; right:20px; width:400px;  z-index:2; border: 1px #FFFFFF; visibility: hidden; overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByLongLatCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria)%><br />
+<%
+   }
+ } %>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByGeoCriteria)) { %>
+                        Geographical Name: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByGeoCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByGeoCriteria).length())){ %>
+                        <a href="#" onMouseOver="MM_showHideLayers('geocrit','','show')" onMouseOut="MM_showHideLayers('geocrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="geocrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility: hidden; overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByGeoCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByGeoCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByGeoCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByTectCriteria)) {   %>    
+                        Tectonic Name:
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByTectCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByTectCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('tectcrit','','show')" onMouseOut="MM_showHideLayers('tectcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="tectcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility: hidden; overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByTectCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByTectCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByTectCriteria)%><br />
+<%
+   }
+ } 
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByRockCriteria)) { %>
+                        Sample Name: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByRockCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByRockCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('rockcrit','','show')" onMouseOut="MM_showHideLayers('rockcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="rockcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility:hidden; overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByRockCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByRockCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByRockCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByExpCriteria)) { %>
+                        Expedition Name: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByExpCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByExpCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('expcrit','','show')" onMouseOut="MM_showHideLayers('expcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="expcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility:hidden;overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByExpCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByExpCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByExpCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByPubCriteria)) { %>
+                        Publication Name: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByPubCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByPubCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('pubcrit','','show')" onMouseOut="MM_showHideLayers('pubcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="pubcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility:hidden;overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByPubCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByPubCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByPubCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByDataAvailCriteria)) { %>
+                        Data Availability Name: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByDataAvailCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('availcrit','','show')" onMouseOut="MM_showHideLayers('availcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="availcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility:hidden;overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByDataAvailCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByDataVersionCriteria)) { %>
+                        Data Version Date: 
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByDataVersionCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria).length())){%>
+                        <a href="#" onMouseOver="MM_showHideLayers('availcrit','','show')" onMouseOut="MM_showHideLayers('availcrit','','hide')"><img 
+                        src="images/info_sm.gif" width="20" height="18" border="1" align="absbottom"></a>
+                        <span id="availcrit" style="position:absolute; left:350px; right:20px; width:400px; z-index:2; border: 1px #FFFFFF; visibility:hidden;overflow: visible;" class="pad"><table class="basic">
+                        <tr><td><%= c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria)%></td></tr></table></span>
+                        <span class="new"><%= c_criteria.getSDsc(CombinedCriteria.ByDataVersionCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria)%><br />
+<%
+   }
+ }
+%>
+                      </td>
+                    </tr>
+                  </table>

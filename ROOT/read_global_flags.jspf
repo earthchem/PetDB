@@ -1,0 +1,10 @@
+<%
+    if (request.getParameter("DoOnSubmit") != null) {
+        if ("and".equals(request.getParameter("logical_and_or")) ){
+            ((ByChemistryCriteria)criteria).setANDQuery();
+        }
+        else {
+            ((ByChemistryCriteria)criteria).setORQuery();
+        }
+    }
+%>

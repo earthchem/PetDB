@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+  <display-name>PetDB Dev</display-name>
+  
+  <context-param>
+    <description>Package name field value at UAS schema</description>
+    <param-name>uas_package</param-name>
+    <param-value>PETDB</param-value>    
+  </context-param>
+  
+  <context-param>
+    <param-name>datasource</param-name>
+    <param-value>ieda.gfgdb.loadpetdb</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>webdomain</param-name>
+    <param-value>www.earthchem.org</param-value>
+  </context-param>
+    
+  <context-param>
+    <param-name>feedback.local</param-name>
+    <param-value>http://localhost/drupal-7.9/content/petdb-download-feedback</param-value>
+  </context-param>
+  
+    <context-param>
+    <param-name>feedback.loadpetdb</param-name>
+    <param-value>http://www.petdb.org/dev-download-feedback</param-value>
+  </context-param>
+    <context-param>
+    <param-name>feedback.petdb</param-name>
+    <param-value>http://www.petdb.org/feedback/2011/03/a/#top</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>feedback.earthchem</param-name>
+    <param-value>http://www.earthchem.org/feedback/2012/08/pet</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>feedback.earthchem.load</param-name>
+    <param-value>http://www.earthchem.org/loadpetdb-download-feedback</param-value>
+  </context-param>
+  
+  <listener>
+    <listener-class>com.bea.wlw.runtime.core.servlet.WebappContextListener</listener-class>
+  </listener>
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+  <servlet>
+    <servlet-name>ReferenceFeedback</servlet-name>
+    <servlet-class>petdb.data.ReferenceFeedback</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReferenceFeedback</servlet-name>
+    <url-pattern>referenceFeedback</url-pattern>
+  </servlet-mapping>
+   <servlet>
+    <servlet-name>TagAlongDownload</servlet-name>
+    <servlet-class>petdb.data.TagAlongDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TagAlongDownload</servlet-name>
+    <url-pattern>tagAlongDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ExcelDownload</servlet-name>
+    <servlet-class>petdb.data.ExcelDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExcelDownload</servlet-name>
+    <url-pattern>ExcelDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>StationDownload</servlet-name>
+    <servlet-class>petdb.data.StationDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StationDownload</servlet-name>
+    <url-pattern>StationDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ReferenceDownload</servlet-name>
+    <servlet-class>petdb.data.ReferenceDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReferenceDownload</servlet-name>
+    <url-pattern>ReferenceDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>TableInfoDownload</servlet-name>
+    <servlet-class>petdb.data.TableInfoDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TableInfoDownload</servlet-name>
+    <url-pattern>TableInfoDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ExpeditionDownload</servlet-name>
+    <servlet-class>petdb.data.ExpeditionDownload</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExpeditionDownload</servlet-name>
+    <url-pattern>ExpeditionDownload</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>getXmlServlet</servlet-name>
+    <servlet-class>petdb.xml.GetSamplesXML</servlet-class>
+    <init-param>
+      <param-name>TransfromFromDBStepOne</param-name>
+      <param-value>/xsls/earthchemFirstStep.xsl</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getXmlServlet</servlet-name>
+    <url-pattern>getsamplesxml</url-pattern>
+  </servlet-mapping>
+  
+  	<servlet>
+		<servlet-name>startPage</servlet-name>
+		<servlet-class>petdb.registration.startPage</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>startPage</servlet-name>
+		<url-pattern>start</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+		<servlet-name>referenceExcel</servlet-name>
+		<servlet-class>petdb.data.ReferenceExcelDownload</servlet-class>
+	</servlet>
+ 
+ 	<servlet-mapping>
+		<servlet-name>referenceExcel</servlet-name>
+		<url-pattern>referenceExcel</url-pattern>
+	</servlet-mapping> 
+	
+	
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404_error.jsp</location>
+  </error-page>
+    <error-page>
+    <error-code>500</error-code>
+    <location>/404_error.jsp</location>
+  </error-page>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <mime-mapping>
+    <extension>xls</extension>
+    <mime-type>application/vnd.ms-excel</mime-type>
+  </mime-mapping>
+</web-app>

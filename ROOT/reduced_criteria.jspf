@@ -1,0 +1,150 @@
+
+         
+          <% String quickSearch = c_criteria.getQuickSearch();
+          if(quickSearch!= null) {%> 
+            <span style="clear:both;float:left;">Quick Search:</span><%=quickSearch%><br/> 
+          <% } %>       
+                  
+                        <% if (c_criteria.isSet(CombinedCriteria.ByLongLatCriteria)) { %>                        
+                        <span style="clear:both;float:left;">Longtitude/Latitude: </span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByLongLatCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria).length())){%>
+                        <button  style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('latlongcrit','show')" onMouseOut="MM_showHideLayers('latlongcrit','hide')"></button>
+                        <span id="latlongcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByLongLatCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByLongLatCriteria)%><br />
+<%
+   }
+ } %>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByGeoCriteria)) { %>
+                        <span style="clear:both;float:left;">Geographical Name: </span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByGeoCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByGeoCriteria).length())){ %>
+                        <button  style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('geocrit','show')" onMouseOut="MM_showHideLayers('geocrit','hide')"></button>
+                        <span id="geocrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByGeoCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByGeoCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByGeoCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByTectCriteria)) {   %>    
+                        <span style="clear:both;float:left;display:inline;">Tectonic Name:</span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByTectCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByTectCriteria).length())){%>
+                        <button style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" 
+                                onMouseOver="MM_showHideLayers('tectcrit','show')" onMouseOut="MM_showHideLayers('tectcrit','hide')"></button>
+                        <span id="tectcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByTectCriteria)%>
+                        </span>
+                        
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByTectCriteria)%>
+                        </span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByTectCriteria)%><br />
+<%
+   }
+ } 
+ if ("true".equals(request.getParameter("xenolith"))) { %>
+ <span style="clear:both;float:left;">Sample Name:</span>
+                        
+                        <button style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('rockcrit','show')" onMouseOut="MM_showHideLayers('rockcrit','hide')"></button>
+                        <span id="rockcrit" class="criteria" style="float:left;left:200px;">
+                        CLASS: xenolith:DUNITE, xenolith:ECLOGITE, xenolith:HARZBURGITE, xenolith:LHERZOLITE, xenolith:PERIDOTITE, xenolith:PYROXENITE, xenolith:WEBSTERITE, xenolith:WEHRLITE</span>
+                        <span class="new" style="float:left;position:relative;left:5px;">CLASS: xenolith:DUNITE, xenolith:ECLOGITE, xenolith:HARZBURG...</span><br />
+<% }%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByRockCriteria)) { %>
+                        <span style="clear:both;float:left;">Sample Name:</span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByRockCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByRockCriteria).length())){ %>
+                        <button style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('rockcrit','show')" onMouseOut="MM_showHideLayers('rockcrit','hide')"></button>
+                        <span id="rockcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByRockCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByRockCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByRockCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByExpCriteria)) { %>
+                        <span style="clear:both;float:left;">Expedition Name: </span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByExpCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByExpCriteria).length())){%>
+                        <button  style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('expcrit','show')" onMouseOut="MM_showHideLayers('expcrit','hide')"></button>
+                        <span id="expcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByExpCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByExpCriteria)%></span><br />
+                        <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByExpCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByPubCriteria)) { %>
+                        <span style="clear:both;float:left;">Publication Name: </span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByPubCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByPubCriteria).length())){%>
+                        <button  style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('pubcrit','show')" onMouseOut="MM_showHideLayers('pubcrit','hide')"></button>
+                        <span id="pubcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByPubCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByPubCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByPubCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByDataAvailCriteria)) { %>
+                        <span style="clear:both;float:left;">Data Availability:</span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByDataAvailCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria).length())){%>
+                        <button style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('availcrit','show')" onMouseOut="MM_showHideLayers('availcrit','hide')"></button>
+                        <span id="availcrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByDataAvailCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByDataAvailCriteria)%><br />
+<%
+   }
+ }
+%>
+                        <% if (c_criteria.isSet(CombinedCriteria.ByDataVersionCriteria)) { %>
+                        <<span style="clear:both;float:left;">Data Version Date: </span>
+                        <% if((c_criteria.getSDsc(CombinedCriteria.ByDataVersionCriteria).length())< (c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria).length())){%>
+                        <button  style="left:2px;" class="infoButton ui-state-default ui-corner-all ui-icon ui-icon-info" onMouseOver="MM_showHideLayers('verscrit','show')" onMouseOut="MM_showHideLayers('verscrit','hide')"></button>
+                        <span id="verscrit" class="criteria" style="float:left;left:200px;">
+                        <%= c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria)%></span>
+                        <span class="new" style="float:left;position:relative;left:5px;"><%= c_criteria.getSDsc(CombinedCriteria.ByDataVersionCriteria)%></span><br />
+                      <% } else { %>
+<%= c_criteria.getDsc(CombinedCriteria.ByDataVersionCriteria)%><br />
+<%
+   }
+ }
+%>
+
+<% String criteriaType = request.getParameter("criteria_type");
+if(criteriaType !=null) {	   
+    session.setAttribute("selectedCriteria", criteriaType);
+}
+if(session.getAttribute("selectedCriteria")!= null) {
+if("ByMineralCriteria".equals(session.getAttribute("selectedCriteria"))) criteriaType="Mineral Analyses";
+else if("ByDataCriteria".equals(session.getAttribute("selectedCriteria"))) criteriaType="Rock Analyses";
+else criteriaType = "Inclusion Analyses";
+%>
+<span style="clear:both;float:left;">Criteria Type:</span><%= criteriaType %><br/>
+<% } 
+
+String allType = null;
+String [] arr = request.getParameterValues("All_type");
+if(arr!= null && arr.length > 0) { 
+    for(int i =0; i < arr.length; i++) {
+        if(i== 0) allType = arr[i];
+        else allType += ", "+arr[i];
+    }
+session.setAttribute("SelectedAllType",allType);
+}
+%>
+<% if(session.getAttribute("SelectedAllType") != null){%>
+<span style="clear:both;float:left;">All Type:</span><%=session.getAttribute("SelectedAllType")%><br/>
+<%}%>
+
+
+

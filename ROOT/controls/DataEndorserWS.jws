@@ -1,0 +1,103 @@
+package controls;
+
+/**
+ * @editor-info:link autogen-style="stateless" source="DataEndorserDBControl.jcx" autogen="true"
+ */
+public class DataEndorserWS implements com.bea.jws.WebService
+{
+    static final long serialVersionUID = 1L;
+
+    /** @common:control */
+    public controls.DataEndorserDBControl dataEndorserDBControl;
+
+    /** @common:operation
+     */
+    public java.lang.String[] getReferences()
+    { return dataEndorserDBControl.getReferences(); }
+
+    /** @common:operation
+     */
+    public controls.DataEndorserDBControl.Expeditions[] getExpeditions()
+    { return dataEndorserDBControl.getExpeditions(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getSamplingTechniques()
+    { return dataEndorserDBControl.getSamplingTechniques(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getNavigationMethods()
+    { return dataEndorserDBControl.getNavigationMethods(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getTectonicSettings()
+    { return dataEndorserDBControl.getTectonicSettings(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getRockTypes()
+    { return dataEndorserDBControl.getRockTypes(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getRockClasses()
+    { return dataEndorserDBControl.getRockClasses(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getMethods()
+    { return dataEndorserDBControl.getMethods(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getItemMeasured()
+    { return dataEndorserDBControl.getItemMeasured(); }
+
+    /** @common:operation
+     */
+    public controls.DataEndorserDBControl.ItemMeasuredJoinMethod[] getItemMeasuredJoinMethod()
+    { return dataEndorserDBControl.getItemMeasuredJoinMethod(); }
+
+    /** @common:operation
+     */
+    public controls.DataEndorserDBControl.ItemTypeJoinItemMeasured[] getItemTypeJoinItemMeasured()
+    { return dataEndorserDBControl.getItemTypeJoinItemMeasured(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getAnalyses()
+    { return dataEndorserDBControl.getAnalyses(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getMaterials()
+    { return dataEndorserDBControl.getMaterials(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getMinerals()
+    { return dataEndorserDBControl.getMinerals(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getCrystals()
+    { return dataEndorserDBControl.getCrystals(); }
+
+    /** @common:operation
+     */
+    public controls.DataEndorserDBControl.RockClassJoinRockType[] getRockClassJoinRockType()
+    { return dataEndorserDBControl.getRockClassJoinRockType(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getAlterations()
+    { return dataEndorserDBControl.getAlterations(); }
+
+    /** @common:operation
+     */
+    public java.lang.String[] getGeoLocationTypes()
+    { return dataEndorserDBControl.getGeoLocationTypes(); }
+
+}

@@ -1,0 +1,11 @@
+.busybox {
+	    position: absolute;
+	    z-index: 999;
+	    color: #fff;
+	    background-color: #666;
+	    margin: 0;
+	    padding: 0;
+	    opacity: 0.5;
+	    filter: alpha(opacity=95);
+	    -ms-filter: "alpha(opacity=95)";
+}

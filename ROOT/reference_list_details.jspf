@@ -1,0 +1,72 @@
+ <%
+ /*$Id:*/
+        int orderBy;
+        if ((""+PubRecord.YEAR).equals(request.getParameter("orderBy")))
+                orderBy = PubRecord.YEAR;
+        else  orderBy = PubRecord.AUTH;
+
+        if (ds == null) return;
+        int index;
+        String r_keys= "";
+        String c_title= "";
+	PubRecordDS pr_ds = (PubRecordDS)ds;
+	pr_ds.goFirst();
+	int kk = pr_ds.orderBy(orderBy);
+%> 
+	<table width="100%" CELLPADDING="1" CELLSPACING="0" class="regTxt">
+	 <tr class="rowLabel2">
+                <th width="5%" ALIGN="left">&nbsp;</th>
+ <%
+		
+		if (href_str.equals("set_ref_scrn2.jsp"))
+		{
+%>
+		<th width="10%" ALIGN="left" class="regTxt">&nbsp;</th>
+<%
+		}
+%>
+                <th width="20%" ALIGN="left" class="pad2"><a href="<%= href_str%>?ind=<%= ind%>&orderBy=<%=PubRecord.AUTH%> " target="_self">Author</a></th>
+                <th ALIGN="left" class="pad2"><a href="<%= href_str%>?ind=<%= ind%>&orderBy=<%=PubRecord.YEAR%>" target="_self">Year</a></th>
+                <th ALIGN="left" class="pad2">Title and Journal</th>
+                </tr>
+<%
+        while (pr_ds.hasMoreKeys())
+	{
+		 String key = pr_ds.getNextKey();
+		 //System.out.println("key===>"+key);
+               	 PubRecord rr = (PubRecord)pr_ds.getValue(key);
+                	r_keys += (r_keys.length() == 0 ? key : "," + key);
+                	c_title = "" + rr.getValue(PubRecord.TITLE);
+               		if (!"&nbsp;".equals(rr.getValue(PubRecord.Journal)))
+                        	c_title += " Journal: " + rr.getValue(PubRecord.Journal);
+                	if (!"&nbsp;".equals(rr.getValue(PubRecord.Volume)))
+                        	c_title += " Volume: " + rr.getValue(PubRecord.Volume);
+
+%>
+                <tr valign="top" class="pad">
+<%
+		if (href_str.equals("set_ref_scrn2.jsp"))
+		{
+%>
+		<td><input type="checkbox" checked name="checkboxref" value="<%= key%>"></td>
+<%
+		}
+%>
+                  <td><a href="ref_info.jsp?singlenum=<%= key%>"  target="ref_win" onClick="openWindow2(this,350,750,this.target)">
+                        data tables</a></td>
+                  <td><%= rr.getValue(PubRecord.AUTH)%></td>
+                  <td class="pad2"><%= rr.getValue(PubRecord.YEAR)%></td>
+                  <td><%= c_title%><%= (rr.getValue(PubRecord.Book_Title).length()<2 ? "": ";" + rr.getValue(PubRecord.Book_Title)
+)%><%= (rr.getValue(PubRecord.Editors).length()<2 ? "": "; "+ rr.getValue(PubRecord.Editors))%></td>
+           <%-- 	<td><input type="button" value="Excel" onclick="location.href='referenceExcel?ref_num=<%= key%>'"></td>  --%>
+                </tr>
+                <tr class="setLabel2"><td colspan="4"><img src="images/shim.gif" width="5" height="1"></td>
+                </tr>
+<%
+        }
+        session.removeAttribute(TheQuery);
+        session.setAttribute(TheQuery,r_keys);
+	if (wrapper != null) wrapper.closeQueries();
+%>
+          </table>
+

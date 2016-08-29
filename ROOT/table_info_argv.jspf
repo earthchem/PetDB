@@ -1,0 +1,42 @@
+<%
+       String table_id = request.getParameter("singlenum");
+       String table_num = request.getParameter("table_num");
+       String table_title = request.getParameter("table_title");
+       String rows= request.getParameter("rows");
+       String items= request.getParameter("items");
+        if (table_id == null) 
+			throw new Exception("You are trying to go to Table in Reference page. "
+			+ " with NO Table in Reference specified");
+        Wrapper wrapper = new TblInRefInfoWrapper(table_id);
+        OrderedChemicals  ds1 = (OrderedChemicals)wrapper.getControlList("0");
+        TblInRefInfo2DS  ds2 = (TblInRefInfo2DS)wrapper.getControlList("1");
+        OrderedChemicals  ds3 = (OrderedChemicals)wrapper.getControlList("2");
+        TblInRefInfo2DS  ds4 = null;
+        if(ds3.getKeys().size() > 0) ds4 = (TblInRefInfo2DS)wrapper.getControlList("3");
+   
+        int xls_x_start = 4;
+        int xls_y_start = 3;
+        Label label = null;
+        int columns_size = 0;
+  
+        
+        int row_index = 0;
+        int f_index = 0;
+        String previous_id ="";
+        String previous_method="";
+        String method="";
+        String material = "";
+        String igsn="";
+        String igsnURL="N/A";
+        String alias = "";
+        String s_id = "";
+        String colorName = "#DFDCB5";
+        
+        double[] columns_value = null;
+        String[] columns_valueStr=null;
+        
+        boolean xls = false;
+        WritableSheet sheet = null;
+        String tableId = "Table1";
+      
+%>

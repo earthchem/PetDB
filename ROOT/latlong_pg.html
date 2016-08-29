@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>PETDB query - set latitute/longitude filters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="css/petdb.css" rel="stylesheet" type="text/css">
+<script LANGUAGE="JavaScript">
+<!-- Original:  Nannette Thacker -->
+<!-- http://www.shiningstar.net -->
+<!-- Begin
+function checkNumeric(objName,minval, maxval,comma,period,hyphen)
+{
+	var numberfield = objName;
+	if (chkNumeric(objName,minval,maxval,comma,period,hyphen) == false)
+	{
+		numberfield.select();
+		numberfield.focus();
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function chkNumeric(objName,minval,maxval,comma,period,hyphen)
+{
+// only allow 0-9 be entered, plus any values passed
+// (can be in any order, and don't have to be comma, period, or hyphen)
+// if all numbers allow commas, periods, hyphens or whatever,
+// just hard code it here and take out the passed parameters
+var checkOK = "0123456789" + comma + period + hyphen;
+var checkStr = objName;
+var allValid = true;
+var decPoints = 0;
+var allNum = "";
+
+for (i = 0;  i < checkStr.value.length;  i++)
+{
+ch = checkStr.value.charAt(i);
+for (j = 0;  j < checkOK.length;  j++)
+if (ch == checkOK.charAt(j))
+break;
+if (j == checkOK.length)
+{
+allValid = false;
+break;
+}
+if (ch != ",")
+allNum += ch;
+}
+if (!allValid)
+{
+alertsay = "Please enter only these values \""
+alertsay = alertsay + checkOK + "\" in the \"" + checkStr.name + "\" field."
+alert(alertsay);
+return (false);
+}
+
+// set the minimum and maximum
+var chkVal = allNum;
+var prsVal = parseInt(allNum);
+if (chkVal != "" && !(prsVal >= minval && prsVal <= maxval))
+{
+alertsay = "Please enter a value greater than or "
+alertsay = alertsay + "equal to \"" + minval + "\" and less than or "
+alertsay = alertsay + "equal to \"" + maxval + "\" in the \"" + checkStr.name + "\" field."
+alert(alertsay);
+return (false);
+}
+}
+//  End -->
+</script>
+</head>
+
+<body>
+<form name="form1" method="post" action="">
+<center>
+    <table width="80%" border="0" cellspacing="0" cellpadding="0">
+      <tr> 
+        <td><img src="images/shim.gif" width="5" height="5"></td>
+      </tr>
+      <tr class="emphasis"> 
+        <td><i><font size="3"><i><span class="emphasis">Latitude/Longitude/Elevation</span></i></font></i></td>
+      </tr>
+      <tr> 
+        <td><img src="images/shim.gif" width="5" height="5"></td>
+      </tr>
+      <tr> 
+        <td><br />
+          <i><span class="regTxt">please specify below</span></i> </td>
+      </tr>
+      <tr>
+        <td><img src="images/shim.gif" width="5" height="5"></td>
+      </tr>
+    </table>  
+  <table border="0" cellspacing="0" class="sub2">
+    <tr align="center" valign="top"> 
+      <td colspan="1" nowrap><b>Latitude</b>&nbsp;<span class="regTxt">(degree)&nbsp;<br />
+        -90 to 90</span></td>
+      <td colspan="1" nowrap> <b>Longitude&nbsp;</b><span class="regTxt">(degree)&nbsp;<br />
+        -180 to 180</span></td>
+      <td nowrap> <b>Elevation&nbsp;</b><span class="regTxt">(meters)&nbsp;<br />
+        negative for ocean floor&nbsp;</span></td>
+    </tr>
+    <tr align="center" valign="bottom"> 
+      <td class="regTxt" nowrap>Northern Bound<br />
+        <input name="latnorth" size="10" value="" onBlur="checkNumeric(this,'-90','90','','.','-')">
+        &nbsp; </td>
+      <td class="regTxt" nowrap>Western Bound<br />
+        <input name="longwest" size="10" value="" onBlur="checkNumeric(this,'-180','180','','.','-')">
+      </td>
+      <td class="regTxt" nowrap>Top<br />
+        <input name="depthtop" size="10" value="" onBlur="checkNumeric(this,'-10000','0','','.','-')">
+      </td>
+    </tr>
+    <tr align="center" valign="bottom"> 
+      <td class="regTxt" nowrap>Southern Bound<br />
+        <input name="latsouth" size="10" value="" onBlur="checkNumeric(this,'-90','90','','.','-')">
+      </td>
+      <td class="regTxt" nowrap>&nbsp;Eastern Bound<br />
+        <input name="longeast" size="10" value="" onBlur="checkNumeric(this,'-180','180','','.','-')">
+      </td>
+      <td class="regTxt" nowrap>Bottom<br />
+        <input name="depthbottom" size="10" value="" onBlur="checkNumeric(this,'-10000','0','','.','-')">
+      </td>
+    </tr>
+    <tr> 
+      <td align="center" valign="middle" colspan="4"><img src="images/shim.gif" width="5" height="5"></td>
+    </tr>
+    <tr align="right"> 
+      <td colspan="3" valign="middle"> 
+        <input type="submit" name="Submit"   class="importantButton" value="Apply" onClick="window.close();">
+      </td>
+    </tr>
+  </table></center>
+</form><br />
+</body>
+</html>

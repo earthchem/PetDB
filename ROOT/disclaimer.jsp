@@ -19,15 +19,14 @@
 
 <h1>Terms of use</h1>
 <br>
-<h3>Use of digital materials obtained from the EarthChem Library (ECL) is for non-commercial purposes only.</h3>
+<h3>Use of digital materials obtained from the PetDB is for non-commercial purposes only.</h3>
 
 <p>You may browse freely, but you may not circulate or publish materials you obtained from this site if you do not
 accept the terms of providing adequate citation.</p>
 
 <p>This web site is designed for both public and academic use. However, appropriate acknowledgment with a byline/credit/link
-<b>must</b> be given to both the original scientists/contributors by reference to their relevant publications and to EarthChem
-(<span class="nobr"><a href="http://www.earthchem.org" rel="nofollow">www.earthchem.org</a></span>). Where citation information has been provided
-to us by contributors it is included with the relevant database entries, and should be acknowledged when data are used.</p>
+<b>must</b> be given to both the original scientists by reference to their relevant publications and to PetDB
+(<span class="nobr"><a href="http://www.earthchem.org/petdb" rel="nofollow">www.earthchem.org/petdb</a></span>).</p>
 
 <h3>Accuracy</h3>
 

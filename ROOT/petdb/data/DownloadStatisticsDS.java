@@ -1,9 +1,6 @@
 package petdb.data;
 
-import java.util.*; 
 import java.sql.*;
-import jxl.*;
-import jxl.write.*;
 
 public class DownloadStatisticsDS extends RowBasedDS 
 {

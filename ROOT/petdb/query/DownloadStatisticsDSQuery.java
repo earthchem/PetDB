@@ -1,11 +1,7 @@
 
 package petdb.query;
 
-import java.sql.*;
-import java.util.*;
 import petdb.data.*;
-import petdb.criteria.*;
-import petdb.config.*;
 
 public class DownloadStatisticsDSQuery extends NonPersistentDynamicCtlQuery 
 {
@@ -13,7 +9,7 @@ public class DownloadStatisticsDSQuery extends NonPersistentDynamicCtlQuery
 	{
 		super();
 		v_filter = filter;
-        int r = setQuery();
+        setQuery();
 		
 	}
 

@@ -1,0 +1,10 @@
+.workshop
+.workshop/**/*
+.bea*
+.classpath
+.*.swp
+.project
+*.ear
+META-INF/*.xml
+META-INF/.*
+admin/WEB-INF/.*/*.xml

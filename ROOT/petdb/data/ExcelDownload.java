@@ -324,7 +324,7 @@ public class ExcelDownload extends HttpServlet
 	            //System.out.println(ref_num);
 	        	//Get the count of download for reference with ref_num
 	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
-	            String it = new SimpleQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='2016-09'").getSingleResult();
+	            String it = new SimpleQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='"+strDate+"'").getSingleResult();
 	            //Max number of sample_download table
 	            String s = new SimpleQuery("select max(id) from reference_download").getSingleResult();
 	            int download_max =0;

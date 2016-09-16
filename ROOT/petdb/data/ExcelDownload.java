@@ -28,7 +28,6 @@ public class ExcelDownload extends HttpServlet
 
 		HttpSession session = request.getSession();
 
-     	
 		if ((c_c_collection = (CCriteriaCollection)session.getAttribute("ccColl")) == null)
 		{
           System.err.println("ExcelDownload:Error getting 'ccColl' attribute. Ignored.");
@@ -263,6 +262,7 @@ public class ExcelDownload extends HttpServlet
 	public int saveDownloadStatistics(HttpServletRequest request, HttpServletResponse  response)
 	{
 	    HttpSession ses = request.getSession();
+		String ds = ses.getServletContext().getInitParameter("datasource");
 	    String email = (String) ses.getAttribute("email");
 	    String purpose = (String) ses.getAttribute("purpose");
 	   
@@ -277,47 +277,74 @@ public class ExcelDownload extends HttpServlet
 	    String ipAddress = new IPAddress().getIpAddrWithFilter(request);
 	    if(ipAddress != null)
 	    {
-	        String insertQry = "insert into download_statistics (id,download_date,ip_address,email,purpose) values ("+ (++num) +",SYSDATE,'"+ipAddress+"','"+email+"','"+purpose+"')";
-	        new SimpleQuery(insertQry);
-
-            int ref_idx = 0;
-            int samp_idx = 0;
- 
-            sq = new SimpleQuery("select count(*) from reference_download");
-	        ref_idx =  Integer.parseInt(sq.getSingleResult());
-	        if(ref_idx !=0 )
-	        {
-	            String s = new SimpleQuery("select max(id) from reference_download").getSingleResult();
-	            ref_idx = Integer.parseInt(s);
-	        }
- 
-            sq = new SimpleQuery("select count(*) from sample_download");
-	        samp_idx =  Integer.parseInt(sq.getSingleResult());
-	        if(samp_idx !=0 )
-	        {
-	            String s = new SimpleQuery("select max(id) from sample_download").getSingleResult();
-	            samp_idx = Integer.parseInt(s);
-	        }
+	    	//saved information into download_statistis table
+	        String insertQry = "insert into download_statistics (id,download_date,ip_address,email,purpose,system_info) values ("+ (++num) +",SYSDATE,'"+ipAddress+"','"+email+"','"+purpose+"','"+ds+"')";
+	        new SimpleQuery(insertQry);	        
+	        
+            int download_cnt = 0; //holds current download counts
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM");//dd/MM/yyyy
+            Date now = new Date();
+            String strDate = sdfDate.format(now);
             
-            HashSet refs = (HashSet) ses.getAttribute("searched_refs");
-	        Iterator iter = refs.iterator();
-	        while (iter.hasNext()) {
-	        	int ref_num = ((Integer) iter.next()).intValue();
-	            //System.out.println(ref_num);
-                String qrs = "insert into reference_download (id,ref_num,download_statistics_id) values ("+ (++ref_idx)+","+ref_num+","+num+")";
-                sq = new SimpleQuery(qrs);
-	        }
-  
-	        HashSet samples = (HashSet) ses.getAttribute("searched_samples");
+	        //update sample download counts             
+			HashSet samples = (HashSet) ses.getAttribute("searched_samples");
             Iterator iter2 = samples.iterator();
 	        while (iter2.hasNext()) {
 	        	int samp_num = ((Integer) iter2.next()).intValue();
 	            //System.out.println(samp_num);
-                String qrs = "insert into sample_download (id,sample_num,download_statistics_id) values ("+ (++samp_idx)+","+samp_num+","+num+")";
-                sq = new SimpleQuery(qrs);
+	        	//Get the count of the sample with sample number samp_num
+	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
+	        	SimpleQuery sq1 = new SimpleQuery("select download_cnt from sample_download where sample_num="+samp_num+" and month_info='"+strDate+"'");
+	            //Max number of sample_download table
+	            String s = new SimpleQuery("select max(id) from sample_download").getSingleResult();
+	            int download_max =0;
+	            if(s != null )
+	            	download_max= Integer.parseInt(s);
+	            String it = sq1.getSingleResult();
+	            if(it == null )
+	            {
+	            	//insert new entry when download_cnt = 1
+	            	 String qrs = "insert into sample_download (id,sample_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+samp_num+",1,'"+strDate+"','"+ds+"')";
+		             new SimpleQuery(qrs);
+	            }
+	            else
+	            { //update the entry
+		          download_cnt =  Integer.parseInt(it);
+		          String qrs = "update sample_download set download_cnt = " +(++download_cnt) +"where sample_num="+samp_num+" and month_info='"+strDate+"'";
+	              new SimpleQuery(qrs);
+	            }	        	
 	        }
             
-            ses.removeValue("searched_refs");
+	        //Update reference download counts
+	        HashSet refs = (HashSet) ses.getAttribute("searched_refs");
+	        Iterator riter = refs.iterator();
+	        while (riter.hasNext()) {
+	        	
+	        	int ref_num = ((Integer) riter.next()).intValue();
+	            //System.out.println(ref_num);
+	        	//Get the count of download for reference with ref_num
+	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
+	            String it = new SimpleQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='2016-09'").getSingleResult();
+	            //Max number of sample_download table
+	            String s = new SimpleQuery("select max(id) from reference_download").getSingleResult();
+	            int download_max =0;
+	            if(s != null )
+	            	download_max= Integer.parseInt(s);
+	            if(it == null )
+	            {
+	            	//insert new entry with download_cnt = 1
+	            	 String qrs = "insert into reference_download (id,ref_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+ref_num+",1,'"+strDate+"','"+ds+"')";
+		             new SimpleQuery(qrs);
+	            }
+	            else
+	            { //update the entry
+		          download_cnt =  Integer.parseInt(it);
+		          String qrs = "update reference_download set download_cnt = " +(++download_cnt) +"where ref_num="+ref_num+" and month_info='"+strDate+"'";
+	              new SimpleQuery(qrs);
+	            }		        	
+	        }	        
+	        
+            ses.removeAttribute("searched_refs");
             ses.removeAttribute("searched_samples");           
 	        return num;
 	    }

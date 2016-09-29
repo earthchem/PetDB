@@ -8,3 +8,7 @@
 META-INF/*.xml
 META-INF/.*
 admin/WEB-INF/.*/*.xml
+META-INF/application.xml
+META-INF/weblogic-application.xml
+META-INF/wlw-manifest.xml
+admin/WEB-INF/.page*/jpg*.xml

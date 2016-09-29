@@ -13,7 +13,7 @@
   
   <context-param>
     <param-name>datasource</param-name>
-    <param-value>ieda.gfgdb.loadpetdb</param-value>
+    <param-value>ieda.gfgdb.petdb</param-value>
   </context-param>
 
   <context-param>

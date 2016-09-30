@@ -560,7 +560,7 @@ if (!(criteria instanceof ByRockModeCriteria)) {
     	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));    	    
             forwardCnt++;
 	    }
-        while( forwardCnt-- != 0 ) final_data.previous(); //rewind to previous data point.        	
+        while( forwardCnt-- != 0 ) final_data.previous(); final_data.previous();//rewind to previous data point.        	
 	    session.setAttribute("searched_refs",ref_num_set);
 	    session.setAttribute("searched_samples",sample_num_set);
     }

@@ -120,7 +120,21 @@ public class ResultSetFSDS implements FinalSampleDS, ExcelDS
 			}
 		return ret;
 	}
-
+	
+	public boolean previous() throws Exception
+	{
+		boolean ret = false;
+		if (r_set == null) return ret; 
+		try{
+			ret = r_set.previous();
+			r_count--;
+		} catch (Exception e) 
+			{ throw new Exception(e.getMessage() 
+				+ ":Error when previous() at row = " + r_count + " for " + r_set); 
+			}
+		return ret;
+	}
+	
 	public boolean goPreviousPage(int rows_num) throws Exception
 	{
 		String s ="";

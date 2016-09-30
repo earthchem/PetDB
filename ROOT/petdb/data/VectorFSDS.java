@@ -236,6 +236,15 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 		} else return false; 
 	}
 
+	public boolean previous() throws Exception
+	{
+		if (r_count -1 >= 0)
+		{
+			--r_count;
+			return true;
+		} else return false; 
+	}
+	
 	public boolean goPreviousPage(int rows_num) throws Exception
 	{
 		if (r_count >= (total_count-1))

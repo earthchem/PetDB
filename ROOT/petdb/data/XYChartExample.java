@@ -78,11 +78,11 @@ public class XYChartExample
             				false  // URLs
         				);
         
-        	chart.setBackgroundPaint(Color.white);
+       // 	chart.setBackgroundPaint(Color.white);
         
         	XYPlot plot = chart.getXYPlot();
         	XYItemRenderer renderer = plot.getRenderer(); 
- 		renderer.setBaseToolTipGenerator(new CustomXYToolTipGenerator());
+ //		renderer.setBaseToolTipGenerator(new CustomXYToolTipGenerator());
 
 		plot.setOutlinePaint(Color.black);
         	plot.setBackgroundPaint(Color.white);

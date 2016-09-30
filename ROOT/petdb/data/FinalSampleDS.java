@@ -21,6 +21,8 @@ public interface FinalSampleDS extends DataSet
 	public void setCount(int count);
 	
 	public boolean next() throws Exception;
+	
+	public boolean previous() throws Exception;
 
 	public boolean goPreviousPage(int rows_num) throws Exception;
 

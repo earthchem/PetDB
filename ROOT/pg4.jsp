@@ -546,21 +546,21 @@ if (!(criteria instanceof ByRockModeCriteria)) {
           <td valign="middle"><%= final_data.getValue(rock)%></td>
         </tr>
 <%
-  layerNum++;
+        layerNum++;
 	}  // end of while
 		
     if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
     {
+    	int forwardCnt=0;
 	    while ( final_data.next() )
 	    {
 		    sample_num_set.add(new Integer(final_data.getValue(sample_num)));
-		    //System.out.println("SampleNum="+final_data.getValue(sample_num));
-		
+		    //System.out.println("SampleNum="+final_data.getValue(sample_num));		
             ref_num_set.add(new Integer(final_data.getValue(ref_num)));
-    	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));
+    	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));    	    
+            forwardCnt++;
 	    }
-    
-
+        while( forwardCnt-- != 0 ) final_data.previous(); //rewind to previous data point.        	
 	    session.setAttribute("searched_refs",ref_num_set);
 	    session.setAttribute("searched_samples",sample_num_set);
     }

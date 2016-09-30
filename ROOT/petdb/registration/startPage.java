@@ -75,41 +75,6 @@ public class startPage extends HttpServlet {
 		
 		//System.out.println(context.getInitParameter("datasource"));
 		String requestURI = request.getRequestURI();
-		StringBuffer requestURL = request.getRequestURL();
-
-		String localfeedback = (String) context.getInitParameter("feedback.local");
-		String loadpetdb_old = (String) context.getInitParameter("feedback.loadpetdb");
-		String petdb_old = (String) context.getInitParameter("feedback.petdb");
-		String petdb_new = (String) context.getInitParameter("feedback.earthchem");
-		String loadpetdb_new = (String) context.getInitParameter("feedback.earthchem.load");		
-		String webdomain= (String) context.getInitParameter("webdomain");
- 		
-		String feedbackStr=petdb_new;
-		String petdbStr =petdb_old;
-		String loadpetdbStr = loadpetdb_old;
-		
-		if( webdomain.indexOf("earthchem") !=-1) 
-		{
-			petdbStr=petdb_new;
-			loadpetdbStr=loadpetdb_new;
-		}
-				
-		if ( requestURI.indexOf("loadpetdb") != -1) // on development or testing server
-		{
-			if (requestURL.indexOf("isotope") != -1)
-				  feedbackStr = loadpetdbStr;
-			else
-					feedbackStr = localfeedback;
-				
-		}
-		else if (requestURI.indexOf("petdbWeb") != -1) // on production server
-		{
-			if (requestURL.indexOf("isotope") != -1)
-			  feedbackStr = petdbStr;
-			else
-				feedbackStr = localfeedback;
-		}
-		request.getSession().setAttribute("feedback",feedbackStr);	
 		
 		requestURI = requestURI.replaceAll("/start", "");
 		response.sendRedirect(requestURI+"/pg2.jsp");

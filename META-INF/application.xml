@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE application PUBLIC '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN' 'http://java.sun.com/dtd/application_1_3.dtd'>
   <application>
-    <display-name>petdb</display-name>
+    <display-name>loadpetdb</display-name>
     <module>
-      <ejb>.workshop/petdbWeb/search/EJB/GenericStateless</ejb>
+      <ejb>.workshop/loadpetdb/search/EJB/GenericStateless</ejb>
     </module>
     <module>
-      <ejb>.workshop/petdbWeb/search/EJB/ProjectBeans</ejb>
+      <ejb>.workshop/loadpetdb/search/EJB/ProjectBeans</ejb>
     </module>
     <module>
       <web>
         <web-uri>admin</web-uri>
-        <context-root>petdbWeb/admin</context-root>
+        <context-root>loadpetdb/admin</context-root>
       </web>
     </module>
     <module>
       <web>
         <web-uri>ROOT</web-uri>
-        <context-root>petdbWeb/search</context-root>
+        <context-root>loadpetdb/search</context-root>
       </web>
     </module>
   </application>

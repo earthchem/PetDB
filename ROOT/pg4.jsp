@@ -549,7 +549,7 @@ if (!(criteria instanceof ByRockModeCriteria)) {
         layerNum++;
 	}  // end of while
 		
-    if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
+    if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) //download button is clicked
     {
     	int forwardCnt=0;
 	    while ( final_data.next() )

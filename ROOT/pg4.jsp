@@ -551,18 +551,27 @@ if (!(criteria instanceof ByRockModeCriteria)) {
 		
     if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) //download button is clicked
     {
-    	int forwardCnt=0;
-	    while ( final_data.next() )
-	    {
+    	if (compiled)
+		{
+    		VectorFSDS vsds = (VectorFSDS) final_data;
+    		session.setAttribute("searched_refs",vsds.getReferenceNumberSet());
+    	    session.setAttribute("searched_samples",vsds.getSampleNumberSet());
+		}
+    	else
+    	{
+    	  int forwardCnt=0;
+	      while ( final_data.next() )
+	      {
 		    sample_num_set.add(new Integer(final_data.getValue(sample_num)));
 		    //System.out.println("SampleNum="+final_data.getValue(sample_num));		
             ref_num_set.add(new Integer(final_data.getValue(ref_num)));
     	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));    	    
             forwardCnt++;
-	    }
-        while( forwardCnt-- != 0 ) final_data.previous(); final_data.previous();//rewind to previous data point.        	
-	    session.setAttribute("searched_refs",ref_num_set);
-	    session.setAttribute("searched_samples",sample_num_set);
+	      }
+          while( forwardCnt-- != 0 ) final_data.previous(); final_data.previous();//rewind to previous data point.    	
+	      session.setAttribute("searched_refs",ref_num_set);
+	      session.setAttribute("searched_samples",sample_num_set);
+    	}
     }
   }
 %>

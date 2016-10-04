@@ -3,7 +3,6 @@ package petdb.data;
 import java.util.*; 
 import java.io.*; 
 import java.sql.*;
-import jxl.*;
 import jxl.write.*;
 
 
@@ -12,22 +11,25 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 	Vector data = null;
 	Vector link = null;
 	private int field_counter = 18;
-	
 	int dynamic_count = 0;
 	int r_count = -1;
-	int remainder = 0;
 	int total_count = 0;
+	int remainder = 0 ;
 	WritableCellFormat emptyFormat = new WritableCellFormat (NumberFormats.DEFAULT); 
 	int A_K = DataFSDS.Analysis_Key;
 	String analysis = ",";
 	String sampleNums = "";
-
+    HashSet sample_numbers=null;
+    HashSet ref_numbers=null;
+    
 	public VectorFSDS(ResultSet rs, int d_c)
 	{
 		data = new Vector();
 		link = new Vector();
 		dynamic_count = d_c;
-	//	RecordDS.printColumnNamesInResultSet(rs);
+		// RecordDS.printColumnNamesInResultSet(rs);
+		sample_numbers = new HashSet();
+		ref_numbers = new HashSet();
 		if (rs != null)
 			buildDS(rs, d_c);
 	}
@@ -122,31 +124,35 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 			Vector rec_link = (Vector)link.elementAt(r_count);
 			if (first)
 			{
-			rec.setElementAt(rs.getString(offset+DataFSDS.Sample_ID),offset+DataFSDS.Sample_ID-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Material),offset+DataFSDS.Material-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Material_Desc),offset+DataFSDS.Material_Desc-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Latitude),offset+DataFSDS.Latitude-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Longitute),offset+DataFSDS.Longitute-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Elevation),offset+DataFSDS.Elevation-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Tectonic),offset+DataFSDS.Tectonic-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Rock),offset+DataFSDS.Rock-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Reference),offset+DataFSDS.Reference-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Reference_Num),offset+DataFSDS.Reference_Num-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Expedition),offset+DataFSDS.Expedition-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Expedition_Num),offset+DataFSDS.Expedition_Num-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Method),offset+DataFSDS.Method-1);
-            String sample_Num = rs.getString(offset+DataFSDS.Sample_Num);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Sample_ID),offset+DataFSDS.Sample_ID-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Material),offset+DataFSDS.Material-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Material_Desc),offset+DataFSDS.Material_Desc-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Latitude),offset+DataFSDS.Latitude-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Longitute),offset+DataFSDS.Longitute-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Elevation),offset+DataFSDS.Elevation-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Tectonic),offset+DataFSDS.Tectonic-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Rock),offset+DataFSDS.Rock-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Reference),offset+DataFSDS.Reference-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Reference_Num),offset+DataFSDS.Reference_Num-1);
+			  ref_numbers.add(new Integer(rs.getString(offset+DataFSDS.Reference_Num)));
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Expedition),offset+DataFSDS.Expedition-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Expedition_Num),offset+DataFSDS.Expedition_Num-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Method),offset+DataFSDS.Method-1);
+              String sample_Num = rs.getString(offset+DataFSDS.Sample_Num);
             
-                        if(!sample_Num.equals(prev)) sampleNums +=","+sample_Num;
-                        prev = sample_Num;
+              if(!sample_Num.equals(prev)) 
+              {
+            	sampleNums +=","+sample_Num;
+            	sample_numbers.add(new Integer(sample_Num));
+              }
+              prev = sample_Num;
             
-            rec.setElementAt(sample_Num,offset+DataFSDS.Sample_Num-1);
-		//	rec.setElementAt(rs.getString(offset+DataFSDS.Sample_Num),offset+DataFSDS.Sample_Num-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Latitude_N),offset+DataFSDS.Latitude_N-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Longitute_N),offset+DataFSDS.Longitute_N-1);
-			rec.setElementAt(rs.getString(offset+DataFSDS.Sample_IGSN),offset+DataFSDS.Sample_IGSN-1);
+              rec.setElementAt(sample_Num,offset+DataFSDS.Sample_Num-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Latitude_N),offset+DataFSDS.Latitude_N-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Longitute_N),offset+DataFSDS.Longitute_N-1);
+			  rec.setElementAt(rs.getString(offset+DataFSDS.Sample_IGSN),offset+DataFSDS.Sample_IGSN-1);
 			
-			first = false;
+			  first = false;
 			}
 
 			if ( 
@@ -169,8 +175,7 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 
             // Artem: AND query on sample chemistry
             // must check if all chem columns are filled in 
-                           
-                            
+                                                       
             for (int i=0; i< offset; i++)
             {
                 if (	(rs.getString(i+1) != null)
@@ -198,9 +203,8 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 		}
 		return 1;
 	}
-
-	public int getRem() {return remainder;}
-	
+    public int getRem() {return remainder;};
+    
 	public int  getTotalCount() { return total_count;}
 	
 	public int getCurrentRow() throws Exception { return r_count;}
@@ -217,15 +221,19 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 	{ ; }
 	
 	
-        public Vector getKeys() { return null;}
+    public Vector getKeys() { return null;}
 
-        public Object getValue(String key) {return null;}
+    public Object getValue(String key) {return null;}
 
 	public Vector getValues()  {return null;}
 	
 	public String getKeyAt(String index)  {return null;}
 	
 	public String getStrValue(String key)  {return null;}
+	
+	public HashSet getReferenceNumberSet()  {return ref_numbers;}
+	
+	public HashSet getSampleNumberSet()     {return sample_numbers;}
 
 	public boolean next() throws Exception
 	{
@@ -238,34 +246,35 @@ public class VectorFSDS implements FinalSampleDS, ExcelDS
 
 	public boolean previous() throws Exception
 	{
-		if (r_count -1 >= 0)
+		if (r_count -1 >=0 )
 		{
-			--r_count;
+			r_count--;
 			return true;
-		} else return false; 
+		} else return false;
 	}
 	
+	/* Pass-in row number for each page */
 	public boolean goPreviousPage(int rows_num) throws Exception
 	{
-		if (r_count >= (total_count-1))
+		if (r_count >= (total_count-1)) //check to see if it is the last page,
 		{
 			int rem = 0;
 
 			if  (Math.floor(total_count/rows_num) ==  Math.ceil(total_count/rows_num))
-				rem =rows_num * ((int) Math.floor(total_count/rows_num) -2);
+				rem =rows_num * ( (int) Math.floor(total_count/rows_num) -2 );
 			else 	
 				rem =rows_num * ((int) Math.floor(total_count/rows_num) -1);
 			if (rem <= 0 ) r_count = -1;
-			else r_count = rem-1; 
+			else r_count = rem-1;
 			remainder = rem;
 		}
-		else if (r_count < 2*rows_num)
+		else if (r_count < 2*rows_num) //check to see if it is first page
 			r_count = -1; 
 		else 
 		{ 
-			int r_count = this.r_count - 2*rows_num;
-			if (r_count <= 0) r_count = -1;
-			this.r_count = r_count; 
+			int r_count = this.r_count -2*rows_num;
+			if(r_count <=0 ) r_count = -1;
+			this.r_count = r_count;
 		}
 		return true;
 	}

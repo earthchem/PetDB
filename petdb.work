@@ -19,7 +19,7 @@
           <option name="project" value="ROOT" />
         </node>
         <node name="2">
-          <option name="includeProject" value="true" />
+          <option name="includeProject" value="false" />
           <option name="project" value="admin" />
         </node>
       </node>

@@ -10,7 +10,7 @@ Applications" documentation on edocs.bea.com. -->
     <display-name>PetDB Admin</display-name>
     <context-param>
       <param-name>datasource</param-name>
-      <param-value>ieda.gfgdb.petdb</param-value>
+      <param-value>ieda.gfgdb.loadpetdb</param-value>
     </context-param>
   
     <filter>

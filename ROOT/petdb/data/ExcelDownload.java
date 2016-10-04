@@ -265,9 +265,11 @@ public class ExcelDownload extends HttpServlet
 		String ds = ses.getServletContext().getInitParameter("datasource");
 	    String email = (String) ses.getAttribute("email");
 	    String purpose = (String) ses.getAttribute("purpose");
-	   
-	    SimpleQuery sq = new SimpleQuery("select count(*) from download_statistics");
-	    int num = Integer.parseInt(sq.getSingleResult());
+        StatisticsQuery statq = new StatisticsQuery();
+        
+	    statq.setQuery("select count(*) from download_statistics");
+	    statq.runQuery();
+	    int num = Integer.parseInt(statq.getSingleResult());
 	    if(num !=0 )
 	    {
 	        String s = new SimpleQuery("select max(id) from download_statistics").getSingleResult();
@@ -277,10 +279,12 @@ public class ExcelDownload extends HttpServlet
 	    String ipAddress = new IPAddress().getIpAddrWithFilter(request);
 	    if(ipAddress != null)
 	    {
+
 	    	//saved information into download_statistis table
 	        String insertQry = "insert into download_statistics (id,download_date,ip_address,email,purpose,system_info) values ("+ (++num) +",SYSDATE,'"+ipAddress+"','"+email+"','"+purpose+"','"+ds+"')";
-	        new SimpleQuery(insertQry);	        
-	        
+            statq.setQuery(insertQry);
+	        statq.runQuery();
+	          
             int download_cnt = 0; //holds current download counts
             SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM");//dd/MM/yyyy
             Date now = new Date();
@@ -289,32 +293,40 @@ public class ExcelDownload extends HttpServlet
 	        //update sample download counts             
 			HashSet samples = (HashSet) ses.getAttribute("searched_samples");
             Iterator iter2 = samples.iterator();
+
 	        while (iter2.hasNext()) {
 	        	int samp_num = ((Integer) iter2.next()).intValue();
 	            //System.out.println(samp_num);
 	        	//Get the count of the sample with sample number samp_num
 	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
-	        	SimpleQuery sq1 = new SimpleQuery("select download_cnt from sample_download where sample_num="+samp_num+" and month_info='"+strDate+"'");
-	            //Max number of sample_download table
-	            String s = new SimpleQuery("select max(id) from sample_download").getSingleResult();
+	        	statq.setQuery("select download_cnt from sample_download where sample_num="+samp_num+" and month_info='"+strDate+"'");
+	        	statq.runQuery();
+	        	String it = statq.getSingleResult();
+	        	
+	        	//Max number of sample_download table
+	        	statq.setQuery("select max(id) from sample_download");
+	        	statq.runQuery();
+	        	String s = statq.getSingleResult();
 	            int download_max =0;
 	            if(s != null )
 	            	download_max= Integer.parseInt(s);
-	            String it = sq1.getSingleResult();
+	            
 	            if(it == null )
 	            {
 	            	//insert new entry when download_cnt = 1
 	            	 String qrs = "insert into sample_download (id,sample_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+samp_num+",1,'"+strDate+"','"+ds+"')";
-		             new SimpleQuery(qrs);
+		             statq.setQuery(qrs);
+		             statq.runQuery();
 	            }
 	            else
 	            { //update the entry
 		          download_cnt =  Integer.parseInt(it);
 		          String qrs = "update sample_download set download_cnt = " +(++download_cnt) +"where sample_num="+samp_num+" and month_info='"+strDate+"'";
-	              new SimpleQuery(qrs);
+		          statq.setQuery(qrs);
+		          statq.runQuery();
 	            }	        	
 	        }
-            
+
 	        //Update reference download counts
 	        HashSet refs = (HashSet) ses.getAttribute("searched_refs");
 	        Iterator riter = refs.iterator();
@@ -324,9 +336,15 @@ public class ExcelDownload extends HttpServlet
 	            //System.out.println(ref_num);
 	        	//Get the count of download for reference with ref_num
 	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
-	            String it = new SimpleQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='"+strDate+"'").getSingleResult();
+	            statq.setQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='"+strDate+"'");
+	            statq.runQuery();
+	            String it = statq.getSingleResult();
+	            
 	            //Max number of sample_download table
-	            String s = new SimpleQuery("select max(id) from reference_download").getSingleResult();
+	            statq.setQuery("select max(id) from reference_download");
+	            statq.runQuery();
+	            String s = statq.getSingleResult();
+	            
 	            int download_max =0;
 	            if(s != null )
 	            	download_max= Integer.parseInt(s);
@@ -334,16 +352,18 @@ public class ExcelDownload extends HttpServlet
 	            {
 	            	//insert new entry with download_cnt = 1
 	            	 String qrs = "insert into reference_download (id,ref_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+ref_num+",1,'"+strDate+"','"+ds+"')";
-		             new SimpleQuery(qrs);
+	            	 statq.setQuery(qrs);
+			         statq.runQuery();
 	            }
 	            else
 	            { //update the entry
 		          download_cnt =  Integer.parseInt(it);
 		          String qrs = "update reference_download set download_cnt = " +(++download_cnt) +"where ref_num="+ref_num+" and month_info='"+strDate+"'";
-	              new SimpleQuery(qrs);
+		          statq.setQuery(qrs);
+		          statq.runQuery();
 	            }		        	
 	        }	        
-	        
+            statq.close();
             ses.removeAttribute("searched_refs");
             ses.removeAttribute("searched_samples");           
 	        return num;

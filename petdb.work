@@ -25,7 +25,7 @@
       </node>
       <node name="EARBuild">
         <option name="output.directory" value="." />
-        <option name="output.filename" value="petdb-2.9.0" />
+        <option name="output.filename" value="petdb-2.9.1" />
       </node>
     </component>
     <component name="com.bea.portal.ide.actions.OpenAdministrationPageAction" />

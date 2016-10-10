@@ -285,87 +285,86 @@ public class ExcelDownload extends HttpServlet
             statq.setQuery(insertQry);
 	        statq.runQuery();
 	          
-            int download_cnt = 0; //holds current download counts
-            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM");//dd/MM/yyyy
-            Date now = new Date();
-            String strDate = sdfDate.format(now);
-            
+//            int download_cnt = 0; //holds current download counts
+//            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM");//dd/MM/yyyy
+//            Date now = new Date();
+//            String strDate = sdfDate.format(now);
+//            
 	        //update sample download counts             
-			HashSet samples = (HashSet) ses.getAttribute("searched_samples");
-            Iterator iter2 = samples.iterator();
+//			HashSet samples = (HashSet) ses.getAttribute("searched_samples");
+//            Iterator iter2 = samples.iterator();
 
-	        while (iter2.hasNext()) {
-	        	int samp_num = ((Integer) iter2.next()).intValue();
-	            //System.out.println(samp_num);
-	        	//Get the count of the sample with sample number samp_num
-	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
-	        	statq.setQuery("select download_cnt from sample_download where sample_num="+samp_num+" and month_info='"+strDate+"'");
-	        	statq.runQuery();
-	        	String it = statq.getSingleResult();
+//	        while (iter2.hasNext()) {
+//	        	int samp_num = ((Integer) iter2.next()).intValue();
+//	            //System.out.println(samp_num);
+//	        	//Get the count of the sample with sample number samp_num
+//	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
+//	        	statq.setQuery("select download_cnt from sample_download where sample_num="+samp_num+" and month_info='"+strDate+"'");
+//	        	statq.runQuery();
+//	        	String it = statq.getSingleResult();
 	        	
 	        	//Max number of sample_download table
-	        	statq.setQuery("select max(id) from sample_download");
-	        	statq.runQuery();
-	        	String s = statq.getSingleResult();
-	            int download_max =0;
-	            if(s != null )
-	            	download_max= Integer.parseInt(s);
+//	        	statq.setQuery("select max(id) from sample_download");
+//	        	statq.runQuery();
+//	        	String s = statq.getSingleResult();
+//	            int download_max =0;
+//	            if(s != null )
+//	            	download_max= Integer.parseInt(s);
 	            
-	            if(it == null )
-	            {
+//	            if(it == null )
+//	            {
 	            	//insert new entry when download_cnt = 1
-	            	 String qrs = "insert into sample_download (id,sample_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+samp_num+",1,'"+strDate+"','"+ds+"')";
-		             statq.setQuery(qrs);
-		             statq.runQuery();
-	            }
-	            else
-	            { //update the entry
-		          download_cnt =  Integer.parseInt(it);
-		          String qrs = "update sample_download set download_cnt = " +(++download_cnt) +"where sample_num="+samp_num+" and month_info='"+strDate+"'";
-		          statq.setQuery(qrs);
-		          statq.runQuery();
-	            }	        	
-	        }
+//	            	 String qrs = "insert into sample_download (id,sample_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+samp_num+",1,'"+strDate+"','"+ds+"')";
+//		             statq.setQuery(qrs);
+//		             statq.runQuery();
+//	            }
+//	            else
+//	            { //update the entry
+//		          download_cnt =  Integer.parseInt(it);
+//		          String qrs = "update sample_download set download_cnt = " +(++download_cnt) +"where sample_num="+samp_num+" and month_info='"+strDate+"'";
+//		          statq.setQuery(qrs);
+//		          statq.runQuery();
+//	            }	        	
+//	        }
 
 	        //Update reference download counts
-	        HashSet refs = (HashSet) ses.getAttribute("searched_refs");
-	        Iterator riter = refs.iterator();
-	        while (riter.hasNext()) {
+//	        HashSet refs = (HashSet) ses.getAttribute("searched_refs");
+//	        Iterator riter = refs.iterator();
+//	        while (riter.hasNext()) {
 	        	
-	        	int ref_num = ((Integer) riter.next()).intValue();
+//	        	int ref_num = ((Integer) riter.next()).intValue();
 	            //System.out.println(ref_num);
 	        	//Get the count of download for reference with ref_num
 	        	//select download_cnt from sample_download where sample_num = 100 and MONTH_INFO = '2016-09';
-	            statq.setQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='"+strDate+"'");
-	            statq.runQuery();
-	            String it = statq.getSingleResult();
+//	            statq.setQuery("select download_cnt from reference_download where ref_num="+ref_num+" and month_info='"+strDate+"'");
+//	            statq.runQuery();
+//	            String it = statq.getSingleResult();
 	            
 	            //Max number of sample_download table
-	            statq.setQuery("select max(id) from reference_download");
-	            statq.runQuery();
-	            String s = statq.getSingleResult();
-	            
-	            int download_max =0;
-	            if(s != null )
-	            	download_max= Integer.parseInt(s);
-	            if(it == null )
-	            {
+//	            statq.setQuery("select max(id) from reference_download");
+//	            statq.runQuery();
+//	            String s = statq.getSingleResult();
+//	            
+//	            int download_max =0;
+//	            if(s != null )
+//	            	download_max= Integer.parseInt(s);
+//	            if(it == null )
+//	            {
 	            	//insert new entry with download_cnt = 1
-	            	 String qrs = "insert into reference_download (id,ref_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+ref_num+",1,'"+strDate+"','"+ds+"')";
-	            	 statq.setQuery(qrs);
-			         statq.runQuery();
-	            }
-	            else
-	            { //update the entry
-		          download_cnt =  Integer.parseInt(it);
-		          String qrs = "update reference_download set download_cnt = " +(++download_cnt) +"where ref_num="+ref_num+" and month_info='"+strDate+"'";
-		          statq.setQuery(qrs);
-		          statq.runQuery();
-	            }		        	
-	        }	        
+//	            	 String qrs = "insert into reference_download (id,ref_num,download_cnt,month_info,system_info) values ("+ (++download_max)+","+ref_num+",1,'"+strDate+"','"+ds+"')";
+//	            	 statq.setQuery(qrs);
+//			         statq.runQuery();
+//	            }
+//	            else
+//	            { //update the entry
+//		          download_cnt =  Integer.parseInt(it);
+//		          String qrs = "update reference_download set download_cnt = " +(++download_cnt) +"where ref_num="+ref_num+" and month_info='"+strDate+"'";
+//		          statq.setQuery(qrs);
+//		          statq.runQuery();
+//	            }		        	
+//	        }	        
             statq.close();
-            ses.removeAttribute("searched_refs");
-            ses.removeAttribute("searched_samples");           
+        
 	        return num;
 	    }
 	    

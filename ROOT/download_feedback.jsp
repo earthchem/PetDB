@@ -61,7 +61,7 @@ function validate(theForm)
   
   </td></tr>
   <tr>
-  <td><input type="radio" name="purpose" value="research"/>Research</td>
+  <td><input type="radio" name="purpose" value="research" checked/>Research</td>
   </tr>
   <tr>
     <td><input type="radio" name="purpose" value="education"/>Education (ie. lectures, course work)</td>

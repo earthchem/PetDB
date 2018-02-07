@@ -31,8 +31,8 @@ MM_reloadPage(true);
               
         if (sample_num == null || !PetdbUtil.isInteger(sample_num)) throw new Exception("You are trying to go to Sample Info page, with NO sample specified");
         String ipAddress = new IPAddress().getIpAddrWithFilter(request);
-        if(ipAddress != null)
-            new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Sample Info',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
+       // if(ipAddress != null)
+       //     new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Sample Info',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
                
         SampleInfoWrapper wrapper 		    = new SampleInfoWrapper(sample_num);
         SampleInfo1DS ds1 		    = (SampleInfo1DS)wrapper.getControlList("0");

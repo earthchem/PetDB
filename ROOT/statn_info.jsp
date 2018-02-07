@@ -8,13 +8,15 @@
 
 	if (request.getParameter("station_id") != null)
 	{
-		ext_app = true;
 		station_id = request.getParameter("station_id");
-		type =StationInfo1DCtlQuery.ID;
-	}
+        String qStr = "select station_num from station where STATION_ID = '"+station_id+"'";
+        //Convert station_id into station_num
+        station_id = new SimpleQuery(qStr).getSingleResult();
+    }
 	else
 		station_id = request.getParameter("singlenum");
-	 if(!PetdbUtil.isInteger(station_id)) return;
+    if(!PetdbUtil.isInteger(station_id)) 
+      throw new Exception("You are trying to go to Station Info page, without correct station specified");
 
 	if (station_id == null) return;
 
@@ -39,9 +41,9 @@
     
 	if (ds1 == null) throw new Exception("ds1 equals null");
     
-    String ipAddress = new IPAddress().getIpAddrWithFilter(request);
-    if(ipAddress != null)
-        new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Station Info',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
+  //  String ipAddress = new IPAddress().getIpAddrWithFilter(request);
+  //  if(ipAddress != null)
+   //     new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Station Info',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
 	
     while (ds1.next())
 	{

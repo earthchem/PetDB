@@ -383,7 +383,7 @@ onMouseOut="MM_showHideLayers('dataVrcrit','hide')" onClick="alert('<%= c_criter
 	</table>
 </form>
 </div><!-- end pad -->
-<div>Version 2.9.2 (Feb 7, 2018)</div>
+<div>Version 2.9.2 (Feb 8, 2018)</div>
 <script LANGUAGE="JavaScript">
 var counter = <%= counter%>;
 var msg = "there are " + counter + " samples. This means\n"

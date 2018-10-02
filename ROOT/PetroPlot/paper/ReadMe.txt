@@ -1,1 +1,0 @@
-This folder will contain the PetroPlot paper which is going to be published in http://www.g-cubed.org/

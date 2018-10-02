@@ -8,5 +8,4 @@
             </con:security-roles>
         </con:top-level-component>
     </con:project>
-    <con:project name="admin"/>
 </con:wlw-manifest>

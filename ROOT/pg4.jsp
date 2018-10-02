@@ -19,8 +19,8 @@ Vector crystalDesc = new Vector();
 Vector methodDesc = new Vector();
 Vector materialDesc = new Vector();
 Vector commentDesc = new Vector();
-//HashSet ref_num_set= new HashSet();
-//HashSet sample_num_set = new HashSet();
+HashSet ref_num_set= new HashSet();
+HashSet sample_num_set = new HashSet();
 int methodNum=1;
 %>
 <%@ include file="head.jsp" %>
@@ -51,9 +51,20 @@ document.title = "<%=pgTitle%>";
  <input name="criteria_type" type="hidden" value="<%= criteria_type %>">
 <div style="border:0px solid black;padding:8px;"> <b><u>Download Options</u></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 <input type="checkbox" name="RESULT" checked/>&nbsp;Search Results (see table below)<br><br>
-Add tag-along data<br>
 
-<%  String isAllMAJ = request.getParameter("allMAJ");
+
+<%  String logicalAndOr = request.getParameter("logical_and_or");
+	if(logicalAndOr != null) session.setAttribute("logical_and_or_flag",logicalAndOr);
+%>	
+
+<% if( !"and".equals(session.getAttribute("logical_and_or_flag"))) {%>
+Add tag-along data<br>
+<% } else {%>
+<div style="color:#E16000"><b>Warning: Tag-along datasets are disabled with the query constraint 
+"Include samples with all selected variables".</b></div>
+<% } %>
+<%  
+    String isAllMAJ = request.getParameter("allMAJ");
     String isAllTE = request.getParameter("allTE");
     String isAllIR = request.getParameter("allIR");
     if(isAllMAJ == null || "".equals(isAllMAJ)) isAllMAJ = (String) session.getAttribute("allMAJ");
@@ -65,28 +76,28 @@ Add tag-along data<br>
     String majChecked = "";
     String teChecked = "";
     String irChecked = "";
+    
     if("true".equals(request.getParameter("MAJ"))) majChecked =" checked";
     if("true".equals(request.getParameter("TE"))) teChecked =" checked";
     if("true".equals(request.getParameter("IR"))) irChecked =" checked";
+
 %>
 
-<% if(tagAlong.getAvailableItemType("MAJ") && "false".equals(isAllMAJ)) {%>
+<% if(tagAlong.getAvailableItemType("MAJ") && "false".equals(isAllMAJ) && (!"and".equals(session.getAttribute("logical_and_or_flag")))) {%>
 <input type="checkbox" id="MAJ" name="MAJ" <%= majChecked %>/>&nbsp;include <b>Major Oxides for these samples</b><br>
 <% } else { %>
 <input type="checkbox" id="MAJ" name="MAJ" disabled="disabled"/>&nbsp;include <b>Major Oxides for these samples</b><% if(!tagAlong.getAvailableItemType("MAJ")) {%>&nbsp;(No data available)<%}%><br>
 
-<% } if (tagAlong.getAvailableItemType("TE") && "false".equals(isAllTE)) { %>
+<% } if (tagAlong.getAvailableItemType("TE") && "false".equals(isAllTE) && (!"and".equals(session.getAttribute("logical_and_or_flag")))) { %>
 <input type="checkbox" id="TE" name="TE" <%= teChecked %>/>&nbsp;include <b>Trace Elements for these samples</b><br>
 <% } else { %>
 <input type="checkbox" id="TE" name="TE" disabled="disabled"/>&nbsp;include <b>Trace Elements for these samples</b><% if(!tagAlong.getAvailableItemType("TE")) {%>&nbsp;(No data available)<%}%><br>
 
-<% } if (tagAlong.getAvailableItemType("IR") && "false".equals(isAllIR)) { %>
+<% } if (tagAlong.getAvailableItemType("IR") && "false".equals(isAllIR) && (!"and".equals(session.getAttribute("logical_and_or_flag")))) { %>
 <input type="checkbox" id="IR" name="IR" <%= irChecked %>/>&nbsp;include <b>Isotope Ratios for these samples</b><br>
 <% } else { %>
 <input type="checkbox" id="IR" name="IR" disabled="disabled"/>&nbsp;include <b>Isotope Ratios for these samples</b><% if(!tagAlong.getAvailableItemType("IR")) {%>&nbsp;(No data available)<%}%><br>
 <% } %>
-
-
 
 <% if((null != sub) && (!sub.equals( "" )) && (sub.equals("y"))) { %>
 <input type="button" value="Download" class="importantButton" onClick="tagAlongForm.submit()" />
@@ -336,11 +347,11 @@ if (!(criteria instanceof ByRockModeCriteria)) {
     int layerNum = 1;
 	while ( (rows_written-- > 0) && (final_data.next()) )
 	{
-       // if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
-       // {
-		//  sample_num_set.add(new Integer(final_data.getValue(sample_num)));
+        if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
+        {
+		  sample_num_set.add(new Integer(final_data.getValue(sample_num)));
 		  //System.out.println("SampleNum="+final_data.getValue(sample_num));
-       // }
+        }
 %>
         <tr valign="top" class="rowCream">
           <td valign="middle"><a href='<%= "sample_info.jsp?sampleID="+ URLEncoder.encode(final_data.getValue(sample_id),"UTF-8")%>'   target="set_win" onClick="openWindow2(this,700,900)"><%= final_data.getValue(sample_id)%></a></td>
@@ -359,11 +370,11 @@ if (!(criteria instanceof ByRockModeCriteria)) {
 	<%
              StringTokenizer refs = new StringTokenizer(final_data.getValue(ref),";");
              StringTokenizer ref_nums = new StringTokenizer(final_data.getValue(ref_num),";");
-            // if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
-            // {
-               //ref_num_set.add(new Integer(final_data.getValue(ref_num)));
+             if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
+             {
+               ref_num_set.add(new Integer(final_data.getValue(ref_num)));
          	   //System.out.println("ReferenceNum"+final_data.getValue(ref_num));
-            // }
+             }
         //     String ref_list ="";
              	int ref_counter = 0;
 
@@ -546,33 +557,24 @@ if (!(criteria instanceof ByRockModeCriteria)) {
           <td valign="middle"><%= final_data.getValue(rock)%></td>
         </tr>
 <%
-        layerNum++;
+  layerNum++;
 	}  // end of while
 		
-   // if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) //download button is clicked
-   // {
-   // 	if (compiled)
-	//	{
-    //		VectorFSDS vsds = (VectorFSDS) final_data;
-    //		session.setAttribute("searched_refs",vsds.getReferenceNumberSet());
-    //	    session.setAttribute("searched_samples",vsds.getSampleNumberSet());
-	//	}
-    //	else
-    //	{
-    //	  int forwardCnt=0;
-	 //     while ( final_data.next() )
-	 //     {
-	//	    sample_num_set.add(new Integer(final_data.getValue(sample_num)));
-		    //System.out.println("SampleNum="+final_data.getValue(sample_num));		
-      //      ref_num_set.add(new Integer(final_data.getValue(ref_num)));
-    	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));    	    
-      //      forwardCnt++;
-	  //   }
-       //   while( forwardCnt-- != 0 ) final_data.previous(); final_data.previous();//rewind to previous data point.    	
-	   //   session.setAttribute("searched_refs",ref_num_set);
-	     // session.setAttribute("searched_samples",sample_num_set);
-    	//}
-   // }
+    if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
+    {
+	    while ( final_data.next() )
+	    {
+		    sample_num_set.add(new Integer(final_data.getValue(sample_num)));
+		    //System.out.println("SampleNum="+final_data.getValue(sample_num));
+		
+            ref_num_set.add(new Integer(final_data.getValue(ref_num)));
+    	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));
+	    }
+    
+
+	    session.setAttribute("searched_refs",ref_num_set);
+	    session.setAttribute("searched_samples",sample_num_set);
+    }
   }
 %>
 </table>
@@ -611,7 +613,25 @@ if (!(criteria instanceof ByRockModeCriteria)) {
 <% } %>
 </div><!-- end div -->
 <% } %>
-<%@ include file="footer.jsp" %>
+
+</div>
+<script language="JavaScript" src="js/windows.js" type="text/javascript"></script>
+
+<script language="JavaScript" src="js/JQuery/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+<!-- 
+<script language="JavaScript" src="js/JQuery/js/jquery-1.6.2.min.js" type="text/javascript"></script>
+ --> 
+<script language="JavaScript" src="js/JQuery/jquery.qtip-1.0.0-rc3.min.js" type="text/javascript"></script>
+
+<script language="JavaScript" src="js/JQuery/js/jquery-ui-1.7.3.custom.min.js" type="text/javascript"></script>
+
+<!-- <script language="JavaScript" src="js/JQuery/js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script> -->
+
+<script language="JavaScript" src="js/loadHelpContent.js" type="text/javascript"></script>
+
+<script language="JavaScript" src="js/JQuery/jquery-busybox-1.1.js" type="text/javascript"></script>
+<link href="js/JQuery/css/busybox.css" rel="stylesheet" type="text/css"/>
+
 
 <script>
 //Wait for document is ready
@@ -736,3 +756,5 @@ function feedbacksurvey(feedbackStr)
 }
 	 
 </script>
+</body>
+</html>

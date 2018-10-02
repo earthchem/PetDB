@@ -5,6 +5,7 @@ import java.util.*;
 import java.sql.*;
 import petdb.query.*;
 import petdb.wrapper.*;
+import petdb.wrapper.Wrapper;
 import petdb.config.*;
 
 public class ByDataVersionCriteria extends Criteria {

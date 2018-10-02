@@ -14,10 +14,4 @@
         <context-root>loadpetdb/search</context-root>
       </web>
     </module>
-    <module>
-      <web>
-        <web-uri>admin</web-uri>
-        <context-root>loadpetdb/admin</context-root>
-      </web>
-    </module>
   </application>

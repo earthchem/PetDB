@@ -5,6 +5,7 @@ import java.util.*;
 import java.sql.*;
 import petdb.query.*;
 import petdb.wrapper.*;
+import petdb.wrapper.Wrapper;
 
 public class ByExpCriteria extends CompositeCriteria 
 {
@@ -24,8 +25,8 @@ public class ByExpCriteria extends CompositeCriteria
 
 	public String getType() { return type;}
 	public void setType(String t) { type = t;}
-
-        public Wrapper getWrapper()
+	
+    public Wrapper getWrapper()
         {
                 if (dataWrapper == null)
                         dataWrapper = new ByExpWrapper(subCriteria);
@@ -39,7 +40,6 @@ public class ByExpCriteria extends CompositeCriteria
 		return super.getDescription(EXPIDs);
 
 	}
-
 }
 
 class ByExpQryModel extends QueryModel

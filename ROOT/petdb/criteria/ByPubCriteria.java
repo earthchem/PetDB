@@ -5,6 +5,7 @@ import java.util.*;
 import java.sql.*;
 import petdb.query.*;
 import petdb.wrapper.*;
+import petdb.wrapper.Wrapper;
 
 public class ByPubCriteria extends CompositeCriteria {
 
@@ -18,10 +19,8 @@ public class ByPubCriteria extends CompositeCriteria {
 		qryModel = new ByPubQryModel();
 		subCriteria = new ByPub2Criteria();
 	}
- 
 
-
-        public Wrapper getWrapper()
+    public Wrapper getWrapper()
         {
                 if (dataWrapper == null) {
                         dataWrapper = new ByPubWrapper(subCriteria);
@@ -33,14 +32,11 @@ public class ByPubCriteria extends CompositeCriteria {
                 return dataWrapper;
         }
  
-        public String getDescription()
-        {
+    public String getDescription()
+    {
                 return super.getDescription(REFIDs);
 
-        }
-
-
-
+    }
 }
 
 class ByPubQryModel extends QueryModel

@@ -19,13 +19,13 @@
           <option name="project" value="ROOT" />
         </node>
         <node name="2">
-          <option name="includeProject" value="true" />
+          <option name="includeProject" value="false" />
           <option name="project" value="admin" />
         </node>
       </node>
       <node name="EARBuild">
         <option name="output.directory" value="." />
-        <option name="output.filename" value="loadpetdb-2.9.2" />
+        <option name="output.filename" value="loadpetdb-2.9.3" />
       </node>
     </component>
     <component name="com.bea.portal.ide.actions.OpenAdministrationPageAction" />

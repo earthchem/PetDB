@@ -24,11 +24,6 @@
           </module-ref>
         </classloader-structure>
       </classloader-structure>
-      <classloader-structure>
-        <module-ref>
-          <module-uri>admin</module-uri>
-        </module-ref>
-      </classloader-structure>
     </classloader-structure>
 
   </weblogic-application>

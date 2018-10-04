@@ -19,8 +19,6 @@ Vector crystalDesc = new Vector();
 Vector methodDesc = new Vector();
 Vector materialDesc = new Vector();
 Vector commentDesc = new Vector();
-HashSet ref_num_set= new HashSet();
-HashSet sample_num_set = new HashSet();
 int methodNum=1;
 %>
 <%@ include file="head.jsp" %>
@@ -347,11 +345,6 @@ if (!(criteria instanceof ByRockModeCriteria)) {
     int layerNum = 1;
 	while ( (rows_written-- > 0) && (final_data.next()) )
 	{
-        if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
-        {
-		  sample_num_set.add(new Integer(final_data.getValue(sample_num)));
-		  //System.out.println("SampleNum="+final_data.getValue(sample_num));
-        }
 %>
         <tr valign="top" class="rowCream">
           <td valign="middle"><a href='<%= "sample_info.jsp?sampleID="+ URLEncoder.encode(final_data.getValue(sample_id),"UTF-8")%>'   target="set_win" onClick="openWindow2(this,700,900)"><%= final_data.getValue(sample_id)%></a></td>
@@ -370,12 +363,6 @@ if (!(criteria instanceof ByRockModeCriteria)) {
 	<%
              StringTokenizer refs = new StringTokenizer(final_data.getValue(ref),";");
              StringTokenizer ref_nums = new StringTokenizer(final_data.getValue(ref_num),";");
-             if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
-             {
-               ref_num_set.add(new Integer(final_data.getValue(ref_num)));
-         	   //System.out.println("ReferenceNum"+final_data.getValue(ref_num));
-             }
-        //     String ref_list ="";
              	int ref_counter = 0;
 
 		while (ref_nums.hasMoreTokens()) {
@@ -559,22 +546,6 @@ if (!(criteria instanceof ByRockModeCriteria)) {
 <%
   layerNum++;
 	}  // end of while
-		
-    if( !((null != sub) && (!sub.equals( "" )) && (sub.equals("y")) ) ) 
-    {
-	    while ( final_data.next() )
-	    {
-		    sample_num_set.add(new Integer(final_data.getValue(sample_num)));
-		    //System.out.println("SampleNum="+final_data.getValue(sample_num));
-		
-            ref_num_set.add(new Integer(final_data.getValue(ref_num)));
-    	    //System.out.println("ReferenceNum"+final_data.getValue(ref_num));
-	    }
-    
-
-	    session.setAttribute("searched_refs",ref_num_set);
-	    session.setAttribute("searched_samples",sample_num_set);
-    }
   }
 %>
 </table>

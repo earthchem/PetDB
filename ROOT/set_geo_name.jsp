@@ -25,8 +25,10 @@ document.close();
 <div class="popTop">
 <span class="emphasis">Set Geographic Criteria</span><br /><br />
 </div><!-- end popTop -->    
-<%      String ipAddress = IPAddress.getIpAddr(request);
-        new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Feature Name',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
+<%      IPAddress ipAdd = new IPAddress();
+        String ipAddress = ipAdd.getIpAddrWithFilter(request);
+        if(ipAddress != null)
+            new SimpleQuery("insert into QUICK_SEARCH (SEARCH_NAME,SEARCH_DATE,DATASOURCE_NAME,SEARCH_GROUP,IP_ADDRESS) values ('Feature Name',SYSDATE,'"+application.getInitParameter("datasource")+"',null,'"+ipAddress+"')");
         CCriteriaCollection c_c_collection;
         CombinedCriteria c_criteria;
         Criteria criteria;

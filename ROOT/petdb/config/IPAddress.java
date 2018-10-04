@@ -5,7 +5,7 @@ import javax.servlet.http.*;
 public class IPAddress
 {
     private String[] agent = {"baidu","msnbot","googlebot","spider","yahoo","bjtelecom"};
-    private String[] IPignorelist = {"142.104.247.1","68.180.230.178","136.243.36.92","136.243.36.88"};
+    private String[] IPignorelist = {"142.104.247.1","68.180.230.178","136.243.36.92","136.243.36.88","10.0.2.15","129.236.29.123","50.97.205.66"};
     
 	public static String getIpAddr(HttpServletRequest request)
 	{		

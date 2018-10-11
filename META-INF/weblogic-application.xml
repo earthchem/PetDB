@@ -15,12 +15,12 @@
         </module-ref>
         <classloader-structure>
           <module-ref>
-            <module-uri>.workshop/loadpetdb/search/EJB/ProjectBeans</module-uri>
+            <module-uri>.workshop/petdbWeb/search/EJB/ProjectBeans</module-uri>
           </module-ref>
         </classloader-structure>
         <classloader-structure>
           <module-ref>
-            <module-uri>.workshop/loadpetdb/search/EJB/GenericStateless</module-uri>
+            <module-uri>.workshop/petdbWeb/search/EJB/GenericStateless</module-uri>
           </module-ref>
         </classloader-structure>
       </classloader-structure>

@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-  <display-name>PetDB Dev</display-name>
+  <display-name>PetDB</display-name>
   
   <context-param>
     <description>Package name field value at UAS schema</description>
@@ -13,7 +13,7 @@
   
   <context-param>
     <param-name>datasource</param-name>
-    <param-value>ieda.gfgdb.loadpetdb</param-value>
+    <param-value>ieda.gfgdb.petdb</param-value>
   </context-param>
   
   <listener>

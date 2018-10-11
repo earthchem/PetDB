@@ -7,10 +7,10 @@ In most cases, you will not need to modify this file. For more information on we
 consult the Web.xml Deployment Descriptor Elements chapter of the "Developing WebLogic Server
 Applications" documentation on edocs.bea.com. -->
 
-    <display-name>PetDB Admin Dev</display-name>
+    <display-name>PetDB Admin</display-name>
     <context-param>
       <param-name>datasource</param-name>
-      <param-value>ieda.gfgdb.loadpetdb</param-value>
+      <param-value>ieda.gfgdb.petdb</param-value>
     </context-param>
   
     <filter>
